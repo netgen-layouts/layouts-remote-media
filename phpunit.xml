@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.2/phpunit.xsd"
+    bootstrap="vendor/autoload.php"
+    colors="true"
+    forceCoversAnnotation="true"
+    beStrictAboutOutputDuringTests="true"
+    beStrictAboutTodoAnnotatedTests="true"
+    beStrictAboutChangesToGlobalState="true"
+>
+    <php>
+        <env name="SYMFONY_DEPRECATIONS_HELPER" value="max[self]=0" />
+    </php>
+
+    <testsuites>
+        <testsuite name="Netgen\ContentBrowser\Cloudinary">
+            <directory>tests/lib</directory>
+        </testsuite>
+        <testsuite name="Netgen\Bundle\ContentBrowserCloudinaryBundle">
+            <directory>tests/bundle</directory>
+        </testsuite>
+    </testsuites>
+
+    <filter>
+        <whitelist>
+            <directory suffix=".php">lib</directory>
+            <directory suffix=".php">bundle</directory>
+            <exclude>
+                <directory>bundle/Resources</directory>
+                <file>bundle/NetgenContentBrowserCloudinaryBundle.php</file>
+                <file>bundle/DependencyInjection/NetgenContentBrowserCloudinaryExtension.php</file>
+            </exclude>
+        </whitelist>
+    </filter>
+</phpunit>

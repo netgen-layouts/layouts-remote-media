@@ -1,0 +1,52 @@
+{
+    "name": "netgen/content-browser-cloudinary",
+    "description": "Netgen Content Browser & Cloudinary integration",
+    "license": "MIT",
+    "type": "symfony-bundle",
+    "authors": [
+        {
+            "name": "Netgen",
+            "homepage": "https://netgen.io"
+        }
+    ],
+    "require": {
+        "netgen/content-browser": "~1.3.0",
+        "netgen/remote-media-bundle": "dev-master"
+    },
+    "require-dev": {
+        "netgen/layouts-coding-standard": "^1.0",
+        "phpunit/phpunit": "^9.2",
+        "symfony/phpunit-bridge": "^5.0",
+        "symfony/var-dumper": "^4.4",
+        "phpstan/phpstan": "^0.12",
+        "phpstan/phpstan-strict-rules": "^0.12",
+        "phpstan/phpstan-phpunit": "^0.12",
+        "vimeo/psalm": "^3.10"
+    },
+    "scripts": {
+        "test": "@php vendor/bin/phpunit --colors=always",
+        "coverage": "@php -dzend_extension=xdebug.so vendor/bin/phpunit --coverage-html=coverage --colors=always",
+        "phpstan": "@php vendor/bin/phpstan analyse -c phpstan.neon --level=8 --ansi lib bundle",
+        "phpstan-tests": "@php vendor/bin/phpstan analyse -c phpstan.tests.neon --level=8 --ansi tests",
+        "psalm": "@php vendor/bin/psalm -c psalm.xml --show-info=false"
+    },
+    "autoload": {
+        "psr-4": {
+            "Netgen\\ContentBrowser\\Cloudinary\\": "lib/",
+            "Netgen\\Bundle\\ContentBrowserCloudinaryBundle\\": "bundle/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Netgen\\ContentBrowser\\Cloudinary\\Tests\\": "tests/lib/",
+            "Netgen\\ContentBrowser\\Tests\\": "vendor/netgen/content-browser/tests/lib/"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.3.x-dev"
+        }
+    }
+}
