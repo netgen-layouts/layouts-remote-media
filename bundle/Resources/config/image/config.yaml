@@ -1,0 +1,11 @@
+item_types:
+    cloudinary_image:
+        name: item_types.cloudinary_image
+        preview:
+            template: '%netgen_content_browser.cloudinary_image.item_template%'
+        columns:
+            name:
+                name: columns.name
+                value_provider: name
+        default_columns:
+            - name
