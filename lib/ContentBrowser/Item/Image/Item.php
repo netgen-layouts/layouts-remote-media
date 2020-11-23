@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Netgen\ContentBrowser\Cloudinary\Item\Image;
+namespace Netgen\Layouts\RemoteMedia\ContentBrowser\Item\Image;
 
 use Netgen\ContentBrowser\Item\ItemInterface;
 use Netgen\Bundle\RemoteMediaBundle\Core\FieldType\RemoteMedia\Value;

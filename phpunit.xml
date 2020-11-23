@@ -14,10 +14,10 @@
     </php>
 
     <testsuites>
-        <testsuite name="Netgen\ContentBrowser\Cloudinary">
+        <testsuite name="Netgen\Layouts\RemoteMedia">
             <directory>tests/lib</directory>
         </testsuite>
-        <testsuite name="Netgen\Bundle\ContentBrowserCloudinaryBundle">
+        <testsuite name="Netgen\Bundle\LayoutsRemoteMediaBundle">
             <directory>tests/bundle</directory>
         </testsuite>
     </testsuites>
@@ -28,8 +28,8 @@
             <directory suffix=".php">bundle</directory>
             <exclude>
                 <directory>bundle/Resources</directory>
-                <file>bundle/NetgenContentBrowserCloudinaryBundle.php</file>
-                <file>bundle/DependencyInjection/NetgenContentBrowserCloudinaryExtension.php</file>
+                <file>bundle/NetgenLayoutsRemoteMediaBundle.php</file>
+                <file>bundle/DependencyInjection/NetgenLayoutsRemoteMediaExtension.php</file>
             </exclude>
         </whitelist>
     </filter>

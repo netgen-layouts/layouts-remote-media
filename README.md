@@ -1,4 +1,4 @@
-# Netgen Content Browser & Cloudinary integration
+# Netgen Layouts & Remote media integration
 
 ## Installation instructions
 

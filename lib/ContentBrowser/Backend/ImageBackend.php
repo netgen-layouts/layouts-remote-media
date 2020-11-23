@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Netgen\ContentBrowser\Cloudinary\Backend;
+namespace Netgen\Layouts\RemoteMedia\ContentBrowser\Backend;
 
-use Netgen\ContentBrowser\Cloudinary\Item\Image\Item;
-use Netgen\ContentBrowser\Cloudinary\Item\Image\Location;
+use Netgen\Bundle\RemoteMediaBundle\RemoteMedia\RemoteMediaProvider;
+use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\Image\Item;
+use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\Image\Location;
 use Netgen\Bundle\RemoteMediaBundle\Core\FieldType\RemoteMedia\Value;
-use Netgen\Bundle\RemoteMediaBundle\RemoteMedia\Provider\Cloudinary\CloudinaryProvider;
 use Netgen\ContentBrowser\Backend\BackendInterface;
 use Netgen\ContentBrowser\Backend\SearchQuery;
 use Netgen\ContentBrowser\Item\ItemInterface;
@@ -22,11 +22,11 @@ final class ImageBackend implements BackendInterface
     private const ROOT_LOCATION_NAME = 'root';
 
     /**
-     * @var \Netgen\Bundle\RemoteMediaBundle\RemoteMedia\Provider\Cloudinary\CloudinaryProvider
+     * @var \Netgen\Bundle\RemoteMediaBundle\RemoteMedia\RemoteMediaProvider
      */
     private $provider;
 
-    public function __construct(CloudinaryProvider $provider)
+    public function __construct(RemoteMediaProvider $provider)
     {
         $this->provider = $provider;
     }
