@@ -1,10 +1,11 @@
-cloudinary_image:
-    name: item_types.cloudinary_image
-    preview:
-        template: '%netgen_content_browser.cloudinary_image.item_template%'
-    columns:
-        name:
-            name: columns.name
-            value_provider: name
-    default_columns:
-        - name
+item_types:
+    remote_media_image:
+        name: item_types.remote_media_image
+        preview:
+            template: '@NetgenLayoutsRemoteMedia/ngcb/remote_media_image.html.twig'
+        columns:
+            name:
+                name: columns.name
+                value_provider: name
+        default_columns:
+            - name
