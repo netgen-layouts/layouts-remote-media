@@ -10,8 +10,8 @@
         }
     ],
     "require": {
-        "netgen/content-browser": "~1.3.0",
-        "netgen/layouts-core": "~1.3.0",
+        "netgen/content-browser": "~1.2.0",
+        "netgen/layouts-core": "~1.2.0",
         "netgen/remote-media-bundle": "dev-master"
     },
     "require-dev": {
