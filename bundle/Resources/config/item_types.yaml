@@ -7,5 +7,17 @@ item_types:
             name:
                 name: columns.name
                 value_provider: name
+            width:
+                name: columns.remote_media_image.width
+                value_provider: remote_media_image/width
+            height:
+                name: columns.remote_media_image.height
+                value_provider: remote_media_image/height
+            tags:
+                name: columns.remote_media_image.tags
+                value_provider: remote_media_image/tags
         default_columns:
             - name
+            - width
+            - height
+            - tags
