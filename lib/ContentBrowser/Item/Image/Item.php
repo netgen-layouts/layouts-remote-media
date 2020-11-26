@@ -14,14 +14,20 @@ final class Item implements ItemInterface
      */
     private $value;
 
-    public function __construct(Value $value)
+    /**
+     * @var null|string
+     */
+    private $resourceId;
+
+    public function __construct(Value $value, ?string $resourceId)
     {
         $this->value = $value;
+        $this->resourceId = $resourceId;
     }
 
     public function getValue()
     {
-        return $this->value->resourceId;
+        return $this->resourceId;
     }
 
     public function getName(): string
