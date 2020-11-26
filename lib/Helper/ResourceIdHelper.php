@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Netgen\Layouts\RemoteMedia\Helper;
 
+use function str_replace;
+
 class ResourceIdHelper
 {
     /**

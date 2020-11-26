@@ -14,9 +14,9 @@ final class Location implements LocationInterface
     private $name;
 
     /**
-     * @var null|string
+     * @var string|null
      */
-    protected $parentName;
+    private $parentName;
 
     public function __construct(string $name, ?string $parentName = null)
     {

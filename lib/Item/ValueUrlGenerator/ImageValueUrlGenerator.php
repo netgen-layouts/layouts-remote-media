@@ -10,7 +10,7 @@ class ImageValueUrlGenerator implements ValueUrlGeneratorInterface
 {
     public function generate(object $object): ?string
     {
-        /** @var $object \Netgen\Bundle\RemoteMediaBundle\Core\FieldType\RemoteMedia\Value */
+        /* @var $object \Netgen\Bundle\RemoteMediaBundle\Core\FieldType\RemoteMedia\Value */
         return $object->secure_url;
     }
 }

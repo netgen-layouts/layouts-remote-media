@@ -4,15 +4,16 @@ declare(strict_types=1);
 
 namespace Netgen\Layouts\RemoteMedia\ContentBrowser\Backend;
 
-use Netgen\Bundle\RemoteMediaBundle\RemoteMedia\RemoteMediaProvider;
-use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\Image\Item;
-use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\Image\Location;
 use Netgen\Bundle\RemoteMediaBundle\Core\FieldType\RemoteMedia\Value;
+use Netgen\Bundle\RemoteMediaBundle\RemoteMedia\RemoteMediaProvider;
 use Netgen\ContentBrowser\Backend\BackendInterface;
 use Netgen\ContentBrowser\Backend\SearchQuery;
 use Netgen\ContentBrowser\Item\ItemInterface;
 use Netgen\ContentBrowser\Item\LocationInterface;
+use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\Image\Item;
+use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\Image\Location;
 use Netgen\Layouts\RemoteMedia\Helper\ResourceIdHelper;
+use function count;
 
 /**
  * @method \Netgen\ContentBrowser\Backend\SearchResultInterface searchItems(SearchQuery $searchQuery)
@@ -36,6 +37,12 @@ final class ImageBackend implements BackendInterface
     {
         $this->provider = $provider;
         $this->resourceIdHelper = $resourceIdHelper;
+    }
+
+    public function __call($name, $arguments)
+    {
+        // TODO: Implement @method \Netgen\ContentBrowser\Backend\SearchResultInterface searchItems(SearchQuery $searchQuery)
+        // TODO: Implement @method int searchItemsCount(SearchQuery $searchQuery)
     }
 
     public function getSections(): iterable
@@ -131,12 +138,6 @@ final class ImageBackend implements BackendInterface
     public function searchCount(string $searchText): int
     {
         return $this->provider->countResourcesInFolder($searchText);
-    }
-
-    public function __call($name, $arguments)
-    {
-        // TODO: Implement @method \Netgen\ContentBrowser\Backend\SearchResultInterface searchItems(SearchQuery $searchQuery)
-        // TODO: Implement @method int searchItemsCount(SearchQuery $searchQuery)
     }
 
     private function buildRootLocation(): Location

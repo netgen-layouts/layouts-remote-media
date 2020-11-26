@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Netgen\Layouts\RemoteMedia\ContentBrowser\Item\Image;
 
-use Netgen\ContentBrowser\Item\ItemInterface;
 use Netgen\Bundle\RemoteMediaBundle\Core\FieldType\RemoteMedia\Value;
+use Netgen\ContentBrowser\Item\ItemInterface;
 
 final class Item implements ItemInterface
 {
@@ -15,7 +15,7 @@ final class Item implements ItemInterface
     private $value;
 
     /**
-     * @var null|string
+     * @var string|null
      */
     private $resourceId;
 

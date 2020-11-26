@@ -6,12 +6,13 @@ namespace Netgen\Layouts\RemoteMedia\ContentBrowser\Item\ColumnProvider\Image;
 
 use Netgen\ContentBrowser\Item\ColumnProvider\ColumnValueProviderInterface;
 use Netgen\ContentBrowser\Item\ItemInterface;
+use function array_key_exists;
 
 class Height implements ColumnValueProviderInterface
 {
     public function getValue(ItemInterface $item): ?string
     {
-        /** @var $item \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\Image\Item */
+        /** @var \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\Image\Item $item */
         if (!array_key_exists('height', $item->getRemoteMediaValue()->metaData)) {
             return '';
         }

@@ -21,19 +21,19 @@ class ImageValueConverter implements ValueConverterInterface
 
     public function getId(object $object)
     {
-        /** @var $object \Netgen\Bundle\RemoteMediaBundle\Core\FieldType\RemoteMedia\Value */
+        /* @var $object \Netgen\Bundle\RemoteMediaBundle\Core\FieldType\RemoteMedia\Value */
         return $object->resourceId;
     }
 
     public function getRemoteId(object $object)
     {
-        /** @var $object \Netgen\Bundle\RemoteMediaBundle\Core\FieldType\RemoteMedia\Value */
+        /* @var $object \Netgen\Bundle\RemoteMediaBundle\Core\FieldType\RemoteMedia\Value */
         return $object->resourceId;
     }
 
     public function getName(object $object): string
     {
-        /** @var $object \Netgen\Bundle\RemoteMediaBundle\Core\FieldType\RemoteMedia\Value */
+        /* @var $object \Netgen\Bundle\RemoteMediaBundle\Core\FieldType\RemoteMedia\Value */
         return $object->resourceId;
     }
 
