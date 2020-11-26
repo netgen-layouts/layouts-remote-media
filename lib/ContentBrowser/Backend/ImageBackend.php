@@ -12,6 +12,7 @@ use Netgen\ContentBrowser\Backend\BackendInterface;
 use Netgen\ContentBrowser\Backend\SearchQuery;
 use Netgen\ContentBrowser\Item\ItemInterface;
 use Netgen\ContentBrowser\Item\LocationInterface;
+use Netgen\Layouts\RemoteMedia\Helper\ResourceIdHelper;
 
 /**
  * @method \Netgen\ContentBrowser\Backend\SearchResultInterface searchItems(SearchQuery $searchQuery)
@@ -26,9 +27,15 @@ final class ImageBackend implements BackendInterface
      */
     private $provider;
 
-    public function __construct(RemoteMediaProvider $provider)
+    /**
+     * @var \Netgen\Layouts\RemoteMedia\Helper\ResourceIdHelper
+     */
+    private $resourceIdHelper;
+
+    public function __construct(RemoteMediaProvider $provider, ResourceIdHelper $resourceIdHelper)
     {
         $this->provider = $provider;
+        $this->resourceIdHelper = $resourceIdHelper;
     }
 
     public function getSections(): iterable
@@ -42,14 +49,18 @@ final class ImageBackend implements BackendInterface
             return $this->buildRootLocation();
         }
 
-        return new Location((string) $id, self::ROOT_LOCATION_NAME);
+        return new Location(
+            $this->resourceIdHelper->fromRemoteId((string) $id),
+            self::ROOT_LOCATION_NAME
+        );
     }
 
     public function loadItem($value): ItemInterface
     {
-        $resource = $this->provider->getRemoteResource($value, 'image');
+        $id = $this->resourceIdHelper->toRemoteId($value);
+        $resource = $this->provider->getRemoteResource($id, 'image');
 
-        return new Item($resource);
+        return $this->buildItem($resource);
     }
 
     public function getSubLocations(LocationInterface $location): iterable
@@ -62,7 +73,10 @@ final class ImageBackend implements BackendInterface
 
         $locations = [];
         foreach ($folders as $folder) {
-            $locations[] = new Location((string) $folder['name'], self::ROOT_LOCATION_NAME);
+            $locations[] = new Location(
+                $this->resourceIdHelper->fromRemoteId((string) $folder['name']),
+                self::ROOT_LOCATION_NAME
+            );
         }
 
         return $locations;
@@ -87,7 +101,7 @@ final class ImageBackend implements BackendInterface
 
         $items = [];
         foreach ($resources as $resource) {
-            $items[] = new Item(Value::createFromCloudinaryResponse($resource));
+            $items[] = $this->buildItem(Value::createFromCloudinaryResponse($resource));
         }
 
         return $items;
@@ -108,7 +122,7 @@ final class ImageBackend implements BackendInterface
 
         $items = [];
         foreach ($resources as $resource) {
-            $items[] = new Item(Value::createFromCloudinaryResponse($resource));
+            $items[] = $this->buildItem(Value::createFromCloudinaryResponse($resource));
         }
 
         return $items;
@@ -128,5 +142,14 @@ final class ImageBackend implements BackendInterface
     private function buildRootLocation(): Location
     {
         return new Location(self::ROOT_LOCATION_NAME, null);
+    }
+
+    private function buildItem(Value $resource): Item
+    {
+        $resourceId = $resource->resourceId !== null ?
+            $this->resourceIdHelper->fromRemoteId($resource->resourceId)
+            : null;
+
+        return new Item($resource, $resourceId);
     }
 }

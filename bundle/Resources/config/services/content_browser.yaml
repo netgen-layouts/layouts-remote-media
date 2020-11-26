@@ -3,6 +3,7 @@ services:
         class: Netgen\Layouts\RemoteMedia\ContentBrowser\Backend\ImageBackend
         arguments:
             - "@netgen_remote_media.provider.cloudinary"
+            - "@netgen_layouts.remote_media.helper.resource_id"
         tags:
             - { name: netgen_content_browser.backend, item_type: remote_media_image }
 
