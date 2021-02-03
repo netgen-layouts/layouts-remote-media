@@ -1,8 +1,8 @@
-# Netgen Layouts & Remote media integration installation instructions
+# Netgen Layouts & Remote Media integration installation instructions
 
 ## Use Composer
 
-Run the following command to install Netgen Layouts & Remote media integration:
+Run the following command to install Netgen Layouts & Remote Media integration:
 
 ```
 composer require netgen/layouts-remote-media
@@ -10,7 +10,7 @@ composer require netgen/layouts-remote-media
 
 ## Activate the bundles
 
-Activate the Content Browser in your kernel class with all required bundles:
+Activate the bundle in your kernel class:
 
 ```
 ...

@@ -1,4 +1,4 @@
-# Netgen Layouts & Remote media integration
+# Netgen Layouts & Remote Media integration
 
 ## Installation instructions
 
