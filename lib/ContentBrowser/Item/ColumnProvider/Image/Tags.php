@@ -6,6 +6,7 @@ namespace Netgen\Layouts\RemoteMedia\ContentBrowser\Item\ColumnProvider\Image;
 
 use Netgen\ContentBrowser\Item\ColumnProvider\ColumnValueProviderInterface;
 use Netgen\ContentBrowser\Item\ItemInterface;
+use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\Image\Item;
 use function array_key_exists;
 use function implode;
 
@@ -13,7 +14,10 @@ final class Tags implements ColumnValueProviderInterface
 {
     public function getValue(ItemInterface $item): ?string
     {
-        /** @var \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\Image\Item $item */
+        if (!$item instanceof Item) {
+            return null;
+        }
+
         if (!array_key_exists('tags', $item->getRemoteMediaValue()->metaData)) {
             return '';
         }
