@@ -8,7 +8,7 @@ use Netgen\ContentBrowser\Item\ColumnProvider\ColumnValueProviderInterface;
 use Netgen\ContentBrowser\Item\ItemInterface;
 use function array_key_exists;
 
-class Height implements ColumnValueProviderInterface
+final class Height implements ColumnValueProviderInterface
 {
     public function getValue(ItemInterface $item): ?string
     {

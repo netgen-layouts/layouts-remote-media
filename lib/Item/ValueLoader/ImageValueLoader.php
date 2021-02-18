@@ -8,7 +8,7 @@ use Netgen\Bundle\RemoteMediaBundle\RemoteMedia\RemoteMediaProvider;
 use Netgen\Layouts\Item\ValueLoaderInterface;
 use Netgen\Layouts\RemoteMedia\Helper\ResourceIdHelper;
 
-class ImageValueLoader implements ValueLoaderInterface
+final class ImageValueLoader implements ValueLoaderInterface
 {
     /**
      * @var \Netgen\Bundle\RemoteMediaBundle\RemoteMedia\RemoteMediaProvider

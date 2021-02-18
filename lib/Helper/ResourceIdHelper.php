@@ -6,7 +6,7 @@ namespace Netgen\Layouts\RemoteMedia\Helper;
 
 use function str_replace;
 
-class ResourceIdHelper
+final class ResourceIdHelper
 {
     /**
      * Converts remote ID (which can be a path to file)

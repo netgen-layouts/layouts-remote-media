@@ -9,7 +9,7 @@ use Netgen\ContentBrowser\Item\ItemInterface;
 use function array_key_exists;
 use function implode;
 
-class Tags implements ColumnValueProviderInterface
+final class Tags implements ColumnValueProviderInterface
 {
     public function getValue(ItemInterface $item): ?string
     {

@@ -10,7 +10,7 @@ use Netgen\Layouts\Item\ValueConverterInterface;
 /**
  * @implements \Netgen\Layouts\Item\ValueConverterInterface<\Netgen\Bundle\RemoteMediaBundle\Core\FieldType\RemoteMedia\Value>
  */
-class ImageValueConverter implements ValueConverterInterface
+final class ImageValueConverter implements ValueConverterInterface
 {
     public function supports(object $object): bool
     {
