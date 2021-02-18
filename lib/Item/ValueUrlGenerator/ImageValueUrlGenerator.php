@@ -6,11 +6,13 @@ namespace Netgen\Layouts\RemoteMedia\Item\ValueUrlGenerator;
 
 use Netgen\Layouts\Item\ValueUrlGeneratorInterface;
 
+/**
+ * @implements \Netgen\Layouts\Item\ValueUrlGeneratorInterface<\Netgen\Bundle\RemoteMediaBundle\Core\FieldType\RemoteMedia\Value>
+ */
 class ImageValueUrlGenerator implements ValueUrlGeneratorInterface
 {
     public function generate(object $object): ?string
     {
-        /* @var $object \Netgen\Bundle\RemoteMediaBundle\Core\FieldType\RemoteMedia\Value */
         return $object->secure_url;
     }
 }

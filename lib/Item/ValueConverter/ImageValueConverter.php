@@ -7,6 +7,9 @@ namespace Netgen\Layouts\RemoteMedia\Item\ValueConverter;
 use Netgen\Bundle\RemoteMediaBundle\Core\FieldType\RemoteMedia\Value;
 use Netgen\Layouts\Item\ValueConverterInterface;
 
+/**
+ * @implements \Netgen\Layouts\Item\ValueConverterInterface<\Netgen\Bundle\RemoteMediaBundle\Core\FieldType\RemoteMedia\Value>
+ */
 class ImageValueConverter implements ValueConverterInterface
 {
     public function supports(object $object): bool
@@ -21,19 +24,16 @@ class ImageValueConverter implements ValueConverterInterface
 
     public function getId(object $object)
     {
-        /* @var $object \Netgen\Bundle\RemoteMediaBundle\Core\FieldType\RemoteMedia\Value */
         return $object->resourceId;
     }
 
     public function getRemoteId(object $object)
     {
-        /* @var $object \Netgen\Bundle\RemoteMediaBundle\Core\FieldType\RemoteMedia\Value */
         return $object->resourceId;
     }
 
     public function getName(object $object): string
     {
-        /* @var $object \Netgen\Bundle\RemoteMediaBundle\Core\FieldType\RemoteMedia\Value */
         return $object->resourceId;
     }
 

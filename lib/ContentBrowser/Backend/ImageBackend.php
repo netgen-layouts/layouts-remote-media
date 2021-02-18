@@ -37,12 +37,6 @@ final class ImageBackend implements BackendInterface
         $this->resourceIdHelper = $resourceIdHelper;
     }
 
-    public function __call($name, $arguments)
-    {
-        // TODO: Implement @method \Netgen\ContentBrowser\Backend\SearchResultInterface searchItems(SearchQuery $searchQuery)
-        // TODO: Implement @method int searchItemsCount(SearchQuery $searchQuery)
-    }
-
     public function getSections(): iterable
     {
         return [$this->buildRootLocation()];
@@ -62,8 +56,8 @@ final class ImageBackend implements BackendInterface
 
     public function loadItem($value): ItemInterface
     {
-        $id = $this->resourceIdHelper->toRemoteId($value);
-        $resource = $this->provider->getRemoteResource($id, 'image');
+        $id = $this->resourceIdHelper->toRemoteId((string) $value);
+        $resource = $this->provider->getRemoteResource($id);
 
         return $this->buildItem($resource);
     }
@@ -105,6 +99,7 @@ final class ImageBackend implements BackendInterface
         $resources = $this->provider->searchResources($query, $limit, $offset);
 
         $items = [];
+
         foreach ($resources as $resource) {
             $items[] = $this->buildItem(Value::createFromCloudinaryResponse($resource));
         }
@@ -118,7 +113,7 @@ final class ImageBackend implements BackendInterface
             return $this->provider->countResources();
         }
 
-        return $this->provider->countResourcesInFolder($location->getLocationId());
+        return $this->provider->countResourcesInFolder((string) $location->getLocationId());
     }
 
     public function searchItems(SearchQuery $searchQuery): SearchResultInterface
@@ -130,6 +125,7 @@ final class ImageBackend implements BackendInterface
         );
 
         $items = [];
+
         foreach ($resources as $resource) {
             $items[] = $this->buildItem(Value::createFromCloudinaryResponse($resource));
         }

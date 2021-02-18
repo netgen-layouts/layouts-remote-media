@@ -29,8 +29,7 @@ class ImageValueLoader implements ValueLoaderInterface
     public function load($id): ?object
     {
         return $this->provider->getRemoteResource(
-            $this->resourceIdHelper->toRemoteId($id),
-            'image'
+            $this->resourceIdHelper->toRemoteId((string) $id)
         );
     }
 
