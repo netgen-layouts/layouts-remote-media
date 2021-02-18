@@ -1,7 +1,4 @@
-item_types:
-    remote_media_image: Remote media image
-columns:
-    remote_media_image:
-        width: Width
-        height: Height
-        tags: Tags
+item_types.remote_media_image: Remote media image
+columns.remote_media_image.width: Width
+columns.remote_media_image.height: Height
+columns.remote_media_image.tags: Tags
