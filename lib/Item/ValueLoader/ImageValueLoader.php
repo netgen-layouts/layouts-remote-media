@@ -13,12 +13,12 @@ final class ImageValueLoader implements ValueLoaderInterface
     /**
      * @var \Netgen\Bundle\RemoteMediaBundle\RemoteMedia\RemoteMediaProvider
      */
-    protected $provider;
+    private $provider;
 
     /**
      * @var \Netgen\Layouts\RemoteMedia\Helper\ResourceIdHelper
      */
-    protected $resourceIdHelper;
+    private $resourceIdHelper;
 
     public function __construct(RemoteMediaProvider $provider, ResourceIdHelper $resourceIdHelper)
     {
