@@ -1,7 +1,7 @@
 {
     "name": "netgen/layouts-remote-media",
     "description": "Netgen Layouts & Remote Media integration",
-    "license": "MIT",
+    "license": "GPL-2.0-only",
     "type": "symfony-bundle",
     "authors": [
         {
