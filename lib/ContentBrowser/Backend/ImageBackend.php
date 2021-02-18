@@ -156,7 +156,7 @@ final class ImageBackend implements BackendInterface
 
     private function buildRootLocation(): Location
     {
-        return new Location(self::ROOT_LOCATION_NAME, null);
+        return new Location(self::ROOT_LOCATION_NAME);
     }
 
     private function buildItem(Value $resource): Item

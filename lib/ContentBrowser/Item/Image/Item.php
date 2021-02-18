@@ -19,7 +19,7 @@ final class Item implements ItemInterface
      */
     private $resourceId;
 
-    public function __construct(Value $value, ?string $resourceId)
+    public function __construct(Value $value, ?string $resourceId = null)
     {
         $this->value = $value;
         $this->resourceId = $resourceId;
