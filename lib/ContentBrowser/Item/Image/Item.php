@@ -45,9 +45,6 @@ final class Item implements ItemInterface
         return true;
     }
 
-    /**
-     * @return \Netgen\Bundle\RemoteMediaBundle\Core\FieldType\RemoteMedia\Value
-     */
     public function getRemoteMediaValue(): Value
     {
         return $this->value;
