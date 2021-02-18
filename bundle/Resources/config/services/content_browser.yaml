@@ -10,14 +10,14 @@ services:
     netgen_content_browser.template_value_provider.remote_media_image.tags:
         class: Netgen\Layouts\RemoteMedia\ContentBrowser\Item\ColumnProvider\Image\Tags
         tags:
-            - { name: netgen_content_browser.column_value_provider, identifier: remote_media_image/tags }
+            - { name: netgen_content_browser.column_value_provider, identifier: remote_media_image\tags }
 
     netgen_content_browser.template_value_provider.remote_media_image.width:
         class: Netgen\Layouts\RemoteMedia\ContentBrowser\Item\ColumnProvider\Image\Width
         tags:
-            - { name: netgen_content_browser.column_value_provider, identifier: remote_media_image/width }
+            - { name: netgen_content_browser.column_value_provider, identifier: remote_media_image\width }
 
     netgen_content_browser.template_value_provider.remote_media_image.height:
         class: Netgen\Layouts\RemoteMedia\ContentBrowser\Item\ColumnProvider\Image\Height
         tags:
-            - { name: netgen_content_browser.column_value_provider, identifier: remote_media_image/height }
+            - { name: netgen_content_browser.column_value_provider, identifier: remote_media_image\height }
