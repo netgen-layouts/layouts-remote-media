@@ -8,6 +8,8 @@ use Netgen\Bundle\RemoteMediaBundle\Core\FieldType\RemoteMedia\Value;
 use Netgen\Bundle\RemoteMediaBundle\RemoteMedia\RemoteMediaProvider;
 use Netgen\ContentBrowser\Backend\BackendInterface;
 use Netgen\ContentBrowser\Backend\SearchQuery;
+use Netgen\ContentBrowser\Backend\SearchResult;
+use Netgen\ContentBrowser\Backend\SearchResultInterface;
 use Netgen\ContentBrowser\Item\ItemInterface;
 use Netgen\ContentBrowser\Item\LocationInterface;
 use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\Image\Item;
@@ -15,10 +17,6 @@ use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\Image\Location;
 use Netgen\Layouts\RemoteMedia\Helper\ResourceIdHelper;
 use function count;
 
-/**
- * @method \Netgen\ContentBrowser\Backend\SearchResultInterface searchItems(SearchQuery $searchQuery)
- * @method int searchItemsCount(SearchQuery $searchQuery)
- */
 final class ImageBackend implements BackendInterface
 {
     private const ROOT_LOCATION_NAME = 'root';
@@ -123,21 +121,41 @@ final class ImageBackend implements BackendInterface
         return $this->provider->countResourcesInFolder($location->getLocationId());
     }
 
-    public function search(string $searchText, int $offset = 0, int $limit = 25): iterable
+    public function searchItems(SearchQuery $searchQuery): SearchResultInterface
     {
-        $resources = $this->provider->searchResources($searchText, $limit, $offset);
+        $resources = $this->provider->searchResources(
+            $searchQuery->getSearchText(),
+            $searchQuery->getLimit(),
+            $searchQuery->getOffset()
+        );
 
         $items = [];
         foreach ($resources as $resource) {
             $items[] = $this->buildItem(Value::createFromCloudinaryResponse($resource));
         }
 
-        return $items;
+        return new SearchResult($items);
+    }
+
+    public function searchItemsCount(SearchQuery $searchQuery): int
+    {
+        return $this->provider->countResourcesInFolder($searchQuery->getSearchText());
+    }
+
+    public function search(string $searchText, int $offset = 0, int $limit = 25): iterable
+    {
+        $searchQuery = new SearchQuery($searchText);
+        $searchQuery->setOffset($offset);
+        $searchQuery->setLimit($limit);
+
+        $searchResult = $this->searchItems($searchQuery);
+
+        return $searchResult->getResults();
     }
 
     public function searchCount(string $searchText): int
     {
-        return $this->provider->countResourcesInFolder($searchText);
+        return $this->searchItemsCount(new SearchQuery($searchText));
     }
 
     private function buildRootLocation(): Location
