@@ -11,7 +11,7 @@
     ],
     "require": {
         "netgen/layouts-ezplatform": "^1.2",
-        "netgen/remote-media-bundle": "dev-master"
+        "netgen/remote-media-bundle": "dev-NGSTACK-493-tinymce-support"
     },
     "require-dev": {
         "netgen/layouts-coding-standard": "^1.0",
