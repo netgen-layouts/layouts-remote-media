@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Netgen\Layouts\RemoteMedia\ContentBrowser\Backend;
 
 use Netgen\Bundle\RemoteMediaBundle\Core\FieldType\RemoteMedia\Value;
+use Netgen\Bundle\RemoteMediaBundle\RemoteMedia\NextCursorResolver;
+use Netgen\Bundle\RemoteMediaBundle\RemoteMedia\Provider\Cloudinary\Search\Query;
 use Netgen\Bundle\RemoteMediaBundle\RemoteMedia\RemoteMediaProvider;
 use Netgen\ContentBrowser\Backend\BackendInterface;
 use Netgen\ContentBrowser\Backend\SearchQuery;
@@ -31,10 +33,16 @@ final class ImageBackend implements BackendInterface
      */
     private $resourceIdHelper;
 
-    public function __construct(RemoteMediaProvider $provider, ResourceIdHelper $resourceIdHelper)
+    /**
+     * @var \Netgen\Bundle\RemoteMediaBundle\RemoteMedia\NextCursorResolver
+     */
+    private $nextCursorResolver;
+
+    public function __construct(RemoteMediaProvider $provider, ResourceIdHelper $resourceIdHelper, NextCursorResolver $nextCursorResolver)
     {
         $this->provider = $provider;
         $this->resourceIdHelper = $resourceIdHelper;
+        $this->nextCursorResolver = $nextCursorResolver;
     }
 
     public function getSections(): iterable
@@ -92,15 +100,39 @@ final class ImageBackend implements BackendInterface
 
     public function getSubItems(LocationInterface $location, int $offset = 0, int $limit = 25): iterable
     {
-        $query = $location->getLocationId() !== self::ROOT_LOCATION_NAME
-            ? $location->getName()
-            : '';
+        $query = new Query(
+            '',
+            'image',
+            $limit,
+            $location->getLocationId() !== self::ROOT_LOCATION_NAME
+                ? $location->getName()
+                : '',
+        );
 
-        $resources = $this->provider->searchResources($query, $limit, $offset);
+        if ($offset > 0) {
+            $nextCursor = $this->nextCursorResolver->resolve($query, $offset);
+
+            $query = new Query(
+                '',
+                'image',
+                $limit,
+                $location->getLocationId() !== self::ROOT_LOCATION_NAME
+                    ? $location->getName()
+                    : '',
+                null,
+                $nextCursor
+            );
+        }
+
+        $result = $this->provider->searchResources($query);
+
+        if ($result->getNextCursor()) {
+            $this->nextCursorResolver->save($query, $offset + $limit, $result->getNextCursor());
+        }
 
         $items = [];
 
-        foreach ($resources as $resource) {
+        foreach ($result->getResults() as $resource) {
             $items[] = $this->buildItem(Value::createFromCloudinaryResponse($resource));
         }
 
