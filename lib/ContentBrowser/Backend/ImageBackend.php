@@ -126,7 +126,7 @@ final class ImageBackend implements BackendInterface
 
         $result = $this->provider->searchResources($query);
 
-        if ($result->getNextCursor()) {
+        if (is_string($result->getNextCursor())) {
             $this->nextCursorResolver->save($query, $offset + $limit, $result->getNextCursor());
         }
 
@@ -171,7 +171,7 @@ final class ImageBackend implements BackendInterface
 
         $result = $this->provider->searchResources($query);
 
-        if ($result->getNextCursor()) {
+        if (is_string($result->getNextCursor())) {
             $this->nextCursorResolver->save($query, $offset + $limit, $result->getNextCursor());
         }
 
