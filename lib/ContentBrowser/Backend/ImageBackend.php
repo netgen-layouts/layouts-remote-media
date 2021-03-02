@@ -100,13 +100,15 @@ final class ImageBackend implements BackendInterface
 
     public function getSubItems(LocationInterface $location, int $offset = 0, int $limit = 25): iterable
     {
+        $folder = $location->getLocationId() !== self::ROOT_LOCATION_NAME
+            ? $location->getName()
+            : '';
+
         $query = new Query(
             '',
             'image',
             $limit,
-            $location->getLocationId() !== self::ROOT_LOCATION_NAME
-                ? $location->getName()
-                : '',
+            $folder
         );
 
         if ($offset > 0) {
@@ -116,9 +118,7 @@ final class ImageBackend implements BackendInterface
                 '',
                 'image',
                 $limit,
-                $location->getLocationId() !== self::ROOT_LOCATION_NAME
-                    ? $location->getName()
-                    : '',
+                $folder,
                 null,
                 $nextCursor
             );
@@ -150,15 +150,34 @@ final class ImageBackend implements BackendInterface
 
     public function searchItems(SearchQuery $searchQuery): SearchResultInterface
     {
-        $resources = $this->provider->searchResources(
+        $query = new Query(
             $searchQuery->getSearchText(),
-            $searchQuery->getLimit(),
-            $searchQuery->getOffset()
+            'image',
+            $limit
         );
+
+        if ($offset > 0) {
+            $nextCursor = $this->nextCursorResolver->resolve($query, $offset);
+
+            $query = new Query(
+                $searchQuery->getSearchText(),
+                'image',
+                $limit,
+                null,
+                null,
+                $nextCursor
+            );
+        }
+
+        $result = $this->provider->searchResources($query);
+
+        if ($result->getNextCursor()) {
+            $this->nextCursorResolver->save($query, $offset + $limit, $result->getNextCursor());
+        }
 
         $items = [];
 
-        foreach ($resources as $resource) {
+        foreach ($result->getResults() as $resource) {
             $items[] = $this->buildItem(Value::createFromCloudinaryResponse($resource));
         }
 
