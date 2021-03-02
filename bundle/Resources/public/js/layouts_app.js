@@ -1,19 +1,25 @@
-function callback(records) {
-    records.forEach(function (record) {
-        var list = record.addedNodes;
-        var i = list.length - 1;
-
-        for ( ; i > -1; i-- ) {
-            if (typeof list[i].classList != 'undefined' && list[i].classList.contains('js-content-browser')) {
-                console.log(list[i]);
-                console.log(list[i].getElementsByClassName('Pager_pager__3ZmyX'));
-            }
-        }
-    });
+function callback() {
+  const contentBrowser = document.getElementsByClassName(
+    'js-content-browser'
+  )[0];
+  if (contentBrowser !== undefined && contentBrowser.dataset.itemType === 'remote_media_image') {
+    const cbChildren = Array.from(
+      contentBrowser.getElementsByTagName('ul')
+    );
+    const pagerIndex = cbChildren
+      .map(e => e.attributes['data-cy'].nodeValue)
+      .indexOf('pagination');
+    if (pagerIndex > -1) {
+      const pagerItems = cbChildren[pagerIndex].children;
+      for (let i = pagerItems.length - 2; i > 0; i--) {
+        pagerItems[i].remove();
+      }
+    }
+  }
 }
 
-var observer = new MutationObserver(callback);
+const observer = new MutationObserver(callback);
 
-var targetNode = document.body;
+const targetNode = document.body;
 
 observer.observe(targetNode, { childList: true, subtree: true });
