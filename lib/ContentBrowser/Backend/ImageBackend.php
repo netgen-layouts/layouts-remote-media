@@ -153,16 +153,16 @@ final class ImageBackend implements BackendInterface
         $query = new Query(
             $searchQuery->getSearchText(),
             'image',
-            $limit
+            $searchQuery->getLimit()
         );
 
-        if ($offset > 0) {
-            $nextCursor = $this->nextCursorResolver->resolve($query, $offset);
+        if ($searchQuery->getOffset() > 0) {
+            $nextCursor = $this->nextCursorResolver->resolve($query, $searchQuery->getOffset());
 
             $query = new Query(
                 $searchQuery->getSearchText(),
                 'image',
-                $limit,
+                $searchQuery->getLimit(),
                 null,
                 null,
                 $nextCursor
@@ -172,7 +172,7 @@ final class ImageBackend implements BackendInterface
         $result = $this->provider->searchResources($query);
 
         if (is_string($result->getNextCursor())) {
-            $this->nextCursorResolver->save($query, $offset + $limit, $result->getNextCursor());
+            $this->nextCursorResolver->save($query, $searchQuery->getOffset() + $searchQuery->getLimit(), $result->getNextCursor());
         }
 
         $items = [];
