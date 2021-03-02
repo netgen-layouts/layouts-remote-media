@@ -18,6 +18,7 @@ use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\Image\Item;
 use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\Image\Location;
 use Netgen\Layouts\RemoteMedia\Helper\ResourceIdHelper;
 use function count;
+use function is_string;
 
 final class ImageBackend implements BackendInterface
 {
