@@ -42,7 +42,7 @@ final class NetgenLayoutsRemoteMediaExtension extends Extension implements Prepe
         $prependConfigs = [
             'item_types.yaml' => 'netgen_content_browser',
             'value_types.yaml' => 'netgen_layouts',
-            'ngl_settings.yml' => 'netgen_layouts',
+            'netgen_layouts.yaml' => 'netgen_layouts',
             'view/item_view.yaml' => 'netgen_layouts',
         ];
 
