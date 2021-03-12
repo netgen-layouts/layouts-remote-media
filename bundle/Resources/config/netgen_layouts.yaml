@@ -1,0 +1,3 @@
+app:
+    javascripts:
+        - /bundles/netgenlayoutsremotemedia/js/layouts_app.js

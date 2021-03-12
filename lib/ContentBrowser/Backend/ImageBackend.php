@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Netgen\Layouts\RemoteMedia\ContentBrowser\Backend;
 
 use Netgen\Bundle\RemoteMediaBundle\Core\FieldType\RemoteMedia\Value;
+use Netgen\Bundle\RemoteMediaBundle\RemoteMedia\NextCursorResolver;
+use Netgen\Bundle\RemoteMediaBundle\RemoteMedia\Provider\Cloudinary\Search\Query;
 use Netgen\Bundle\RemoteMediaBundle\RemoteMedia\RemoteMediaProvider;
 use Netgen\ContentBrowser\Backend\BackendInterface;
 use Netgen\ContentBrowser\Backend\SearchQuery;
@@ -16,6 +18,7 @@ use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\Image\Item;
 use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\Image\Location;
 use Netgen\Layouts\RemoteMedia\Helper\ResourceIdHelper;
 use function count;
+use function is_string;
 
 final class ImageBackend implements BackendInterface
 {
@@ -31,10 +34,16 @@ final class ImageBackend implements BackendInterface
      */
     private $resourceIdHelper;
 
-    public function __construct(RemoteMediaProvider $provider, ResourceIdHelper $resourceIdHelper)
+    /**
+     * @var \Netgen\Bundle\RemoteMediaBundle\RemoteMedia\NextCursorResolver
+     */
+    private $nextCursorResolver;
+
+    public function __construct(RemoteMediaProvider $provider, ResourceIdHelper $resourceIdHelper, NextCursorResolver $nextCursorResolver)
     {
         $this->provider = $provider;
         $this->resourceIdHelper = $resourceIdHelper;
+        $this->nextCursorResolver = $nextCursorResolver;
     }
 
     public function getSections(): iterable
@@ -92,15 +101,39 @@ final class ImageBackend implements BackendInterface
 
     public function getSubItems(LocationInterface $location, int $offset = 0, int $limit = 25): iterable
     {
-        $query = $location->getLocationId() !== self::ROOT_LOCATION_NAME
+        $folder = $location->getLocationId() !== self::ROOT_LOCATION_NAME
             ? $location->getName()
             : '';
 
-        $resources = $this->provider->searchResources($query, $limit, $offset);
+        $query = new Query(
+            '',
+            'image',
+            $limit,
+            $folder
+        );
+
+        if ($offset > 0) {
+            $nextCursor = $this->nextCursorResolver->resolve($query, $offset);
+
+            $query = new Query(
+                '',
+                'image',
+                $limit,
+                $folder,
+                null,
+                $nextCursor
+            );
+        }
+
+        $result = $this->provider->searchResources($query);
+
+        if (is_string($result->getNextCursor())) {
+            $this->nextCursorResolver->save($query, $offset + $limit, $result->getNextCursor());
+        }
 
         $items = [];
 
-        foreach ($resources as $resource) {
+        foreach ($result->getResults() as $resource) {
             $items[] = $this->buildItem(Value::createFromCloudinaryResponse($resource));
         }
 
@@ -118,15 +151,34 @@ final class ImageBackend implements BackendInterface
 
     public function searchItems(SearchQuery $searchQuery): SearchResultInterface
     {
-        $resources = $this->provider->searchResources(
+        $query = new Query(
             $searchQuery->getSearchText(),
-            $searchQuery->getLimit(),
-            $searchQuery->getOffset()
+            'image',
+            $searchQuery->getLimit()
         );
+
+        if ($searchQuery->getOffset() > 0) {
+            $nextCursor = $this->nextCursorResolver->resolve($query, $searchQuery->getOffset());
+
+            $query = new Query(
+                $searchQuery->getSearchText(),
+                'image',
+                $searchQuery->getLimit(),
+                null,
+                null,
+                $nextCursor
+            );
+        }
+
+        $result = $this->provider->searchResources($query);
+
+        if (is_string($result->getNextCursor())) {
+            $this->nextCursorResolver->save($query, $searchQuery->getOffset() + $searchQuery->getLimit(), $result->getNextCursor());
+        }
 
         $items = [];
 
-        foreach ($resources as $resource) {
+        foreach ($result->getResults() as $resource) {
             $items[] = $this->buildItem(Value::createFromCloudinaryResponse($resource));
         }
 
