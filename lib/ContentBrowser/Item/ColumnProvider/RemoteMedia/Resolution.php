@@ -18,7 +18,8 @@ final class Resolution implements ColumnValueProviderInterface
         }
 
         if (!array_key_exists('width', $item->getRemoteMediaValue()->metaData)
-            || !array_key_exists('height', $item->getRemoteMediaValue()->metaData)) {
+            || !array_key_exists('height', $item->getRemoteMediaValue()->metaData)
+            || (empty($item->getRemoteMediaValue()->metaData['width']) && empty($item->getRemoteMediaValue()->metaData['height']))) {
             return '';
         }
 
