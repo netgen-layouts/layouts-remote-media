@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia;
 
 use Netgen\ContentBrowser\Item\LocationInterface;
+use InvalidArgumentException;
 use function explode;
 use function in_array;
 
@@ -22,10 +23,7 @@ final class Location implements LocationInterface
 
     public const RESOURCE_TYPE_RAW = 'raw';
 
-    /**
-     * @var string[]
-     */
-    private $supportedTypes = [
+    public const SUPPORTED_TYPES = [
         self::RESOURCE_TYPE_ALL,
         self::RESOURCE_TYPE_IMAGE,
         self::RESOURCE_TYPE_VIDEO,
@@ -38,14 +36,9 @@ final class Location implements LocationInterface
     private $id;
 
     /**
-     * @var string|null
-     */
-    private $name;
-
-    /**
      * @var string
      */
-    private $folder;
+    private $name;
 
     /**
      * @var string
@@ -58,39 +51,65 @@ final class Location implements LocationInterface
     private $resourceType;
 
     /**
-     * @var string|null
+     * @var string
+     */
+    private $folder;
+
+    /**
+     * @var string
      */
     private $parentId;
 
-    public function __construct(string $id, ?string $name = null)
-    {
+    private function __construct(
+        string $id,
+        string $name,
+        string $type,
+        string $resourceType,
+        ?string $folder = null,
+        ?string $parentId = null
+    ) {
         $this->id = $id;
         $this->name = $name;
+        $this->type = $type;
+        $this->resourceType = $resourceType;
+        $this->folder = $folder;
+        $this->parentId = $parentId;
+    }
 
+    public static function createFromId(string $id, ?string $name = null): self
+    {
         $idParts = explode('|', $id);
 
         if ($idParts[0] === self::TYPE_SECTION) {
-            $this->type = self::TYPE_SECTION;
-
-            $this->resourceType = self::RESOURCE_TYPE_ALL;
-            if (in_array($idParts[1], $this->supportedTypes, true)) {
-                $this->resourceType = $idParts[1];
+            $resourceType = self::RESOURCE_TYPE_ALL;
+            if (in_array($idParts[1], self::SUPPORTED_TYPES, true)) {
+                $resourceType = $idParts[1];
             }
 
-            return;
+            if ($name === null) {
+                $name = $resourceType;
+            }
+
+            return new self($id, $name, self::TYPE_SECTION, $resourceType);
         }
 
         if ($idParts[0] === self::TYPE_FOLDER) {
-            $this->type = self::TYPE_FOLDER;
-
-            $this->resourceType = self::RESOURCE_TYPE_ALL;
-            if (in_array($idParts[1], $this->supportedTypes, true)) {
-                $this->resourceType = $idParts[1];
+            $resourceType = self::RESOURCE_TYPE_ALL;
+            if (in_array($idParts[1], self::SUPPORTED_TYPES, true)) {
+                $resourceType = $idParts[1];
             }
 
-            $this->folder = $idParts[2];
-            $this->parentId = self::TYPE_SECTION . '|' . $this->resourceType;
+            $folder = $idParts[2];
+            $parentId = self::TYPE_SECTION . '|' . $resourceType;
+
+            if ($name === null) {
+                $name = $folder;
+            }
+
+            return new self($id, $name, self::TYPE_FOLDER, $resourceType, $folder, $parentId);
         }
+
+        throw new InvalidArgumentException('Provided ID '.$id.' is invalid');
     }
 
     public function getLocationId()
@@ -129,13 +148,6 @@ final class Location implements LocationInterface
 
     public function getResourceType(): string
     {
-        $supportedTypes = [
-            self::RESOURCE_TYPE_ALL,
-            self::RESOURCE_TYPE_IMAGE,
-            self::RESOURCE_TYPE_VIDEO,
-            self::RESOURCE_TYPE_RAW,
-        ];
-
         return $this->resourceType;
     }
 }

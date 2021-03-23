@@ -68,7 +68,7 @@ final class RemoteMediaBackend implements BackendInterface
 
     public function loadLocation($id): LocationInterface
     {
-        return new Location((string) $id);
+        return Location::createFromId((string) $id);
     }
 
     public function loadItem($value): ItemInterface
@@ -76,7 +76,10 @@ final class RemoteMediaBackend implements BackendInterface
         $query = ResourceQuery::createFromString((string) $value);
 
         try {
-            $resource = $this->provider->getRemoteResource($query->resourceId, $query->resourceType);
+            $resource = $this->provider->getRemoteResource(
+                $query->getResourceId(),
+                $query->getResourceType()
+            );
         } catch (CloudinaryNotFoundException $e) {
             throw new NotFoundException(
                 sprintf(
@@ -100,7 +103,7 @@ final class RemoteMediaBackend implements BackendInterface
 
         $locations = [];
         foreach ($folders as $folder) {
-            $locations[] = new Location(
+            $locations[] = Location::createFromId(
                 Location::TYPE_FOLDER . '|' . $location->getResourceType() . '|' . $folder['name']
             );
         }
@@ -248,19 +251,19 @@ final class RemoteMediaBackend implements BackendInterface
     private function buildSections(): array
     {
         return [
-            new Location(
+            Location::createFromId(
                 'section|' . Location::RESOURCE_TYPE_ALL,
                 $this->translator->trans('backend.remote_media.resource_type.' . Location::RESOURCE_TYPE_ALL, [], 'ngcb')
             ),
-            new Location(
+            Location::createFromId(
                 'section|' . Location::RESOURCE_TYPE_IMAGE,
                 $this->translator->trans('backend.remote_media.resource_type.' . Location::RESOURCE_TYPE_IMAGE, [], 'ngcb')
             ),
-            new Location(
+            Location::createFromId(
                 'section|' . Location::RESOURCE_TYPE_VIDEO,
                 $this->translator->trans('backend.remote_media.resource_type.' . Location::RESOURCE_TYPE_VIDEO, [], 'ngcb')
             ),
-            new Location(
+            Location::createFromId(
                 'section|' . Location::RESOURCE_TYPE_RAW,
                 $this->translator->trans('backend.remote_media.resource_type.' . Location::RESOURCE_TYPE_RAW, [], 'ngcb')
             ),

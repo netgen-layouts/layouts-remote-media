@@ -13,21 +13,37 @@ final class ResourceQuery
     /**
      * @var string
      */
-    public $resourceId;
+    private $resourceId;
 
     /**
      * @var string
      */
-    public $resourceType;
+    private $resourceType;
+
+    private function __construct(string $resourceId, string $resourceType)
+    {
+        $this->resourceId = $resourceId;
+        $this->resourceType = $resourceType;
+    }
 
     public static function createFromString(string $input): self
     {
         $parts = explode('|', $input);
+        $resourceType = array_shift($parts);
+        $resourceId = implode('/', $parts);
 
-        $query = new self();
-        $query->resourceType = array_shift($parts);
-        $query->resourceId = implode('/', $parts);
-
-        return $query;
+        return new self($resourceId, $resourceType);
     }
+
+    public function getResourceId(): string
+    {
+        return $this->resourceId;
+    }
+
+    public function getResourceType(): string
+    {
+        return $this->resourceType;
+    }
+
+
 }
