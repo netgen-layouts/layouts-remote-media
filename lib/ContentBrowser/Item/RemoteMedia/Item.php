@@ -23,12 +23,12 @@ final class Item implements ItemInterface
 
     public function getValue()
     {
-        return $this->getResourceType() . '|' . $this->value->resourceId;
+        return $this->getResourceType() . '|' . str_replace('/', '|', $this->value->resourceId);
     }
 
     public function getName(): string
     {
-        $parts = explode('|', $this->value->resourceId);
+        $parts = explode('/', $this->value->resourceId);
 
         return array_pop($parts);
     }
