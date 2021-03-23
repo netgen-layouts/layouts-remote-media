@@ -6,7 +6,8 @@ namespace Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia;
 
 use Netgen\Bundle\RemoteMediaBundle\Core\FieldType\RemoteMedia\Value;
 use Netgen\ContentBrowser\Item\ItemInterface;
-use Netgen\Layouts\RemoteMedia\Core\RemoteMedia\ResourceQuery;
+use function array_pop;
+use function explode;
 
 final class Item implements ItemInterface
 {
@@ -22,7 +23,7 @@ final class Item implements ItemInterface
 
     public function getValue()
     {
-        return $this->getResourceType().'|'.$this->value->resourceId;
+        return $this->getResourceType() . '|' . $this->value->resourceId;
     }
 
     public function getName(): string

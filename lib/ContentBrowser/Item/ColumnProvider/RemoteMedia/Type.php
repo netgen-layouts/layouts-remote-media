@@ -25,7 +25,7 @@ final class Type implements ColumnValueProviderInterface
         $value = $item->getRemoteMediaValue()->metaData['resource_type'];
 
         if (array_key_exists('format', $item->getRemoteMediaValue()->metaData)) {
-            $value .= ' / '.$item->getRemoteMediaValue()->metaData['format'];
+            $value .= ' / ' . $item->getRemoteMediaValue()->metaData['format'];
         }
 
         return $value;

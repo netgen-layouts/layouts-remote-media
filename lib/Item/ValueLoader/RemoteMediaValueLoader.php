@@ -6,7 +6,6 @@ namespace Netgen\Layouts\RemoteMedia\Item\ValueLoader;
 
 use Cloudinary\Api\NotFound as CloudinaryNotFoundException;
 use Netgen\Bundle\RemoteMediaBundle\RemoteMedia\RemoteMediaProvider;
-use Netgen\ContentBrowser\Exceptions\NotFoundException;
 use Netgen\Layouts\Item\ValueLoaderInterface;
 use Netgen\Layouts\RemoteMedia\Core\RemoteMedia\ResourceQuery;
 use Netgen\Layouts\RemoteMedia\Helper\ResourceIdHelper;

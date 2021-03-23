@@ -6,7 +6,8 @@ namespace Netgen\Layouts\RemoteMedia\Item\ValueConverter;
 
 use Netgen\Bundle\RemoteMediaBundle\Core\FieldType\RemoteMedia\Value;
 use Netgen\Layouts\Item\ValueConverterInterface;
-use Netgen\Layouts\RemoteMedia\Core\RemoteMedia\ResourceQuery;
+use function array_pop;
+use function explode;
 
 /**
  * @implements \Netgen\Layouts\Item\ValueConverterInterface<\Netgen\Bundle\RemoteMediaBundle\Core\FieldType\RemoteMedia\Value>

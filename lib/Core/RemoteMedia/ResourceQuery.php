@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Netgen\Layouts\RemoteMedia\Core\RemoteMedia;
 
-use Netgen\Bundle\RemoteMediaBundle\Core\FieldType\RemoteMedia\Value;
+use function array_shift;
+use function explode;
+use function implode;
 
 final class ResourceQuery
 {
@@ -22,7 +24,7 @@ final class ResourceQuery
     {
         $parts = explode('|', $input);
 
-        $query = new ResourceQuery();
+        $query = new self();
         $query->resourceType = array_shift($parts);
         $query->resourceId = implode('/', $parts);
 

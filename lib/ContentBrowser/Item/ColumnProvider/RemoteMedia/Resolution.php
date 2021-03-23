@@ -22,6 +22,6 @@ final class Resolution implements ColumnValueProviderInterface
             return '';
         }
 
-        return $item->getRemoteMediaValue()->metaData['width'].'x'.$item->getRemoteMediaValue()->metaData['height'];
+        return $item->getRemoteMediaValue()->metaData['width'] . 'x' . $item->getRemoteMediaValue()->metaData['height'];
     }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Netgen\Layouts\RemoteMedia\ContentBrowser\Backend;
 
+use Cloudinary\Api\NotFound as CloudinaryNotFoundException;
 use Netgen\Bundle\RemoteMediaBundle\Core\FieldType\RemoteMedia\Value;
 use Netgen\Bundle\RemoteMediaBundle\RemoteMedia\NextCursorResolver;
 use Netgen\Bundle\RemoteMediaBundle\RemoteMedia\Provider\Cloudinary\Search\Query;
@@ -19,10 +20,10 @@ use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Item;
 use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Location;
 use Netgen\Layouts\RemoteMedia\Core\RemoteMedia\ResourceQuery;
 use Netgen\Layouts\RemoteMedia\Helper\ResourceIdHelper;
-use Cloudinary\Api\NotFound as CloudinaryNotFoundException;
 use Symfony\Component\Translation\TranslatorInterface;
 use function count;
 use function is_string;
+use function sprintf;
 
 final class RemoteMediaBackend implements BackendInterface
 {
@@ -48,8 +49,7 @@ final class RemoteMediaBackend implements BackendInterface
      */
     private $translator;
 
-    public function __construct
-    (
+    public function __construct(
         RemoteMediaProvider $provider,
         ResourceIdHelper $resourceIdHelper,
         NextCursorResolver $nextCursorResolver,
@@ -101,7 +101,7 @@ final class RemoteMediaBackend implements BackendInterface
         $locations = [];
         foreach ($folders as $folder) {
             $locations[] = new Location(
-                Location::TYPE_FOLDER.'|'.$location->getResourceType().'|'.$folder['name']
+                Location::TYPE_FOLDER . '|' . $location->getResourceType() . '|' . $folder['name']
             );
         }
 
@@ -242,21 +242,21 @@ final class RemoteMediaBackend implements BackendInterface
     {
         return [
             new Location(
-                'section|'.Location::RESOURCE_TYPE_ALL,
-                $this->translator->trans('backend.remote_media.resource_type.'.Location::RESOURCE_TYPE_ALL, [], 'ngcb')
+                'section|' . Location::RESOURCE_TYPE_ALL,
+                $this->translator->trans('backend.remote_media.resource_type.' . Location::RESOURCE_TYPE_ALL, [], 'ngcb')
             ),
             new Location(
-                'section|'.Location::RESOURCE_TYPE_IMAGE,
-                $this->translator->trans('backend.remote_media.resource_type.'.Location::RESOURCE_TYPE_IMAGE, [], 'ngcb')
+                'section|' . Location::RESOURCE_TYPE_IMAGE,
+                $this->translator->trans('backend.remote_media.resource_type.' . Location::RESOURCE_TYPE_IMAGE, [], 'ngcb')
             ),
             new Location(
-                'section|'.Location::RESOURCE_TYPE_VIDEO,
-                $this->translator->trans('backend.remote_media.resource_type.'.Location::RESOURCE_TYPE_VIDEO, [], 'ngcb')
+                'section|' . Location::RESOURCE_TYPE_VIDEO,
+                $this->translator->trans('backend.remote_media.resource_type.' . Location::RESOURCE_TYPE_VIDEO, [], 'ngcb')
             ),
             new Location(
-                'section|'.Location::RESOURCE_TYPE_RAW,
-                $this->translator->trans('backend.remote_media.resource_type.'.Location::RESOURCE_TYPE_RAW, [], 'ngcb')
-            )
+                'section|' . Location::RESOURCE_TYPE_RAW,
+                $this->translator->trans('backend.remote_media.resource_type.' . Location::RESOURCE_TYPE_RAW, [], 'ngcb')
+            ),
         ];
     }
 

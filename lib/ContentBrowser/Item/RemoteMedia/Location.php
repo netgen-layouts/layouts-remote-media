@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia;
 
 use Netgen\ContentBrowser\Item\LocationInterface;
+use function explode;
+use function in_array;
 
 final class Location implements LocationInterface
 {
@@ -57,7 +59,8 @@ final class Location implements LocationInterface
      */
     private $parentId;
 
-    public function __construct(string $id, ?string $name = null) {
+    public function __construct(string $id, ?string $name = null)
+    {
         $this->id = $id;
         $this->name = $name;
 
@@ -67,7 +70,7 @@ final class Location implements LocationInterface
             $this->type = self::TYPE_SECTION;
 
             $this->resourceType = self::RESOURCE_TYPE_ALL;
-            if (in_array($idParts[1], $this->supportedTypes)) {
+            if (in_array($idParts[1], $this->supportedTypes, true)) {
                 $this->resourceType = $idParts[1];
             }
 
@@ -78,12 +81,12 @@ final class Location implements LocationInterface
             $this->type = self::TYPE_FOLDER;
 
             $this->resourceType = self::RESOURCE_TYPE_ALL;
-            if (in_array($idParts[1], $this->supportedTypes)) {
+            if (in_array($idParts[1], $this->supportedTypes, true)) {
                 $this->resourceType = $idParts[1];
             }
 
             $this->folder = $idParts[2];
-            $this->parentId = self::TYPE_SECTION.'|'.$this->resourceType;
+            $this->parentId = self::TYPE_SECTION . '|' . $this->resourceType;
         }
     }
 
@@ -127,7 +130,7 @@ final class Location implements LocationInterface
             self::RESOURCE_TYPE_ALL,
             self::RESOURCE_TYPE_IMAGE,
             self::RESOURCE_TYPE_VIDEO,
-            self::RESOURCE_TYPE_RAW
+            self::RESOURCE_TYPE_RAW,
         ];
 
         return $this->resourceType;
