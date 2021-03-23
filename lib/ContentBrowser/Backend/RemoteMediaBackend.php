@@ -163,7 +163,7 @@ final class RemoteMediaBackend implements BackendInterface
     public function getSubItemsCount(LocationInterface $location): int
     {
         /** @var \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Location $location */
-        if ($location->isSection() || $location->isFolder() === null) {
+        if ($location->isSection() || $location->getFolder() === null) {
             return $this->provider->countResources();
         }
 
@@ -219,7 +219,7 @@ final class RemoteMediaBackend implements BackendInterface
 
     public function searchItemsCount(SearchQuery $searchQuery): int
     {
-        if ($searchQuery->getSearchText() === null) {
+        if ($searchQuery->getSearchText() === '') {
             return $this->provider->countResources();
         }
 
