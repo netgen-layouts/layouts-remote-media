@@ -1,4 +1,10 @@
-item_types.remote_media_image: Remote media image
-columns.remote_media_image.width: Width
-columns.remote_media_image.height: Height
-columns.remote_media_image.tags: Tags
+item_types.remote_media: Remote media
+columns.remote_media.type: Type
+columns.remote_media.resolution: Resolution
+columns.remote_media.tags: Tags
+columns.remote_media.size: Size
+
+backend.remote_media.resource_type.all: 'All resources'
+backend.remote_media.resource_type.image: 'Images'
+backend.remote_media.resource_type.video: 'Videos'
+backend.remote_media.resource_type.raw: 'RAW files'

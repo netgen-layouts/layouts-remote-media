@@ -2,7 +2,7 @@ function callback() {
   const contentBrowser = document.getElementsByClassName(
     'js-content-browser'
   )[0];
-  if (contentBrowser !== undefined && contentBrowser.dataset.itemType === 'remote_media_image') {
+  if (contentBrowser !== undefined && contentBrowser.dataset.itemType === 'remote_media') {
     const cbChildren = Array.from(
       contentBrowser.getElementsByTagName('ul')
     );

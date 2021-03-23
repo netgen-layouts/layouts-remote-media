@@ -12,15 +12,19 @@ use Netgen\ContentBrowser\Backend\BackendInterface;
 use Netgen\ContentBrowser\Backend\SearchQuery;
 use Netgen\ContentBrowser\Backend\SearchResult;
 use Netgen\ContentBrowser\Backend\SearchResultInterface;
+use Netgen\ContentBrowser\Exceptions\NotFoundException;
 use Netgen\ContentBrowser\Item\ItemInterface;
 use Netgen\ContentBrowser\Item\LocationInterface;
-use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\Image\Item;
-use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\Image\Location;
+use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Item;
+use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Location;
+use Netgen\Layouts\RemoteMedia\Core\RemoteMedia\ResourceQuery;
 use Netgen\Layouts\RemoteMedia\Helper\ResourceIdHelper;
+use Cloudinary\Api\NotFound as CloudinaryNotFoundException;
+use Symfony\Component\Translation\TranslatorInterface;
 use function count;
 use function is_string;
 
-final class ImageBackend implements BackendInterface
+final class RemoteMediaBackend implements BackendInterface
 {
     private const ROOT_LOCATION_NAME = 'root';
 
@@ -39,41 +43,56 @@ final class ImageBackend implements BackendInterface
      */
     private $nextCursorResolver;
 
-    public function __construct(RemoteMediaProvider $provider, ResourceIdHelper $resourceIdHelper, NextCursorResolver $nextCursorResolver)
-    {
+    /**
+     * @var \Symfony\Component\Translation\TranslatorInterface
+     */
+    private $translator;
+
+    public function __construct
+    (
+        RemoteMediaProvider $provider,
+        ResourceIdHelper $resourceIdHelper,
+        NextCursorResolver $nextCursorResolver,
+        TranslatorInterface $translator
+    ) {
         $this->provider = $provider;
         $this->resourceIdHelper = $resourceIdHelper;
         $this->nextCursorResolver = $nextCursorResolver;
+        $this->translator = $translator;
     }
 
     public function getSections(): iterable
     {
-        return [$this->buildRootLocation()];
+        return $this->buildSections();
     }
 
     public function loadLocation($id): LocationInterface
     {
-        if ($id === self::ROOT_LOCATION_NAME) {
-            return $this->buildRootLocation();
-        }
-
-        return new Location(
-            $this->resourceIdHelper->fromRemoteId((string) $id),
-            self::ROOT_LOCATION_NAME
-        );
+        return new Location($id);
     }
 
     public function loadItem($value): ItemInterface
     {
-        $id = $this->resourceIdHelper->toRemoteId((string) $value);
-        $resource = $this->provider->getRemoteResource($id);
+        $query = ResourceQuery::createFromString($value);
+
+        try {
+            $resource = $this->provider->getRemoteResource($query->resourceId, $query->resourceType);
+        } catch (CloudinaryNotFoundException $e) {
+            throw new NotFoundException(
+                sprintf(
+                    'Remote media with ID "%s" not found.',
+                    $id
+                )
+            );
+        }
 
         return $this->buildItem($resource);
     }
 
     public function getSubLocations(LocationInterface $location): iterable
     {
-        if ($location->getLocationId() !== self::ROOT_LOCATION_NAME) {
+        /** @var \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Location $location */
+        if ($location->isFolder()) {
             return [];
         }
 
@@ -82,8 +101,7 @@ final class ImageBackend implements BackendInterface
         $locations = [];
         foreach ($folders as $folder) {
             $locations[] = new Location(
-                $this->resourceIdHelper->fromRemoteId((string) $folder['name']),
-                self::ROOT_LOCATION_NAME
+                Location::TYPE_FOLDER.'|'.$location->getResourceType().'|'.$folder['name']
             );
         }
 
@@ -92,24 +110,26 @@ final class ImageBackend implements BackendInterface
 
     public function getSubLocationsCount(LocationInterface $location): int
     {
-        if ($location->getLocationId() === self::ROOT_LOCATION_NAME) {
-            return count($this->provider->listFolders());
+        /** @var \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Location $location */
+        if ($location->isFolder()) {
+            return 0;
         }
 
-        return 0;
+        return count($this->provider->listFolders());
     }
 
     public function getSubItems(LocationInterface $location, int $offset = 0, int $limit = 25): iterable
     {
-        $folder = $location->getLocationId() !== self::ROOT_LOCATION_NAME
-            ? $location->getName()
-            : '';
+        /** @var \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Location $location */
+        $resourceType = $location->getResourceType() !== Location::RESOURCE_TYPE_ALL ?
+            $location->getResourceType()
+            : null;
 
         $query = new Query(
             '',
-            'image',
+            $resourceType,
             $limit,
-            $folder
+            $location->getFolder()
         );
 
         if ($offset > 0) {
@@ -117,9 +137,9 @@ final class ImageBackend implements BackendInterface
 
             $query = new Query(
                 '',
-                'image',
+                $resourceType,
                 $limit,
-                $folder,
+                $location->getFolder(),
                 null,
                 $nextCursor
             );
@@ -142,19 +162,31 @@ final class ImageBackend implements BackendInterface
 
     public function getSubItemsCount(LocationInterface $location): int
     {
-        if ($location->getLocationId() === self::ROOT_LOCATION_NAME) {
+        /** @var \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Location $location */
+        if ($location->isSection()) {
             return $this->provider->countResources();
         }
 
-        return $this->provider->countResourcesInFolder((string) $location->getLocationId());
+        return $this->provider->countResourcesInFolder($location->getFolder());
     }
 
     public function searchItems(SearchQuery $searchQuery): SearchResultInterface
     {
+        $resourceType = null;
+        $folder = null;
+        if ($searchQuery->getLocation() instanceof Location) {
+            $resourceType = $searchQuery->getLocation()->getResourceType() !== Location::RESOURCE_TYPE_ALL
+                ? $searchQuery->getLocation()->getResourceType()
+                : null;
+
+            $folder = $searchQuery->getLocation()->getFolder();
+        }
+
         $query = new Query(
             $searchQuery->getSearchText(),
-            'image',
-            $searchQuery->getLimit()
+            $resourceType,
+            $searchQuery->getLimit(),
+            $folder
         );
 
         if ($searchQuery->getOffset() > 0) {
@@ -162,9 +194,9 @@ final class ImageBackend implements BackendInterface
 
             $query = new Query(
                 $searchQuery->getSearchText(),
-                'image',
+                $resourceType,
                 $searchQuery->getLimit(),
-                null,
+                $folder,
                 null,
                 $nextCursor
             );
@@ -206,17 +238,30 @@ final class ImageBackend implements BackendInterface
         return $this->searchItemsCount(new SearchQuery($searchText));
     }
 
-    private function buildRootLocation(): Location
+    private function buildSections(): array
     {
-        return new Location(self::ROOT_LOCATION_NAME);
+        return [
+            new Location(
+                'section|'.Location::RESOURCE_TYPE_ALL,
+                $this->translator->trans('backend.remote_media.resource_type.'.Location::RESOURCE_TYPE_ALL, [], 'ngcb')
+            ),
+            new Location(
+                'section|'.Location::RESOURCE_TYPE_IMAGE,
+                $this->translator->trans('backend.remote_media.resource_type.'.Location::RESOURCE_TYPE_IMAGE, [], 'ngcb')
+            ),
+            new Location(
+                'section|'.Location::RESOURCE_TYPE_VIDEO,
+                $this->translator->trans('backend.remote_media.resource_type.'.Location::RESOURCE_TYPE_VIDEO, [], 'ngcb')
+            ),
+            new Location(
+                'section|'.Location::RESOURCE_TYPE_RAW,
+                $this->translator->trans('backend.remote_media.resource_type.'.Location::RESOURCE_TYPE_RAW, [], 'ngcb')
+            )
+        ];
     }
 
     private function buildItem(Value $resource): Item
     {
-        $resourceId = $resource->resourceId !== null ?
-            $this->resourceIdHelper->fromRemoteId($resource->resourceId)
-            : null;
-
-        return new Item($resource, $resourceId);
+        return new Item($resource);
     }
 }

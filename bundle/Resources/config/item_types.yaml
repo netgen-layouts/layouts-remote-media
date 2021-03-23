@@ -1,23 +1,24 @@
 item_types:
-    remote_media_image:
-        name: item_types.remote_media_image
+    remote_media:
+        name: item_types.remote_media
         preview:
-            template: '@NetgenLayoutsRemoteMedia/ngcb/remote_media_image.html.twig'
+            template: '@NetgenLayoutsRemoteMedia/ngcb/remote_media.html.twig'
         columns:
             name:
                 name: columns.name
                 value_provider: name
-            width:
-                name: columns.remote_media_image.width
-                value_provider: remote_media_image\width
-            height:
-                name: columns.remote_media_image.height
-                value_provider: remote_media_image\height
+            type:
+                name: columns.remote_media.type
+                value_provider: remote_media\type
+            resolution:
+                name: columns.remote_media.resolution
+                value_provider: remote_media\resolution
             tags:
-                name: columns.remote_media_image.tags
-                value_provider: remote_media_image\tags
+                name: columns.remote_media.tags
+                value_provider: remote_media\tags
+            size:
+                name: columns.remote_media.size
+                value_provider: remote_media\size
         default_columns:
             - name
-            - width
-            - height
-            - tags
+            - type
