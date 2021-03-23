@@ -8,6 +8,7 @@ use Netgen\Bundle\RemoteMediaBundle\Core\FieldType\RemoteMedia\Value;
 use Netgen\ContentBrowser\Item\ItemInterface;
 use function array_pop;
 use function explode;
+use function str_replace;
 
 final class Item implements ItemInterface
 {

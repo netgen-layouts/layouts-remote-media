@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia;
 
-use Netgen\ContentBrowser\Item\LocationInterface;
 use InvalidArgumentException;
+use Netgen\ContentBrowser\Item\LocationInterface;
 use function explode;
 use function in_array;
 
@@ -109,7 +109,7 @@ final class Location implements LocationInterface
             return new self($id, $name, self::TYPE_FOLDER, $resourceType, $folder, $parentId);
         }
 
-        throw new InvalidArgumentException('Provided ID '.$id.' is invalid');
+        throw new InvalidArgumentException('Provided ID ' . $id . ' is invalid');
     }
 
     public function getLocationId()

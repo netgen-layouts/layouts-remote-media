@@ -44,6 +44,4 @@ final class ResourceQuery
     {
         return $this->resourceType;
     }
-
-
 }
