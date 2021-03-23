@@ -68,12 +68,12 @@ final class RemoteMediaBackend implements BackendInterface
 
     public function loadLocation($id): LocationInterface
     {
-        return new Location($id);
+        return new Location((string) $id);
     }
 
     public function loadItem($value): ItemInterface
     {
-        $query = ResourceQuery::createFromString($value);
+        $query = ResourceQuery::createFromString((string) $value);
 
         try {
             $resource = $this->provider->getRemoteResource($query->resourceId, $query->resourceType);
@@ -81,7 +81,7 @@ final class RemoteMediaBackend implements BackendInterface
             throw new NotFoundException(
                 sprintf(
                     'Remote media with ID "%s" not found.',
-                    $id
+                    $value
                 )
             );
         }
@@ -163,7 +163,7 @@ final class RemoteMediaBackend implements BackendInterface
     public function getSubItemsCount(LocationInterface $location): int
     {
         /** @var \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Location $location */
-        if ($location->isSection()) {
+        if ($location->isSection() || $location->isFolder() === null) {
             return $this->provider->countResources();
         }
 
@@ -238,6 +238,9 @@ final class RemoteMediaBackend implements BackendInterface
         return $this->searchItemsCount(new SearchQuery($searchText));
     }
 
+    /**
+     * @return \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Location[]
+     */
     private function buildSections(): array
     {
         return [

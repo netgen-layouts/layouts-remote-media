@@ -30,7 +30,7 @@ final class RemoteMediaValueLoader implements ValueLoaderInterface
 
     public function load($id): ?object
     {
-        $query = ResourceQuery::createFromString($id);
+        $query = ResourceQuery::createFromString((string) $id);
 
         try {
             return $this->provider->getRemoteResource(

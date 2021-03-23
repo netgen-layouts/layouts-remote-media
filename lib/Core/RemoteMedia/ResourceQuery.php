@@ -20,7 +20,7 @@ final class ResourceQuery
      */
     public $resourceType;
 
-    public static function createFromString(string $input)
+    public static function createFromString(string $input): self
     {
         $parts = explode('|', $input);
 

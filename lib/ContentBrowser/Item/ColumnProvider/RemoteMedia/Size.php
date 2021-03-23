@@ -20,7 +20,7 @@ final class Size implements ColumnValueProviderInterface
         return $this->prettyBytes($item->getRemoteMediaValue()->size);
     }
 
-    private function prettyBytes(int $size, int $precision = 2)
+    private function prettyBytes(int $size, int $precision = 2): string
     {
         $units = ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
         $step = 1024;

@@ -22,6 +22,9 @@ final class Location implements LocationInterface
 
     public const RESOURCE_TYPE_RAW = 'raw';
 
+    /**
+     * @var string[]
+     */
     private $supportedTypes = [
         self::RESOURCE_TYPE_ALL,
         self::RESOURCE_TYPE_IMAGE,
@@ -97,7 +100,7 @@ final class Location implements LocationInterface
 
     public function getName(): string
     {
-        if ($this->name) {
+        if ($this->name !== null) {
             return $this->name;
         }
 
