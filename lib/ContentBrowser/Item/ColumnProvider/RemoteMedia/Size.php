@@ -22,9 +22,15 @@ final class Size implements ColumnValueProviderInterface
 
     private function prettyBytes(int $size, int $precision = 2)
     {
-        for ($i = 0; ($size / 1024) > 0.9; $i++, $size /= 1024) {
+        $units = ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']);
+        $step = 1024;
+
+        $unitIndex = 0;
+        while (($size / $step) > 0.9) {
+            $size = $size / $step;
+            $unitIndex++;
         }
 
-        return round($size, $precision) . [' B', ' kB', ' MB', ' GB', ' TB', ' PB', ' EB', ' ZB', ' YB'][$i];
+        return round($size, $precision) . $units[$unitIndex];
     }
 }
