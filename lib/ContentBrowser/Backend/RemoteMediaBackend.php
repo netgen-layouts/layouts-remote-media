@@ -219,6 +219,10 @@ final class RemoteMediaBackend implements BackendInterface
 
     public function searchItemsCount(SearchQuery $searchQuery): int
     {
+        if ($searchQuery->getSearchText() === null) {
+            return $this->provider->countResources();
+        }
+
         return $this->provider->countResourcesInFolder($searchQuery->getSearchText());
     }
 
