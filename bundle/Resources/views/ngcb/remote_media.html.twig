@@ -1,15 +1,13 @@
-<div class="remote-media">
-    {% if item.remoteMediaValue.mediaType == 'image' %}
+{% if item.remoteMediaValue.mediaType == 'image' %}
+    <div class="remote-media">
         <img src="{{ item.remoteMediaValue.secure_url }}" />
-    {% elseif item.remoteMediaValue.mediaType == 'video' %}
-        {% set thumbnail = netgen_remote_video_thumbnail(item.remoteMediaValue) %}
+    </div>
+{% elseif item.remoteMediaValue.mediaType == 'video' %}
+    {% set thumbnail = netgen_remote_video_thumbnail(item.remoteMediaValue) %}
 
-        {% if thumbnail %}
+    {% if thumbnail %}
+        <div class="remote-media">
             <img src="{{ thumbnail }}" />
-        {% else %}
-            This item does not have a preview.
-        {% endif %}
-    {% else %}
-        This item does not have a preview.
+        </div>
     {% endif %}
-</div>
+{% endif %}
