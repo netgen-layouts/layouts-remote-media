@@ -17,9 +17,19 @@ final class Resolution implements ColumnValueProviderInterface
             return null;
         }
 
-        if (!array_key_exists('width', $item->getRemoteMediaValue()->metaData)
-            || !array_key_exists('height', $item->getRemoteMediaValue()->metaData)
-            || ($item->getRemoteMediaValue()->metaData['width'] === '' && $item->getRemoteMediaValue()->metaData['height'] === '')) {
+        if (!array_key_exists('width', $item->getRemoteMediaValue()->metaData)) {
+            return '';
+        }
+
+        if (!array_key_exists('height', $item->getRemoteMediaValue()->metaData)) {
+            return '';
+        }
+
+        if ($item->getRemoteMediaValue()->metaData['width'] === '') {
+            return '';
+        }
+
+        if ($item->getRemoteMediaValue()->metaData['height'] === '') {
             return '';
         }
 
