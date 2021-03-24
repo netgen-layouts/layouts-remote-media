@@ -119,11 +119,7 @@ final class Location implements LocationInterface
 
     public function getName(): string
     {
-        if ($this->name !== null) {
-            return $this->name;
-        }
-
-        return $this->isSection() ? $this->resourceType : $this->folder;
+        return $this->name;
     }
 
     public function getParentId()
