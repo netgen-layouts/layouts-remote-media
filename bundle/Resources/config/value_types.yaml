@@ -1,3 +1,3 @@
 value_types:
-    remote_media_image:
-        name: 'Remote media image'
+    remote_media:
+        name: 'Remote media'

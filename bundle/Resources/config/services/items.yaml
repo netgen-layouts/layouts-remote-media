@@ -1,18 +1,17 @@
 services:
-    netgen_layouts.remote_media.item.value_converter.image:
-        class: Netgen\Layouts\RemoteMedia\Item\ValueConverter\ImageValueConverter
+    netgen_layouts.remote_media.item.value_converter.remote_media:
+        class: Netgen\Layouts\RemoteMedia\Item\ValueConverter\RemoteMediaValueConverter
         tags:
             - { name: netgen_layouts.cms_value_converter }
 
-    netgen_layouts.remote_media.item.value_loader.image:
-        class: Netgen\Layouts\RemoteMedia\Item\ValueLoader\ImageValueLoader
+    netgen_layouts.remote_media.item.value_loader.remote_media:
+        class: Netgen\Layouts\RemoteMedia\Item\ValueLoader\RemoteMediaValueLoader
         arguments:
             - "@netgen_remote_media.provider.cloudinary"
-            - "@netgen_layouts.remote_media.helper.resource_id"
         tags:
-            - { name: netgen_layouts.cms_value_loader, value_type: remote_media_image }
+            - { name: netgen_layouts.cms_value_loader, value_type: remote_media }
 
-    netgen_layouts.remote_media.item.value_url_generator.image:
-        class: Netgen\Layouts\RemoteMedia\Item\ValueUrlGenerator\ImageValueUrlGenerator
+    netgen_layouts.remote_media.item.value_url_generator.remote_media:
+        class: Netgen\Layouts\RemoteMedia\Item\ValueUrlGenerator\RemoteMediaValueUrlGenerator
         tags:
-            - { name: netgen_layouts.cms_value_url_generator, value_type: remote_media_image }
+            - { name: netgen_layouts.cms_value_url_generator, value_type: remote_media }

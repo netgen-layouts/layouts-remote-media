@@ -6,11 +6,13 @@ namespace Netgen\Layouts\RemoteMedia\Item\ValueConverter;
 
 use Netgen\Bundle\RemoteMediaBundle\Core\FieldType\RemoteMedia\Value;
 use Netgen\Layouts\Item\ValueConverterInterface;
+use function array_pop;
+use function explode;
 
 /**
  * @implements \Netgen\Layouts\Item\ValueConverterInterface<\Netgen\Bundle\RemoteMediaBundle\Core\FieldType\RemoteMedia\Value>
  */
-final class ImageValueConverter implements ValueConverterInterface
+final class RemoteMediaValueConverter implements ValueConverterInterface
 {
     public function supports(object $object): bool
     {
@@ -19,7 +21,7 @@ final class ImageValueConverter implements ValueConverterInterface
 
     public function getValueType(object $object): string
     {
-        return 'remote_media_image';
+        return 'remote_media';
     }
 
     public function getId(object $object)
@@ -34,7 +36,9 @@ final class ImageValueConverter implements ValueConverterInterface
 
     public function getName(object $object): string
     {
-        return $object->resourceId;
+        $parts = explode('/', $object->resourceId);
+
+        return array_pop($parts);
     }
 
     public function getIsVisible(object $object): bool

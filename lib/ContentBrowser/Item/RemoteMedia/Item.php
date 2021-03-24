@@ -2,10 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Netgen\Layouts\RemoteMedia\ContentBrowser\Item\Image;
+namespace Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia;
 
 use Netgen\Bundle\RemoteMediaBundle\Core\FieldType\RemoteMedia\Value;
 use Netgen\ContentBrowser\Item\ItemInterface;
+use function array_pop;
+use function explode;
+use function str_replace;
 
 final class Item implements ItemInterface
 {
@@ -14,25 +17,21 @@ final class Item implements ItemInterface
      */
     private $value;
 
-    /**
-     * @var string|null
-     */
-    private $resourceId;
-
-    public function __construct(Value $value, ?string $resourceId = null)
+    public function __construct(Value $value)
     {
         $this->value = $value;
-        $this->resourceId = $resourceId;
     }
 
     public function getValue()
     {
-        return $this->resourceId;
+        return $this->getResourceType() . '|' . str_replace('/', '|', $this->value->resourceId);
     }
 
     public function getName(): string
     {
-        return (string) $this->value->resourceId;
+        $parts = explode('/', $this->value->resourceId);
+
+        return array_pop($parts);
     }
 
     public function isVisible(): bool
@@ -43,6 +42,11 @@ final class Item implements ItemInterface
     public function isSelectable(): bool
     {
         return true;
+    }
+
+    public function getResourceType(): string
+    {
+        return $this->value->metaData['resource_type'] ?? 'image';
     }
 
     public function getRemoteMediaValue(): Value

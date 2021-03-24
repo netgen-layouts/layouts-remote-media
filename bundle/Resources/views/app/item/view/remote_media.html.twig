@@ -1,0 +1,36 @@
+{% if item.object is defined %}
+    <div class="image">
+        {% if item.object.mediaType == 'image' %}
+            <img src="{{ nglayouts_item_path(item) }}" />
+        {% elseif item.object.mediaType == 'video' %}
+            {% set thumbnail = netgen_remote_video_thumbnail(item.object) %}
+
+            {% if thumbnail %}
+                <img src="{{ thumbnail }}" />
+            {% else %}
+                <i class="material-icons" aria-hidden="true">audiotrack</i>
+            {% endif %}
+        {% else %}
+            <i class="material-icons" aria-hidden="true">insert_drive_file</i>
+        {% endif %}
+    </div>
+{% endif %}
+
+<div class="name">
+    <p>{{ item.name }}</p>
+</div>
+
+{% if item.object.metaData is defined %}
+    <div class="value-type">
+        <p>
+            Remote media:
+            {% if item.object.metaData.resource_type is defined %}
+                {{ item.object.metaData.resource_type }}
+            {% endif %}
+
+            {% if item.object.metaData.format is defined and item.object.metaData.format %}
+                / {{ item.object.metaData.format }}
+            {% endif %}
+        </p>
+    </div>
+{% endif %}
