@@ -6,7 +6,6 @@ namespace Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia;
 
 use Netgen\Bundle\RemoteMediaBundle\Core\FieldType\RemoteMedia\Value;
 use Netgen\ContentBrowser\Item\ItemInterface;
-use function array_key_exists;
 use function array_pop;
 use function explode;
 use function str_replace;
@@ -47,11 +46,7 @@ final class Item implements ItemInterface
 
     public function getResourceType(): string
     {
-        if (array_key_exists('resource_type', $this->value->metaData)) {
-            return $this->value->metaData['resource_type'];
-        }
-
-        return 'image';
+        return $this->value->metaData['resource_type'] ?? 'image';
     }
 
     public function getRemoteMediaValue(): Value

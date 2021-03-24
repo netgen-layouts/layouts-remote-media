@@ -7,7 +7,6 @@ namespace Netgen\Layouts\RemoteMedia\ContentBrowser\Item\ColumnProvider\RemoteMe
 use Netgen\ContentBrowser\Item\ColumnProvider\ColumnValueProviderInterface;
 use Netgen\ContentBrowser\Item\ItemInterface;
 use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Item;
-use function array_key_exists;
 
 final class Resolution implements ColumnValueProviderInterface
 {
@@ -17,19 +16,11 @@ final class Resolution implements ColumnValueProviderInterface
             return null;
         }
 
-        if (!array_key_exists('width', $item->getRemoteMediaValue()->metaData)) {
+        if (($item->getRemoteMediaValue()->metaData['width'] ?? '') === '') {
             return '';
         }
 
-        if (!array_key_exists('height', $item->getRemoteMediaValue()->metaData)) {
-            return '';
-        }
-
-        if ($item->getRemoteMediaValue()->metaData['width'] === '') {
-            return '';
-        }
-
-        if ($item->getRemoteMediaValue()->metaData['height'] === '') {
+        if (($item->getRemoteMediaValue()->metaData['height'] ?? '') === '') {
             return '';
         }
 
