@@ -17,9 +17,8 @@ final class Type implements ColumnValueProviderInterface
             return null;
         }
 
-        $value = '';
         if (!array_key_exists('resource_type', $item->getRemoteMediaValue()->metaData)) {
-            return $value;
+            $value = '';
         }
 
         $value = $item->getRemoteMediaValue()->metaData['resource_type'];
