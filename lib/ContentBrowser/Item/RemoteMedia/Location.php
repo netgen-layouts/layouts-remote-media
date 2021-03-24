@@ -51,12 +51,12 @@ final class Location implements LocationInterface
     private $resourceType;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $folder;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $parentId;
 
