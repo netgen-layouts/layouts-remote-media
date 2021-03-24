@@ -3,7 +3,6 @@ services:
         class: Netgen\Layouts\RemoteMedia\ContentBrowser\Backend\RemoteMediaBackend
         arguments:
             - "@netgen_remote_media.provider.cloudinary"
-            - "@netgen_layouts.remote_media.helper.resource_id"
             - "@netgen_remote_media.next_cursor_resolver"
             - "@translator"
         tags:

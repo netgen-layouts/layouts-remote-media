@@ -1,3 +1,0 @@
-services:
-    netgen_layouts.remote_media.helper.resource_id:
-        class: Netgen\Layouts\RemoteMedia\Helper\ResourceIdHelper

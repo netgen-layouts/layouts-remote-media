@@ -8,7 +8,6 @@ services:
         class: Netgen\Layouts\RemoteMedia\Item\ValueLoader\RemoteMediaValueLoader
         arguments:
             - "@netgen_remote_media.provider.cloudinary"
-            - "@netgen_layouts.remote_media.helper.resource_id"
         tags:
             - { name: netgen_layouts.cms_value_loader, value_type: remote_media }
 

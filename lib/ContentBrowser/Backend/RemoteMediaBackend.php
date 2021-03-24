@@ -19,7 +19,6 @@ use Netgen\ContentBrowser\Item\LocationInterface;
 use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Item;
 use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Location;
 use Netgen\Layouts\RemoteMedia\Core\RemoteMedia\ResourceQuery;
-use Netgen\Layouts\RemoteMedia\Helper\ResourceIdHelper;
 use Symfony\Component\Translation\TranslatorInterface;
 use function count;
 use function is_string;
@@ -35,11 +34,6 @@ final class RemoteMediaBackend implements BackendInterface
     private $provider;
 
     /**
-     * @var \Netgen\Layouts\RemoteMedia\Helper\ResourceIdHelper
-     */
-    private $resourceIdHelper;
-
-    /**
      * @var \Netgen\Bundle\RemoteMediaBundle\RemoteMedia\NextCursorResolver
      */
     private $nextCursorResolver;
@@ -51,12 +45,10 @@ final class RemoteMediaBackend implements BackendInterface
 
     public function __construct(
         RemoteMediaProvider $provider,
-        ResourceIdHelper $resourceIdHelper,
         NextCursorResolver $nextCursorResolver,
         TranslatorInterface $translator
     ) {
         $this->provider = $provider;
-        $this->resourceIdHelper = $resourceIdHelper;
         $this->nextCursorResolver = $nextCursorResolver;
         $this->translator = $translator;
     }
