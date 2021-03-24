@@ -6,6 +6,7 @@ namespace Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia;
 
 use Netgen\Bundle\RemoteMediaBundle\Core\FieldType\RemoteMedia\Value;
 use Netgen\ContentBrowser\Item\ItemInterface;
+use function array_key_exists;
 use function array_pop;
 use function explode;
 use function str_replace;
