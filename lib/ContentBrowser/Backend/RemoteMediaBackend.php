@@ -26,8 +26,6 @@ use function sprintf;
 
 final class RemoteMediaBackend implements BackendInterface
 {
-    private const ROOT_LOCATION_NAME = 'root';
-
     /**
      * @var \Netgen\Bundle\RemoteMediaBundle\RemoteMedia\RemoteMediaProvider
      */
@@ -87,17 +85,13 @@ final class RemoteMediaBackend implements BackendInterface
     public function getSubLocations(LocationInterface $location): iterable
     {
         /** @var \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Location $location */
-        if ($location->isFolder()) {
-            return [];
-        }
-
-        $folders = $this->provider->listFolders();
+        $folders = $location->getFolder() !== null
+            ? $this->provider->listSubFolders($location->getFolder())
+            : $this->provider->listFolders();
 
         $locations = [];
         foreach ($folders as $folder) {
-            $locations[] = Location::createFromId(
-                Location::TYPE_FOLDER . '|' . $location->getResourceType() . '|' . $folder['name']
-            );
+            $locations[] = Location::createFromFolder($folder['path'], $folder['name']);
         }
 
         return $locations;
@@ -106,11 +100,9 @@ final class RemoteMediaBackend implements BackendInterface
     public function getSubLocationsCount(LocationInterface $location): int
     {
         /** @var \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Location $location */
-        if ($location->isFolder()) {
-            return 0;
-        }
-
-        return count($this->provider->listFolders());
+        return $location->getFolder() !== null
+            ? count($this->provider->listSubFolders($location->getFolder()))
+            : count($this->provider->listFolders());
     }
 
     public function getSubItems(LocationInterface $location, int $offset = 0, int $limit = 25): iterable
@@ -158,11 +150,11 @@ final class RemoteMediaBackend implements BackendInterface
     public function getSubItemsCount(LocationInterface $location): int
     {
         /** @var \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Location $location */
-        if ($location->isSection() || $location->getFolder() === null) {
-            return $this->provider->countResources();
+        if ($location->getFolder() !== null) {
+            return $this->provider->countResourcesInFolder($location->getFolder());
         }
 
-        return $this->provider->countResourcesInFolder($location->getFolder());
+        return $this->provider->countResources();
     }
 
     public function searchItems(SearchQuery $searchQuery): SearchResultInterface
@@ -243,20 +235,20 @@ final class RemoteMediaBackend implements BackendInterface
     private function buildSections(): array
     {
         return [
-            Location::createFromId(
-                'section|' . Location::RESOURCE_TYPE_ALL,
+            Location::createAsSection(
+                Location::RESOURCE_TYPE_ALL,
                 $this->translator->trans('backend.remote_media.resource_type.' . Location::RESOURCE_TYPE_ALL, [], 'ngcb')
             ),
-            Location::createFromId(
-                'section|' . Location::RESOURCE_TYPE_IMAGE,
+            Location::createAsSection(
+                Location::RESOURCE_TYPE_IMAGE,
                 $this->translator->trans('backend.remote_media.resource_type.' . Location::RESOURCE_TYPE_IMAGE, [], 'ngcb')
             ),
-            Location::createFromId(
-                'section|' . Location::RESOURCE_TYPE_VIDEO,
+            Location::createAsSection(
+                Location::RESOURCE_TYPE_VIDEO,
                 $this->translator->trans('backend.remote_media.resource_type.' . Location::RESOURCE_TYPE_VIDEO, [], 'ngcb')
             ),
-            Location::createFromId(
-                'section|' . Location::RESOURCE_TYPE_RAW,
+            Location::createAsSection(
+                Location::RESOURCE_TYPE_RAW,
                 $this->translator->trans('backend.remote_media.resource_type.' . Location::RESOURCE_TYPE_RAW, [], 'ngcb')
             ),
         ];
