@@ -99,7 +99,7 @@ final class RemoteMediaBackend implements BackendInterface
 
     public function getSubLocationsCount(LocationInterface $location): int
     {
-        /** @var \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Location $location */
+        /* @var \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Location $location */
         return $location->getFolder() !== null
             ? count($this->provider->listSubFolders($location->getFolder()))
             : count($this->provider->listFolders());
