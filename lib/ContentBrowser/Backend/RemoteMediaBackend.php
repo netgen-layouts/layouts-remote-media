@@ -26,8 +26,6 @@ use function sprintf;
 
 final class RemoteMediaBackend implements BackendInterface
 {
-    private const ROOT_LOCATION_NAME = 'root';
-
     /**
      * @var \Netgen\Bundle\RemoteMediaBundle\RemoteMedia\RemoteMediaProvider
      */
@@ -81,7 +79,7 @@ final class RemoteMediaBackend implements BackendInterface
             );
         }
 
-        return $this->buildItem($resource);
+        return new Item($resource);
     }
 
     public function getSubLocations(LocationInterface $location): iterable
@@ -149,7 +147,7 @@ final class RemoteMediaBackend implements BackendInterface
         $items = [];
 
         foreach ($result->getResults() as $resource) {
-            $items[] = $this->buildItem(Value::createFromCloudinaryResponse($resource));
+            $items[] = new Item(Value::createFromCloudinaryResponse($resource));
         }
 
         return $items;
@@ -206,7 +204,7 @@ final class RemoteMediaBackend implements BackendInterface
         $items = [];
 
         foreach ($result->getResults() as $resource) {
-            $items[] = $this->buildItem(Value::createFromCloudinaryResponse($resource));
+            $items[] = new Item(Value::createFromCloudinaryResponse($resource));
         }
 
         return new SearchResult($items);
@@ -214,11 +212,24 @@ final class RemoteMediaBackend implements BackendInterface
 
     public function searchItemsCount(SearchQuery $searchQuery): int
     {
-        if ($searchQuery->getSearchText() === '') {
-            return $this->provider->countResources();
+        $resourceType = null;
+        $folder = null;
+        if ($searchQuery->getLocation() instanceof Location) {
+            $resourceType = $searchQuery->getLocation()->getResourceType() !== Location::RESOURCE_TYPE_ALL
+                ? $searchQuery->getLocation()->getResourceType()
+                : null;
+
+            $folder = $searchQuery->getLocation()->getFolder();
         }
 
-        return $this->provider->countResourcesInFolder($searchQuery->getSearchText());
+        $query = new Query(
+            $searchQuery->getSearchText(),
+            $resourceType,
+            $searchQuery->getLimit(),
+            $folder
+        );
+
+        return $this->provider->searchResourcesCount($query);
     }
 
     public function search(string $searchText, int $offset = 0, int $limit = 25): iterable
@@ -260,10 +271,5 @@ final class RemoteMediaBackend implements BackendInterface
                 $this->translator->trans('backend.remote_media.resource_type.' . Location::RESOURCE_TYPE_RAW, [], 'ngcb')
             ),
         ];
-    }
-
-    private function buildItem(Value $resource): Item
-    {
-        return new Item($resource);
     }
 }
