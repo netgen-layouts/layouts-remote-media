@@ -84,7 +84,10 @@ final class RemoteMediaBackend implements BackendInterface
 
     public function getSubLocations(LocationInterface $location): iterable
     {
-        /** @var \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Location $location */
+        if (!$location instanceof Location) {
+            return [];
+        }
+
         $folders = $location->getFolder() !== null
             ? $this->provider->listSubFolders($location->getFolder())
             : $this->provider->listFolders();
@@ -99,7 +102,10 @@ final class RemoteMediaBackend implements BackendInterface
 
     public function getSubLocationsCount(LocationInterface $location): int
     {
-        /* @var \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Location $location */
+        if (!$location instanceof Location) {
+            return 0;
+        }
+
         return $location->getFolder() !== null
             ? count($this->provider->listSubFolders($location->getFolder()))
             : count($this->provider->listFolders());
@@ -107,7 +113,10 @@ final class RemoteMediaBackend implements BackendInterface
 
     public function getSubItems(LocationInterface $location, int $offset = 0, int $limit = 25): iterable
     {
-        /** @var \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Location $location */
+        if (!$location instanceof Location) {
+            return [];
+        }
+
         $resourceType = $location->getResourceType() !== Location::RESOURCE_TYPE_ALL ?
             $location->getResourceType()
             : null;
@@ -149,7 +158,10 @@ final class RemoteMediaBackend implements BackendInterface
 
     public function getSubItemsCount(LocationInterface $location): int
     {
-        /** @var \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Location $location */
+        if (!$location instanceof Location) {
+            return 0;
+        }
+
         if ($location->getFolder() !== null) {
             return $this->provider->countResourcesInFolder($location->getFolder());
         }
