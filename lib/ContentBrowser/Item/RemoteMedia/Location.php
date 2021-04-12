@@ -6,15 +6,16 @@ namespace Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia;
 
 use InvalidArgumentException;
 use Netgen\ContentBrowser\Item\LocationInterface;
+use function array_pop;
+use function array_shift;
+use function array_slice;
+use function count;
 use function explode;
+use function implode;
 use function in_array;
 
 final class Location implements LocationInterface
 {
-    public const TYPE_SECTION = 'section';
-
-    public const TYPE_FOLDER = 'folder';
-
     public const RESOURCE_TYPE_ALL = 'all';
 
     public const RESOURCE_TYPE_IMAGE = 'image';
@@ -43,11 +44,6 @@ final class Location implements LocationInterface
     /**
      * @var string
      */
-    private $type;
-
-    /**
-     * @var string
-     */
     private $resourceType;
 
     /**
@@ -63,53 +59,68 @@ final class Location implements LocationInterface
     private function __construct(
         string $id,
         string $name,
-        string $type,
         string $resourceType,
         ?string $folder = null,
         ?string $parentId = null
     ) {
         $this->id = $id;
         $this->name = $name;
-        $this->type = $type;
         $this->resourceType = $resourceType;
         $this->folder = $folder;
         $this->parentId = $parentId;
     }
 
-    public static function createFromId(string $id, ?string $name = null): self
+    public static function createFromId(string $id): self
     {
         $idParts = explode('|', $id);
+        $resourceType = array_shift($idParts);
 
-        if ($idParts[0] === self::TYPE_SECTION) {
-            $resourceType = self::RESOURCE_TYPE_ALL;
-            if (in_array($idParts[1], self::SUPPORTED_TYPES, true)) {
-                $resourceType = $idParts[1];
-            }
-
-            if ($name === null) {
-                $name = $resourceType;
-            }
-
-            return new self($id, $name, self::TYPE_SECTION, $resourceType);
+        if (!in_array($resourceType, self::SUPPORTED_TYPES, true)) {
+            throw new InvalidArgumentException('Provided ID ' . $id . ' is invalid');
         }
 
-        if ($idParts[0] === self::TYPE_FOLDER) {
-            $resourceType = self::RESOURCE_TYPE_ALL;
-            if (in_array($idParts[1], self::SUPPORTED_TYPES, true)) {
-                $resourceType = $idParts[1];
-            }
+        $name = $resourceType;
+        $folder = null;
+        $parentId = null;
 
-            $folder = $idParts[2];
-            $parentId = self::TYPE_SECTION . '|' . $resourceType;
+        if (count($idParts) > 0) {
+            $folder = implode('/', $idParts);
+            $name = array_pop($idParts);
 
-            if ($name === null) {
-                $name = $folder;
-            }
-
-            return new self($id, $name, self::TYPE_FOLDER, $resourceType, $folder, $parentId);
+            $parentId = count($idParts) > 0
+                ? $resourceType . '|' . implode('|', $idParts)
+                : $resourceType;
         }
 
-        throw new InvalidArgumentException('Provided ID ' . $id . ' is invalid');
+        return new self($id, $name, $resourceType, $folder, $parentId);
+    }
+
+    public static function createAsSection(string $resourceType, ?string $sectionName = null): self
+    {
+        if (!in_array($resourceType, self::SUPPORTED_TYPES, true)) {
+            throw new InvalidArgumentException('Provided resource type ' . $resourceType . ' is invalid');
+        }
+
+        return new self(
+            $resourceType,
+            $sectionName ?? $resourceType,
+            $resourceType
+        );
+    }
+
+    public static function createFromFolder(string $folderPath, string $folderName, string $resourceType = self::RESOURCE_TYPE_ALL): self
+    {
+        $folders = explode('/', $folderPath);
+        $folder = implode('/', $folders);
+
+        $id = $resourceType . '|' . implode('|', $folders);
+        $parentId = $resourceType;
+
+        if (count($folders) > 1) {
+            $parentId .= '|' . implode('|', array_slice($folders, 0, -1));
+        }
+
+        return new self($id, $folderName, $resourceType, $folder, $parentId);
     }
 
     public function getLocationId()
@@ -125,16 +136,6 @@ final class Location implements LocationInterface
     public function getParentId()
     {
         return $this->parentId;
-    }
-
-    public function isSection(): bool
-    {
-        return $this->type === self::TYPE_SECTION;
-    }
-
-    public function isFolder(): bool
-    {
-        return $this->type === self::TYPE_FOLDER;
     }
 
     public function getFolder(): ?string
