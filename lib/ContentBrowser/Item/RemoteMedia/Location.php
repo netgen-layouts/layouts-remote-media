@@ -100,7 +100,7 @@ final class Location implements LocationInterface
         return new self($id, $name, $resourceType, $folder, $parentId);
     }
 
-    public static function createAsSection(string $resourceType, ?string $sectionName = null)
+    public static function createAsSection(string $resourceType, ?string $sectionName = null): self
     {
         if (!in_array($resourceType, self::SUPPORTED_TYPES, true)) {
             throw new InvalidArgumentException('Provided resource type ' . $resourceType . ' is invalid');
@@ -113,7 +113,7 @@ final class Location implements LocationInterface
         );
     }
 
-    public static function createFromFolder(string $folderPath, string $folderName, string $resourceType = self::RESOURCE_TYPE_ALL)
+    public static function createFromFolder(string $folderPath, string $folderName, string $resourceType = self::RESOURCE_TYPE_ALL): self
     {
         $folders = explode('/', $folderPath);
         $folder = implode('/', $folders);
