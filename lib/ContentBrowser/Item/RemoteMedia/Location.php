@@ -73,11 +73,6 @@ final class Location implements LocationInterface
     public static function createFromId(string $id): self
     {
         $idParts = explode('|', $id);
-
-        if (count($idParts) === 0) {
-            throw new InvalidArgumentException('Provided ID ' . $id . ' is invalid');
-        }
-
         $resourceType = array_shift($idParts);
 
         if (!in_array($resourceType, self::SUPPORTED_TYPES, true)) {
