@@ -80,7 +80,7 @@ final class Location implements LocationInterface
         }
 
         $name = $resourceType;
-        $folder = null;
+        $folder = '';
         $parentId = null;
 
         if (count($idParts) > 0) {
@@ -104,7 +104,8 @@ final class Location implements LocationInterface
         return new self(
             $resourceType,
             $sectionName ?? $resourceType,
-            $resourceType
+            $resourceType,
+            ''
         );
     }
 
