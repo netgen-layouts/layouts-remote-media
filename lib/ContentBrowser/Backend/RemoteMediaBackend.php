@@ -94,7 +94,7 @@ final class RemoteMediaBackend implements BackendInterface
 
         $locations = [];
         foreach ($folders as $folder) {
-            $locations[] = Location::createFromFolder($folder['path'], $folder['name']);
+            $locations[] = Location::createFromFolder($folder['path'], $folder['name'], $location->getResourceType());
         }
 
         return $locations;
