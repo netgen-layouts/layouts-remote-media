@@ -172,20 +172,16 @@ final class RemoteMediaBackend implements BackendInterface
     public function searchItems(SearchQuery $searchQuery): SearchResultInterface
     {
         $resourceType = null;
-        $folder = null;
         if ($searchQuery->getLocation() instanceof Location) {
             $resourceType = $searchQuery->getLocation()->getResourceType() !== Location::RESOURCE_TYPE_ALL
                 ? $searchQuery->getLocation()->getResourceType()
                 : null;
-
-            $folder = $searchQuery->getLocation()->getFolder();
         }
 
         $query = new Query(
             $searchQuery->getSearchText(),
             $resourceType,
-            $searchQuery->getLimit(),
-            $folder
+            $searchQuery->getLimit()
         );
 
         if ($searchQuery->getOffset() > 0) {
@@ -195,7 +191,7 @@ final class RemoteMediaBackend implements BackendInterface
                 $searchQuery->getSearchText(),
                 $resourceType,
                 $searchQuery->getLimit(),
-                $folder,
+                null,
                 null,
                 $nextCursor
             );
