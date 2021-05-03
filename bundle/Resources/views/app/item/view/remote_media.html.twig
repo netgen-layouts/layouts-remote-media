@@ -24,9 +24,7 @@
     <div class="value-type">
         <p>
             Remote media:
-            {% if item.object.metaData.resource_type is defined %}
-                {{ item.object.metaData.resource_type }}
-            {% endif %}
+            {{ item.object.resourceType }}
 
             {% if item.object.metaData.format is defined and item.object.metaData.format %}
                 / {{ item.object.metaData.format }}

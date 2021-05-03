@@ -46,7 +46,7 @@ final class Item implements ItemInterface
 
     public function getResourceType(): string
     {
-        return $this->value->metaData['resource_type'] ?? 'image';
+        return $this->value->resourceType;
     }
 
     public function getRemoteMediaValue(): Value
