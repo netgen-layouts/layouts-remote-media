@@ -30,8 +30,8 @@ final class NetgenLayoutsRemoteMediaExtension extends Extension implements Prepe
                 [
                     new GlobFileLoader($container, $locator),
                     new YamlFileLoader($container, $locator),
-                ]
-            )
+                ],
+            ),
         );
 
         $loader->load('services/**/*.yaml', 'glob');

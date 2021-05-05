@@ -28,7 +28,7 @@ final class RemoteMediaValueLoader implements ValueLoaderInterface
         try {
             return $this->provider->getRemoteResource(
                 $query->getResourceId(),
-                $query->getResourceType()
+                $query->getResourceType(),
             );
         } catch (CloudinaryNotFoundException $e) {
             return null;

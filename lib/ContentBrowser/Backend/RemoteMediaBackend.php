@@ -68,14 +68,14 @@ final class RemoteMediaBackend implements BackendInterface
         try {
             $resource = $this->provider->getRemoteResource(
                 $query->getResourceId(),
-                $query->getResourceType()
+                $query->getResourceType(),
             );
         } catch (CloudinaryNotFoundException $e) {
             throw new NotFoundException(
                 sprintf(
                     'Remote media with ID "%s" not found.',
-                    $value
-                )
+                    $value,
+                ),
             );
         }
 
@@ -125,7 +125,7 @@ final class RemoteMediaBackend implements BackendInterface
             '',
             $resourceType,
             $limit,
-            $location->getFolder()
+            $location->getFolder(),
         );
 
         if ($offset > 0) {
@@ -137,7 +137,7 @@ final class RemoteMediaBackend implements BackendInterface
                 $limit,
                 $location->getFolder(),
                 null,
-                $nextCursor
+                $nextCursor,
             );
         }
 
@@ -181,7 +181,7 @@ final class RemoteMediaBackend implements BackendInterface
         $query = new Query(
             $searchQuery->getSearchText(),
             $resourceType,
-            $searchQuery->getLimit()
+            $searchQuery->getLimit(),
         );
 
         if ($searchQuery->getOffset() > 0) {
@@ -193,7 +193,7 @@ final class RemoteMediaBackend implements BackendInterface
                 $searchQuery->getLimit(),
                 null,
                 null,
-                $nextCursor
+                $nextCursor,
             );
         }
 
@@ -228,7 +228,7 @@ final class RemoteMediaBackend implements BackendInterface
             $searchQuery->getSearchText(),
             $resourceType,
             $searchQuery->getLimit(),
-            $folder
+            $folder,
         );
 
         return $this->provider->searchResourcesCount($query);
@@ -258,19 +258,19 @@ final class RemoteMediaBackend implements BackendInterface
         return [
             Location::createAsSection(
                 Location::RESOURCE_TYPE_ALL,
-                $this->translator->trans('backend.remote_media.resource_type.' . Location::RESOURCE_TYPE_ALL, [], 'ngcb')
+                $this->translator->trans('backend.remote_media.resource_type.' . Location::RESOURCE_TYPE_ALL, [], 'ngcb'),
             ),
             Location::createAsSection(
                 Location::RESOURCE_TYPE_IMAGE,
-                $this->translator->trans('backend.remote_media.resource_type.' . Location::RESOURCE_TYPE_IMAGE, [], 'ngcb')
+                $this->translator->trans('backend.remote_media.resource_type.' . Location::RESOURCE_TYPE_IMAGE, [], 'ngcb'),
             ),
             Location::createAsSection(
                 Location::RESOURCE_TYPE_VIDEO,
-                $this->translator->trans('backend.remote_media.resource_type.' . Location::RESOURCE_TYPE_VIDEO, [], 'ngcb')
+                $this->translator->trans('backend.remote_media.resource_type.' . Location::RESOURCE_TYPE_VIDEO, [], 'ngcb'),
             ),
             Location::createAsSection(
                 Location::RESOURCE_TYPE_RAW,
-                $this->translator->trans('backend.remote_media.resource_type.' . Location::RESOURCE_TYPE_RAW, [], 'ngcb')
+                $this->translator->trans('backend.remote_media.resource_type.' . Location::RESOURCE_TYPE_RAW, [], 'ngcb'),
             ),
         ];
     }

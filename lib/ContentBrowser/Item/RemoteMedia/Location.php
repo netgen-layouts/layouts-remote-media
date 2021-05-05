@@ -105,7 +105,7 @@ final class Location implements LocationInterface
             $resourceType,
             $sectionName ?? $resourceType,
             $resourceType,
-            ''
+            '',
         );
     }
 
