@@ -10,20 +10,11 @@ use PHPUnit\Framework\TestCase;
 
 final class LocationTest extends TestCase
 {
-    /**
-     * @var \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Location
-     */
-    private $sectionLocation;
+    private Location $sectionLocation;
 
-    /**
-     * @var \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Location
-     */
-    private $folderLocation;
+    private Location $folderLocation;
 
-    /**
-     * @var \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Location
-     */
-    private $location;
+    private Location $location;
 
     protected function setUp(): void
     {

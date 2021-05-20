@@ -8,6 +8,7 @@ use Netgen\Bundle\LayoutsRemoteMediaBundle\Templating\Twig\Runtime\RemoteMediaRu
 use Netgen\Bundle\RemoteMediaBundle\Core\FieldType\RemoteMedia\Variation;
 use Netgen\Bundle\RemoteMediaBundle\RemoteMedia\RemoteMediaProvider;
 use Netgen\Layouts\RemoteMedia\Tests\Stubs\RemoteMedia as RemoteMediaStub;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 final class RemoteMediaRuntimeTest extends TestCase
@@ -15,12 +16,9 @@ final class RemoteMediaRuntimeTest extends TestCase
     /**
      * @var \PHPUnit\Framework\MockObject\MockObject&\Netgen\Bundle\RemoteMediaBundle\RemoteMedia\RemoteMediaProvider
      */
-    private $providerMock;
+    private MockObject $providerMock;
 
-    /**
-     * @var \Netgen\Bundle\LayoutsRemoteMediaBundle\Templating\Twig\Runtime\RemoteMediaRuntime
-     */
-    private $runtime;
+    private RemoteMediaRuntime $runtime;
 
     protected function setUp(): void
     {

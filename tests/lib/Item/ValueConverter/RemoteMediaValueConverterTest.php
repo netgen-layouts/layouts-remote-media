@@ -11,10 +11,7 @@ use stdClass;
 
 final class RemoteMediaValueConverterTest extends TestCase
 {
-    /**
-     * @var \Netgen\Layouts\RemoteMedia\Item\ValueConverter\RemoteMediaValueConverter
-     */
-    private $valueConverter;
+    private RemoteMediaValueConverter $valueConverter;
 
     protected function setUp(): void
     {
@@ -22,7 +19,6 @@ final class RemoteMediaValueConverterTest extends TestCase
     }
 
     /**
-     * @covers \Netgen\Layouts\RemoteMedia\Item\ValueConverter\RemoteMediaValueConverter::__construct
      * @covers \Netgen\Layouts\RemoteMedia\Item\ValueConverter\RemoteMediaValueConverter::supports
      */
     public function testSupports(): void

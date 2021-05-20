@@ -16,10 +16,7 @@ use function is_string;
 
 final class RemoteMediaValidator extends ConstraintValidator
 {
-    /**
-     * @var \Netgen\Bundle\RemoteMediaBundle\RemoteMedia\RemoteMediaProvider
-     */
-    private $provider;
+    private RemoteMediaProvider $provider;
 
     public function __construct(RemoteMediaProvider $provider)
     {

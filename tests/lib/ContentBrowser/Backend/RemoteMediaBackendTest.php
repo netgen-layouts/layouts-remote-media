@@ -18,6 +18,7 @@ use Netgen\Layouts\RemoteMedia\ContentBrowser\Backend\RemoteMediaBackend;
 use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Item;
 use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Location;
 use Netgen\Layouts\RemoteMedia\Tests\Stubs\RemoteMedia as RemoteMediaStub;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 use Symfony\Component\Translation\TranslatorInterface;
@@ -28,27 +29,21 @@ final class RemoteMediaBackendTest extends TestCase
     /**
      * @var \PHPUnit\Framework\MockObject\MockObject&\Netgen\Bundle\RemoteMediaBundle\RemoteMedia\RemoteMediaProvider
      */
-    private $providerMock;
+    private MockObject $providerMock;
 
     /**
      * @var \PHPUnit\Framework\MockObject\MockObject&\Netgen\Bundle\RemoteMediaBundle\RemoteMedia\NextCursorResolver
      */
-    private $nextCursorResolverMock;
+    private MockObject $nextCursorResolverMock;
 
     /**
      * @var \PHPUnit\Framework\MockObject\MockObject&\Symfony\Component\Translation\TranslatorInterface
      */
-    private $translatorMock;
+    private MockObject $translatorMock;
 
-    /**
-     * @var \Netgen\ContentBrowser\Config\Configuration
-     */
-    private $config;
+    private Configuration $config;
 
-    /**
-     * @var \Netgen\Layouts\RemoteMedia\ContentBrowser\Backend\RemoteMediaBackend
-     */
-    private $backend;
+    private RemoteMediaBackend $backend;
 
     protected function setUp(): void
     {

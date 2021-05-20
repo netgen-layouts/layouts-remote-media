@@ -11,10 +11,7 @@ use Twig\Extension\AbstractExtension;
 
 final class RemoteMediaRuntime extends AbstractExtension
 {
-    /**
-     * @var \Netgen\Bundle\RemoteMediaBundle\RemoteMedia\RemoteMediaProvider
-     */
-    protected $provider;
+    protected RemoteMediaProvider $provider;
 
     public function __construct(RemoteMediaProvider $provider)
     {

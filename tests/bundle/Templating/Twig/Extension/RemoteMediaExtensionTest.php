@@ -10,10 +10,7 @@ use Twig\TwigFunction;
 
 final class RemoteMediaExtensionTest extends TestCase
 {
-    /**
-     * @var \Netgen\Bundle\LayoutsRemoteMediaBundle\Templating\Twig\Extension\RemoteMediaExtension
-     */
-    private $extension;
+    private RemoteMediaExtension $extension;
 
     protected function setUp(): void
     {

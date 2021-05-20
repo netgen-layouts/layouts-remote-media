@@ -10,16 +10,14 @@ use Netgen\Layouts\RemoteMedia\Tests\Stubs\RemoteMedia as RemoteMediaStub;
 use Netgen\Layouts\RemoteMedia\Validator\Constraint\RemoteMedia;
 use Netgen\Layouts\RemoteMedia\Validator\RemoteMediaValidator;
 use Netgen\Layouts\Tests\TestCase\ValidatorTestCase;
+use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\ConstraintValidatorInterface;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 
 final class RemoteMediaValidatorTest extends ValidatorTestCase
 {
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
-     */
-    private $provider;
+    private MockObject $provider;
 
     protected function setUp(): void
     {

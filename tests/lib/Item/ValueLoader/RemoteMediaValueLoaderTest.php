@@ -8,19 +8,14 @@ use Cloudinary\Api\NotFound as CloudinaryNotFoundException;
 use Netgen\Bundle\RemoteMediaBundle\RemoteMedia\RemoteMediaProvider;
 use Netgen\Layouts\RemoteMedia\Item\ValueLoader\RemoteMediaValueLoader;
 use Netgen\Layouts\RemoteMedia\Tests\Stubs\RemoteMedia as RemoteMediaStub;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 final class RemoteMediaValueLoaderTest extends TestCase
 {
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject&\Netgen\Bundle\RemoteMediaBundle\RemoteMedia\RemoteMediaProvider
-     */
-    private $providerMock;
+    private MockObject $providerMock;
 
-    /**
-     * @var \Netgen\Layouts\RemoteMedia\Item\ValueLoader\RemoteMediaValueLoader
-     */
-    private $valueLoader;
+    private RemoteMediaValueLoader $valueLoader;
 
     protected function setUp(): void
     {

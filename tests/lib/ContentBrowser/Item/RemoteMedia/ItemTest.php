@@ -10,15 +10,9 @@ use PHPUnit\Framework\TestCase;
 
 final class ItemTest extends TestCase
 {
-    /**
-     * @var \Netgen\Bundle\RemoteMediaBundle\Core\FieldType\RemoteMedia\Value
-     */
-    private $resource;
+    private RemoteMediaStub $resource;
 
-    /**
-     * @var \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Item
-     */
-    private $item;
+    private Item $item;
 
     protected function setUp(): void
     {

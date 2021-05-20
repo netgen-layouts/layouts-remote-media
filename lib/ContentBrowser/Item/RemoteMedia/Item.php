@@ -12,17 +12,14 @@ use function str_replace;
 
 final class Item implements ItemInterface
 {
-    /**
-     * @var \Netgen\Bundle\RemoteMediaBundle\Core\FieldType\RemoteMedia\Value
-     */
-    private $value;
+    private Value $value;
 
     public function __construct(Value $value)
     {
         $this->value = $value;
     }
 
-    public function getValue()
+    public function getValue(): string
     {
         return $this->getResourceType() . '|' . str_replace('/', '|', $this->value->resourceId);
     }

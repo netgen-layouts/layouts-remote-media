@@ -11,10 +11,7 @@ use PHPUnit\Framework\TestCase;
 
 final class ResolutionTest extends TestCase
 {
-    /**
-     * @var \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\ColumnProvider\RemoteMedia\Resolution
-     */
-    private $resolutionColumn;
+    private Resolution $resolutionColumn;
 
     protected function setUp(): void
     {

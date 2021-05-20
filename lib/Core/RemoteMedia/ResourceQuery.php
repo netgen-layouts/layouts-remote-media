@@ -10,15 +10,9 @@ use function implode;
 
 final class ResourceQuery
 {
-    /**
-     * @var string
-     */
-    private $resourceId;
+    private string $resourceId;
 
-    /**
-     * @var string
-     */
-    private $resourceType;
+    private string $resourceType;
 
     private function __construct(string $resourceId, string $resourceType)
     {

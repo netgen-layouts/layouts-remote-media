@@ -9,10 +9,7 @@ use PHPUnit\Framework\TestCase;
 
 final class ResourceQueryTest extends TestCase
 {
-    /**
-     * @var \Netgen\Layouts\RemoteMedia\Core\RemoteMedia\ResourceQuery
-     */
-    private $resourceQuery;
+    private ResourceQuery $resourceQuery;
 
     protected function setUp(): void
     {

@@ -11,10 +11,7 @@ use PHPUnit\Framework\TestCase;
 
 final class TagsTest extends TestCase
 {
-    /**
-     * @var \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\ColumnProvider\RemoteMedia\Tags
-     */
-    private $tagsColumn;
+    private Tags $tagsColumn;
 
     protected function setUp(): void
     {

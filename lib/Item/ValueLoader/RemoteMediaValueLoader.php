@@ -11,10 +11,7 @@ use Netgen\Layouts\RemoteMedia\Core\RemoteMedia\ResourceQuery;
 
 final class RemoteMediaValueLoader implements ValueLoaderInterface
 {
-    /**
-     * @var \Netgen\Bundle\RemoteMediaBundle\RemoteMedia\RemoteMediaProvider
-     */
-    private $provider;
+    private RemoteMediaProvider $provider;
 
     public function __construct(RemoteMediaProvider $provider)
     {

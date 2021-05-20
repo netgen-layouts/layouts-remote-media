@@ -31,30 +31,15 @@ final class Location implements LocationInterface
         self::RESOURCE_TYPE_RAW,
     ];
 
-    /**
-     * @var string
-     */
-    private $id;
+    private string $id;
 
-    /**
-     * @var string
-     */
-    private $name;
+    private string $name;
 
-    /**
-     * @var string
-     */
-    private $resourceType;
+    private string $resourceType;
 
-    /**
-     * @var string|null
-     */
-    private $folder;
+    private ?string $folder;
 
-    /**
-     * @var string|null
-     */
-    private $parentId;
+    private ?string $parentId;
 
     private function __construct(
         string $id,
@@ -123,7 +108,7 @@ final class Location implements LocationInterface
         return new self($id, $folderName, $resourceType, $folder, $parentId);
     }
 
-    public function getLocationId()
+    public function getLocationId(): string
     {
         return $this->id;
     }
@@ -133,7 +118,7 @@ final class Location implements LocationInterface
         return $this->name;
     }
 
-    public function getParentId()
+    public function getParentId(): ?string
     {
         return $this->parentId;
     }

@@ -15,6 +15,7 @@ use Netgen\Layouts\Parameters\ParameterType\TextLineType;
 use Netgen\Layouts\RemoteMedia\Block\BlockDefinition\Handler\RemoteMediaHandler;
 use Netgen\Layouts\RemoteMedia\Parameters\ParameterType\RemoteMediaType;
 use Netgen\Layouts\RemoteMedia\Tests\Stubs\RemoteMedia as RemoteMediaStub;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 final class RemoteMediaHandlerTest extends TestCase
@@ -22,22 +23,19 @@ final class RemoteMediaHandlerTest extends TestCase
     /**
      * @var \PHPUnit\Framework\MockObject\MockObject&\Netgen\Layouts\Item\ValueLoaderInterface
      */
-    private $valueLoaderMock;
+    private MockObject $valueLoaderMock;
 
     /**
      * @var \PHPUnit\Framework\MockObject\MockObject&\Netgen\Bundle\RemoteMediaBundle\RemoteMedia\VariationResolver
      */
-    private $variationResolverMock;
+    private MockObject $variationResolverMock;
 
     /**
-     * @var array<string>
+     * @var string[]
      */
-    private $allowedResourceTypes;
+    private array $allowedResourceTypes;
 
-    /**
-     * @var \Netgen\Layouts\RemoteMedia\Block\BlockDefinition\Handler\RemoteMediaHandler
-     */
-    private $handler;
+    private RemoteMediaHandler $handler;
 
     protected function setUp(): void
     {

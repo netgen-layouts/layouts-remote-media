@@ -10,10 +10,7 @@ use PHPUnit\Framework\TestCase;
 
 final class RemoteMediaUrlGeneratorTest extends TestCase
 {
-    /**
-     * @var \Netgen\Layouts\RemoteMedia\Item\ValueUrlGenerator\RemoteMediaValueUrlGenerator
-     */
-    private $urlGenerator;
+    private RemoteMediaValueUrlGenerator $urlGenerator;
 
     protected function setUp(): void
     {
@@ -21,7 +18,6 @@ final class RemoteMediaUrlGeneratorTest extends TestCase
     }
 
     /**
-     * @covers \Netgen\Layouts\RemoteMedia\Item\ValueUrlGenerator\RemoteMediaValueUrlGenerator::__construct
      * @covers \Netgen\Layouts\RemoteMedia\Item\ValueUrlGenerator\RemoteMediaValueUrlGenerator::generate
      */
     public function testGenerate(): void

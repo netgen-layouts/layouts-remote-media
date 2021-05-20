@@ -12,15 +12,9 @@ use Symfony\Component\Validator\ConstraintValidatorFactoryInterface;
 
 final class RemoteMediaValidatorFactory implements ConstraintValidatorFactoryInterface
 {
-    /**
-     * @var \Netgen\Bundle\RemoteMediaBundle\RemoteMedia\RemoteMediaProvider
-     */
-    private $provider;
+    private RemoteMediaProvider $provider;
 
-    /**
-     * @var \Symfony\Component\Validator\ConstraintValidatorFactory
-     */
-    private $baseValidatorFactory;
+    private ConstraintValidatorFactory $baseValidatorFactory;
 
     public function __construct(RemoteMediaProvider $provider)
     {

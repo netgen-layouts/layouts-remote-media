@@ -29,25 +29,13 @@ use function sprintf;
 
 final class RemoteMediaBackend implements BackendInterface
 {
-    /**
-     * @var \Netgen\Bundle\RemoteMediaBundle\RemoteMedia\RemoteMediaProvider
-     */
-    private $provider;
+    private RemoteMediaProvider $provider;
 
-    /**
-     * @var \Netgen\Bundle\RemoteMediaBundle\RemoteMedia\NextCursorResolver
-     */
-    private $nextCursorResolver;
+    private NextCursorResolver $nextCursorResolver;
 
-    /**
-     * @var \Symfony\Component\Translation\TranslatorInterface
-     */
-    private $translator;
+    private TranslatorInterface $translator;
 
-    /**
-     * @var \Netgen\ContentBrowser\Config\Configuration
-     */
-    private $config;
+    private Configuration $config;
 
     public function __construct(
         RemoteMediaProvider $provider,
@@ -292,7 +280,7 @@ final class RemoteMediaBackend implements BackendInterface
     }
 
     /**
-     * @return array<string>
+     * @return string[]
      */
     private function getAllowedTypes(): array
     {

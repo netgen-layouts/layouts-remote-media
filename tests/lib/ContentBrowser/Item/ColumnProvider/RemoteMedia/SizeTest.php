@@ -11,10 +11,7 @@ use PHPUnit\Framework\TestCase;
 
 final class SizeTest extends TestCase
 {
-    /**
-     * @var \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\ColumnProvider\RemoteMedia\Size
-     */
-    private $sizeColumn;
+    private Size $sizeColumn;
 
     protected function setUp(): void
     {

@@ -11,10 +11,7 @@ use PHPUnit\Framework\TestCase;
 
 final class TypeTest extends TestCase
 {
-    /**
-     * @var \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\ColumnProvider\RemoteMedia\Type
-     */
-    private $typeColumn;
+    private Type $typeColumn;
 
     protected function setUp(): void
     {

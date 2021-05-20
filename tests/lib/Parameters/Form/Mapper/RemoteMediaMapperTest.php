@@ -12,10 +12,7 @@ use PHPUnit\Framework\TestCase;
 
 final class RemoteMediaMapperTest extends TestCase
 {
-    /**
-     * @var \Netgen\Layouts\RemoteMedia\Parameters\Form\Mapper\RemoteMediaMapper
-     */
-    private $mapper;
+    private RemoteMediaMapper $mapper;
 
     protected function setUp(): void
     {
