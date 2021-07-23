@@ -309,7 +309,7 @@ final class RemoteMediaBackendTest extends TestCase
             '',
             null,
             5,
-            'some/folder'
+            'some/folder',
         );
 
         $this->nextCursorResolverMock
@@ -324,7 +324,7 @@ final class RemoteMediaBackendTest extends TestCase
             5,
             'some/folder',
             null,
-            $nextCursor
+            $nextCursor,
         );
 
         $searchResult = Result::fromResponse(new Response($this->getSearchResponse()));
@@ -478,7 +478,7 @@ final class RemoteMediaBackendTest extends TestCase
             5,
             null,
             null,
-            $nextCursor
+            $nextCursor,
         );
 
         $searchResult = Result::fromResponse(new Response($this->getSearchResponse()));

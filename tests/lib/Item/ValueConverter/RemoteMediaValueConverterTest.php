@@ -29,8 +29,8 @@ final class RemoteMediaValueConverterTest extends TestCase
     {
         self::assertTrue(
             $this->valueConverter->supports(
-                new RemoteMediaStub('test_resource')
-            )
+                new RemoteMediaStub('test_resource'),
+            ),
         );
 
         self::assertFalse($this->valueConverter->supports(new stdClass()));
