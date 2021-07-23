@@ -7,7 +7,6 @@ namespace Netgen\Layouts\RemoteMedia\ContentBrowser\Item\ColumnProvider\RemoteMe
 use Netgen\ContentBrowser\Item\ColumnProvider\ColumnValueProviderInterface;
 use Netgen\ContentBrowser\Item\ItemInterface;
 use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Item;
-use function array_key_exists;
 
 final class Type implements ColumnValueProviderInterface
 {
@@ -18,8 +17,9 @@ final class Type implements ColumnValueProviderInterface
         }
 
         $value = $item->getRemoteMediaValue()->resourceType;
+        $format = $item->getRemoteMediaValue()->metaData['format'] ?? '';
 
-        if (array_key_exists('format', $item->getRemoteMediaValue()->metaData)) {
+        if ($format !== '') {
             $value .= ' / ' . $item->getRemoteMediaValue()->metaData['format'];
         }
 
