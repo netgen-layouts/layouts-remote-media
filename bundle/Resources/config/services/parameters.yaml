@@ -1,0 +1,10 @@
+services:
+    netgen_layouts.remote_media.parameters.parameter_type.remote_media:
+        class: Netgen\Layouts\RemoteMedia\Parameters\ParameterType\RemoteMediaType
+        tags:
+            - { name: netgen_layouts.parameter_type }
+
+    netgen_layouts.remote_media.parameters.form_mapper.remote_media:
+        class: Netgen\Layouts\RemoteMedia\Parameters\Form\Mapper\RemoteMediaMapper
+        tags:
+            - { name: netgen_layouts.parameter_type.form_mapper, type: remote_media }
