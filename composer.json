@@ -39,7 +39,7 @@
     "autoload-dev": {
         "psr-4": {
             "Netgen\\Layouts\\RemoteMedia\\Tests\\": "tests/lib/",
-            "Netgen\\Bundle\\LayoutsRemoteMediaBundle\\Tests\\": "tests/bundle/"
+            "Netgen\\Layouts\\Tests\\": "vendor/netgen/layouts-core/tests/lib"
         }
     },
     "minimum-stability": "dev",
