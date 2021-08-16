@@ -34,6 +34,7 @@ final class NetgenLayoutsRemoteMediaExtension extends Extension implements Prepe
             ),
         );
 
+        $loader->load('default_settings.yaml');
         $loader->load('services/**/*.yaml', 'glob');
     }
 
