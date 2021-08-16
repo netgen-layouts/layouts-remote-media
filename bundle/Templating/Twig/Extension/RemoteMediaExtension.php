@@ -8,7 +8,7 @@ use Netgen\Bundle\LayoutsRemoteMediaBundle\Templating\Twig\Runtime\RemoteMediaRu
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
-class RemoteMediaExtension extends AbstractExtension
+final class RemoteMediaExtension extends AbstractExtension
 {
     /**
      * @return \Twig\TwigFunction[]

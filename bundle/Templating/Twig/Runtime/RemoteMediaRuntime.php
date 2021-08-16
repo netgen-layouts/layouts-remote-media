@@ -9,7 +9,7 @@ use Netgen\Bundle\RemoteMediaBundle\Core\FieldType\RemoteMedia\Variation;
 use Netgen\Bundle\RemoteMediaBundle\RemoteMedia\RemoteMediaProvider;
 use Twig\Extension\AbstractExtension;
 
-class RemoteMediaRuntime extends AbstractExtension
+final class RemoteMediaRuntime extends AbstractExtension
 {
     /**
      * @var \Netgen\Bundle\RemoteMediaBundle\RemoteMedia\RemoteMediaProvider
