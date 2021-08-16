@@ -1,0 +1,7 @@
+services:
+    netgen_layouts.remote_media.validator.remote_media:
+        class: Netgen\Layouts\RemoteMedia\Validator\RemoteMediaValidator
+        arguments:
+            - "@netgen_remote_media.provider"
+        tags:
+            - { name: validator.constraint_validator, alias: netgen_remote_media }
