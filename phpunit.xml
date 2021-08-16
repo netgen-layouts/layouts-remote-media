@@ -17,9 +17,6 @@
         <testsuite name="Netgen\Layouts\RemoteMedia">
             <directory>tests/lib</directory>
         </testsuite>
-        <testsuite name="Netgen\Bundle\LayoutsRemoteMediaBundle">
-            <directory>tests/bundle</directory>
-        </testsuite>
     </testsuites>
 
     <coverage>
