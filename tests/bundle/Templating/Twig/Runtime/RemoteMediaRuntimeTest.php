@@ -49,7 +49,7 @@ final class RemoteMediaRuntimeTest extends TestCase
             ->with($value, 'layouts_block', 'test_variation', true)
             ->willReturn($variation);
 
-        $this->assertEquals(
+        self::assertSame(
             $variationUrl,
             $this->runtime->getBlockVariation($value, 'test_variation')->url,
         );
@@ -70,7 +70,7 @@ final class RemoteMediaRuntimeTest extends TestCase
             ->with($value, 'layouts_block', 'test_variation')
             ->willReturn($videoTagString);
 
-        $this->assertEquals(
+        self::assertSame(
             $videoTagString,
             $this->runtime->getRemoteVideoTagEmbed($value, 'test_variation'),
         );

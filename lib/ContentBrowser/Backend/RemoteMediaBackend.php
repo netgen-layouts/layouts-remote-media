@@ -22,9 +22,10 @@ use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Location;
 use Netgen\Layouts\RemoteMedia\Core\RemoteMedia\ResourceQuery;
 use Symfony\Component\Translation\TranslatorInterface;
 use function count;
+use function explode;
+use function in_array;
 use function is_string;
 use function sprintf;
-use function explode;
 
 final class RemoteMediaBackend implements BackendInterface
 {
@@ -182,7 +183,7 @@ final class RemoteMediaBackend implements BackendInterface
             $location->getFolder(),
         );
 
-       return $this->provider->searchResourcesCount($query);
+        return $this->provider->searchResourcesCount($query);
     }
 
     public function searchItems(SearchQuery $searchQuery): SearchResultInterface
@@ -290,6 +291,9 @@ final class RemoteMediaBackend implements BackendInterface
         return $sections;
     }
 
+    /**
+     * @return array<string>
+     */
     private function getAllowedTypes(): array
     {
         $allowedTypes = [];
@@ -305,7 +309,7 @@ final class RemoteMediaBackend implements BackendInterface
         ];
 
         foreach ($allowedTypes as $key => $type) {
-            if (!in_array($type, $validTypes)) {
+            if (!in_array($type, $validTypes, true)) {
                 unset($allowedTypes[$key]);
             }
         }

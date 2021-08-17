@@ -41,7 +41,7 @@ final class RemoteMediaMapperTest extends TestCase
                 'required' => false,
                 'custom_params' => [
                     'allowed_types' => [],
-                ]
+                ],
             ],
             $this->mapper->mapOptions(ParameterDefinition::fromArray(
                 [
@@ -63,14 +63,14 @@ final class RemoteMediaMapperTest extends TestCase
                 'required' => false,
                 'custom_params' => [
                     'allowed_types' => ['image', 'video'],
-                ]
+                ],
             ],
             $this->mapper->mapOptions(ParameterDefinition::fromArray(
                 [
                     'type' => new ParameterType(),
                     'isRequired' => false,
                     'options' => [
-                        'allowed_types' => ['image', 'video']
+                        'allowed_types' => ['image', 'video'],
                     ],
                 ],
             )),

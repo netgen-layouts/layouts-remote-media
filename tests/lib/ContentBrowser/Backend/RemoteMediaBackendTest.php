@@ -360,8 +360,8 @@ final class RemoteMediaBackendTest extends TestCase
     }
 
     /**
-     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Backend\RemoteMediaBackend::getSubItems
      * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Backend\RemoteMediaBackend::getAllowedTypes
+     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Backend\RemoteMediaBackend::getSubItems
      */
     public function testGetSubItemsWithOffset(): void
     {
@@ -410,8 +410,8 @@ final class RemoteMediaBackendTest extends TestCase
     }
 
     /**
-     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Backend\RemoteMediaBackend::getSubItems
      * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Backend\RemoteMediaBackend::getAllowedTypes
+     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Backend\RemoteMediaBackend::getSubItems
      */
     public function testGetSubItemsWithFilter(): void
     {
@@ -504,8 +504,8 @@ final class RemoteMediaBackendTest extends TestCase
     }
 
     /**
-     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Backend\RemoteMediaBackend::getSubItemsCount
      * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Backend\RemoteMediaBackend::getAllowedTypes
+     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Backend\RemoteMediaBackend::getSubItemsCount
      */
     public function testGetSubItemsCount(): void
     {
@@ -527,8 +527,8 @@ final class RemoteMediaBackendTest extends TestCase
     }
 
     /**
-     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Backend\RemoteMediaBackend::getSubItemsCount
      * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Backend\RemoteMediaBackend::getAllowedTypes
+     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Backend\RemoteMediaBackend::getSubItemsCount
      */
     public function testGetSubItemsCountInFolderWithFilter(): void
     {
@@ -553,8 +553,8 @@ final class RemoteMediaBackendTest extends TestCase
     }
 
     /**
-     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Backend\RemoteMediaBackend::getSubItemsCount
      * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Backend\RemoteMediaBackend::getAllowedTypes
+     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Backend\RemoteMediaBackend::getSubItemsCount
      */
     public function testGetSubItemsCountWithEmptyFilter(): void
     {
@@ -578,8 +578,8 @@ final class RemoteMediaBackendTest extends TestCase
     }
 
     /**
-     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Backend\RemoteMediaBackend::searchItems
      * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Backend\RemoteMediaBackend::getAllowedTypes
+     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Backend\RemoteMediaBackend::searchItems
      */
     public function testSearchItems(): void
     {
@@ -617,8 +617,8 @@ final class RemoteMediaBackendTest extends TestCase
     }
 
     /**
-     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Backend\RemoteMediaBackend::searchItems
      * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Backend\RemoteMediaBackend::getAllowedTypes
+     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Backend\RemoteMediaBackend::searchItems
      */
     public function testSearchItemsWithFilter(): void
     {
@@ -773,8 +773,8 @@ final class RemoteMediaBackendTest extends TestCase
     }
 
     /**
-     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Backend\RemoteMediaBackend::searchItemsCount
      * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Backend\RemoteMediaBackend::getAllowedTypes
+     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Backend\RemoteMediaBackend::searchItemsCount
      */
     public function testSearchItemsCountWithFilter(): void
     {
