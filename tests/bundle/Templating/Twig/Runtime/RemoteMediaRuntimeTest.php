@@ -13,7 +13,7 @@ use PHPUnit\Framework\TestCase;
 final class RemoteMediaRuntimeTest extends TestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject&\Netgen\Bundle\RemoteMediaBundle\RemoteMedia\RemoteMediaProvider
      */
     private $providerMock;
 

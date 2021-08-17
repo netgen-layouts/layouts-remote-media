@@ -75,7 +75,17 @@ final class RemoteMediaTypeTest extends TestCase
         return [
             [
                 [],
-                [],
+                [
+                    'allowed_types' => [],
+                ],
+            ],
+            [
+                [
+                    'allowed_types' => ['image'],
+                ],
+                [
+                    'allowed_types' => ['image'],
+                ],
             ],
         ];
     }

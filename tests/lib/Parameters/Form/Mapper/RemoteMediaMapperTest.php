@@ -39,8 +39,41 @@ final class RemoteMediaMapperTest extends TestCase
             [
                 'item_type' => 'remote_media',
                 'required' => false,
+                'custom_params' => [
+                    'allowed_types' => [],
+                ]
             ],
-            $this->mapper->mapOptions(ParameterDefinition::fromArray(['type' => new ParameterType(), 'isRequired' => false])),
+            $this->mapper->mapOptions(ParameterDefinition::fromArray(
+                [
+                    'type' => new ParameterType(),
+                    'isRequired' => false,
+                ]
+            )),
+        );
+    }
+
+    /**
+     * @covers \Netgen\Layouts\RemoteMedia\Parameters\Form\Mapper\RemoteMediaMapper::mapOptions
+     */
+    public function testMapOptionsWithFilter(): void
+    {
+        self::assertSame(
+            [
+                'item_type' => 'remote_media',
+                'required' => false,
+                'custom_params' => [
+                    'allowed_types' => ['image', 'video'],
+                ]
+            ],
+            $this->mapper->mapOptions(ParameterDefinition::fromArray(
+                [
+                    'type' => new ParameterType(),
+                    'isRequired' => false,
+                    'options' => [
+                        'allowed_types' => ['image', 'video']
+                    ],
+                ],
+            )),
         );
     }
 }
