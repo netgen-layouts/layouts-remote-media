@@ -13,6 +13,7 @@ use Netgen\ContentBrowser\Backend\BackendInterface;
 use Netgen\ContentBrowser\Backend\SearchQuery;
 use Netgen\ContentBrowser\Backend\SearchResult;
 use Netgen\ContentBrowser\Backend\SearchResultInterface;
+use Netgen\ContentBrowser\Config\Configuration;
 use Netgen\ContentBrowser\Exceptions\NotFoundException;
 use Netgen\ContentBrowser\Item\ItemInterface;
 use Netgen\ContentBrowser\Item\LocationInterface;
@@ -23,6 +24,7 @@ use Symfony\Component\Translation\TranslatorInterface;
 use function count;
 use function is_string;
 use function sprintf;
+use function explode;
 
 final class RemoteMediaBackend implements BackendInterface
 {
@@ -41,14 +43,21 @@ final class RemoteMediaBackend implements BackendInterface
      */
     private $translator;
 
+    /**
+     * @var \Netgen\ContentBrowser\Config\Configuration
+     */
+    private $config;
+
     public function __construct(
         RemoteMediaProvider $provider,
         NextCursorResolver $nextCursorResolver,
-        TranslatorInterface $translator
+        TranslatorInterface $translator,
+        Configuration $config
     ) {
         $this->provider = $provider;
         $this->nextCursorResolver = $nextCursorResolver;
         $this->translator = $translator;
+        $this->config = $config;
     }
 
     public function getSections(): iterable
@@ -119,7 +128,7 @@ final class RemoteMediaBackend implements BackendInterface
 
         $resourceType = $location->getResourceType() !== Location::RESOURCE_TYPE_ALL ?
             $location->getResourceType()
-            : null;
+            : $this->getAllowedTypes();
 
         $query = new Query(
             '',
@@ -162,11 +171,18 @@ final class RemoteMediaBackend implements BackendInterface
             return 0;
         }
 
-        if ($location->getFolder() !== null) {
-            return $this->provider->countResourcesInFolder($location->getFolder());
-        }
+        $resourceType = $location->getResourceType() !== Location::RESOURCE_TYPE_ALL ?
+            $location->getResourceType()
+            : $this->getAllowedTypes();
 
-        return $this->provider->countResources();
+        $query = new Query(
+            '',
+            $resourceType,
+            0,
+            $location->getFolder(),
+        );
+
+       return $this->provider->searchResourcesCount($query);
     }
 
     public function searchItems(SearchQuery $searchQuery): SearchResultInterface
@@ -175,7 +191,7 @@ final class RemoteMediaBackend implements BackendInterface
         if ($searchQuery->getLocation() instanceof Location) {
             $resourceType = $searchQuery->getLocation()->getResourceType() !== Location::RESOURCE_TYPE_ALL
                 ? $searchQuery->getLocation()->getResourceType()
-                : null;
+                : $this->getAllowedTypes();
         }
 
         $query = new Query(
@@ -219,7 +235,7 @@ final class RemoteMediaBackend implements BackendInterface
         if ($searchQuery->getLocation() instanceof Location) {
             $resourceType = $searchQuery->getLocation()->getResourceType() !== Location::RESOURCE_TYPE_ALL
                 ? $searchQuery->getLocation()->getResourceType()
-                : null;
+                : $this->getAllowedTypes();
 
             $folder = $searchQuery->getLocation()->getFolder();
         }
@@ -255,23 +271,45 @@ final class RemoteMediaBackend implements BackendInterface
      */
     private function buildSections(): array
     {
-        return [
+        $allowedTypes = $this->getAllowedTypes();
+
+        $sections = [
             Location::createAsSection(
                 Location::RESOURCE_TYPE_ALL,
                 $this->translator->trans('backend.remote_media.resource_type.' . Location::RESOURCE_TYPE_ALL, [], 'ngcb'),
             ),
-            Location::createAsSection(
-                Location::RESOURCE_TYPE_IMAGE,
-                $this->translator->trans('backend.remote_media.resource_type.' . Location::RESOURCE_TYPE_IMAGE, [], 'ngcb'),
-            ),
-            Location::createAsSection(
-                Location::RESOURCE_TYPE_VIDEO,
-                $this->translator->trans('backend.remote_media.resource_type.' . Location::RESOURCE_TYPE_VIDEO, [], 'ngcb'),
-            ),
-            Location::createAsSection(
-                Location::RESOURCE_TYPE_RAW,
-                $this->translator->trans('backend.remote_media.resource_type.' . Location::RESOURCE_TYPE_RAW, [], 'ngcb'),
-            ),
         ];
+
+        foreach ($allowedTypes as $type) {
+            $sections[] = Location::createAsSection(
+                $type,
+                $this->translator->trans('backend.remote_media.resource_type.' . $type, [], 'ngcb'),
+            );
+        }
+
+        return $sections;
+    }
+
+    private function getAllowedTypes(): array
+    {
+        $allowedTypes = [];
+
+        if ($this->config->hasParameter('allowed_types')) {
+            $allowedTypes = explode(',', $this->config->getParameter('allowed_types'));
+        }
+
+        $validTypes = [
+            Location::RESOURCE_TYPE_IMAGE,
+            Location::RESOURCE_TYPE_VIDEO,
+            Location::RESOURCE_TYPE_RAW,
+        ];
+
+        foreach ($allowedTypes as $key => $type) {
+            if (!in_array($type, $validTypes)) {
+                unset($allowedTypes[$key]);
+            }
+        }
+
+        return count($allowedTypes) > 0 ? $allowedTypes : $validTypes;
     }
 }
