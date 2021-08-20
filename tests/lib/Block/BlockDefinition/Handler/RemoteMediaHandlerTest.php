@@ -83,7 +83,7 @@ final class RemoteMediaHandlerTest extends TestCase
         $this->variationResolverMock
             ->expects(self::once())
             ->method('getVariationsForContentType')
-            ->with('layouts_block')
+            ->with('netgen_layouts_block')
             ->willReturn($variations);
 
         $builderMock = $this->createMock(ParameterBuilderInterface::class);

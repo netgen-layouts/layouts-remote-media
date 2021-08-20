@@ -16,7 +16,7 @@ use Netgen\Layouts\RemoteMedia\Parameters\ParameterType\RemoteMediaType;
 
 final class RemoteMediaHandler extends BlockDefinitionHandler
 {
-    private const LAYOUTS_BLOCK_VARIATIONS = 'layouts_block';
+    private const LAYOUTS_BLOCK_VARIATIONS = 'netgen_layouts_block';
 
     /**
      * @var \Netgen\Layouts\Item\ValueLoaderInterface

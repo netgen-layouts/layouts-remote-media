@@ -46,7 +46,7 @@ final class RemoteMediaRuntimeTest extends TestCase
         $this->providerMock
             ->expects(self::once())
             ->method('buildVariation')
-            ->with($value, 'layouts_block', 'test_variation', true)
+            ->with($value, 'netgen_layouts_block', 'test_variation', true)
             ->willReturn($variation);
 
         self::assertSame(
@@ -67,7 +67,7 @@ final class RemoteMediaRuntimeTest extends TestCase
         $this->providerMock
             ->expects(self::once())
             ->method('generateVideoTag')
-            ->with($value, 'layouts_block', 'test_variation')
+            ->with($value, 'netgen_layouts_block', 'test_variation')
             ->willReturn($videoTagString);
 
         self::assertSame(

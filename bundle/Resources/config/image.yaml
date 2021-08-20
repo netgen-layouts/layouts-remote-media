@@ -1,7 +1,7 @@
 system:
     default:
         image_variations:
-            layouts_block:
+            netgen_layouts_block:
                 small:
                     transformations:
                         - { name: crop, params: [200, 200] }
