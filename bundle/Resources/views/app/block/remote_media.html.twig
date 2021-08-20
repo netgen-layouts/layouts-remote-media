@@ -1,0 +1,55 @@
+{% extends '@NetgenLayoutsAdmin/app/block/block.html.twig' %}
+
+{% import '@NetgenLayoutsAdmin/app/parts/macros.html.twig' as macros %}
+
+{% trans_default_domain 'nglayouts_app' %}
+
+{% block content %}
+    {% set resource = block.dynamicParameter('resource') %}
+
+    {% if resource %}
+        <div class="image">
+            {% if resource.mediaType == 'image' %}
+                <img src="{{ resource.secure_url }}" />
+            {% elseif resource.mediaType == 'video' %}
+                {% set thumbnail = netgen_remote_video_thumbnail(resource) %}
+
+                {% if thumbnail %}
+                    <img src="{{ thumbnail }}" />
+                {% else %}
+                    <i class="material-icons" aria-hidden="true">audiotrack</i>
+                {% endif %}
+            {% else %}
+                <i class="material-icons" aria-hidden="true">insert_drive_file</i>
+            {% endif %}
+        </div>
+
+        <div class="name">
+            <p>{{ resource.resourceId }}</p>
+        </div>
+
+        <div class="value-type">
+            <p>
+                Remote media:
+                {{ resource.resourceType }}
+
+                {% if resource.metaData.format is defined and resource.metaData.format %}
+                    / {{ resource.metaData.format }}
+                {% endif %}
+            </p>
+        </div>
+
+        <div class="variation">
+            <p>
+                Variation:
+                {% if not block.parameter('variation').isEmpty %}
+                    {{ block.parameter('variation').value }}
+                {% else %}
+                    /
+                {% endif %}
+            </p>
+        </div>
+    {% else %}
+        {{ macros.notice('block.notice.empty_remote_media'|trans) }}
+    {% endif %}
+{% endblock %}
