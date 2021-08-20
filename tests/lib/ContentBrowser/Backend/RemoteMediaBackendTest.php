@@ -540,7 +540,7 @@ final class RemoteMediaBackendTest extends TestCase
             '',
             ['image'],
             0,
-            'test/folder/subfolder'
+            'test/folder/subfolder',
         );
 
         $this->providerMock

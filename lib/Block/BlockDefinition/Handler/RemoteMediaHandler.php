@@ -68,7 +68,7 @@ final class RemoteMediaHandler extends BlockDefinitionHandler
 
         $builder->add(
             'title',
-            TextLineType::class
+            TextLineType::class,
         );
     }
 

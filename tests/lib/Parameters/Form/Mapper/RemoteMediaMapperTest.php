@@ -47,7 +47,7 @@ final class RemoteMediaMapperTest extends TestCase
                 [
                     'type' => new ParameterType(),
                     'isRequired' => false,
-                ]
+                ],
             )),
         );
     }
