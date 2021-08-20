@@ -161,14 +161,18 @@ final class RemoteMediaHandlerTest extends TestCase
                 'remote_media' => Parameter::fromArray([
                     'name' => 'remote_media',
                     'value' => null,
+                    'isEmpty' => true,
                 ]),
                 'variation' => Parameter::fromArray([
                     'name' => 'variation',
                     'value' => null,
+                    'isEmpty' => true,
+
                 ]),
                 'title' => Parameter::fromArray([
                     'name' => 'title',
                     'value' => 'Test title',
+                    'isEmpty' => false,
                 ]),
             ],
         ]);
