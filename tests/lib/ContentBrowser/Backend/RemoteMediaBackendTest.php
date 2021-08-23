@@ -12,6 +12,7 @@ use Netgen\Bundle\RemoteMediaBundle\RemoteMedia\Provider\Cloudinary\Search\Resul
 use Netgen\Bundle\RemoteMediaBundle\RemoteMedia\RemoteMediaProvider;
 use Netgen\ContentBrowser\Backend\SearchQuery;
 use Netgen\ContentBrowser\Backend\SearchResult;
+use Netgen\ContentBrowser\Config\Configuration;
 use Netgen\ContentBrowser\Exceptions\NotFoundException;
 use Netgen\Layouts\RemoteMedia\ContentBrowser\Backend\RemoteMediaBackend;
 use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Item;
@@ -40,6 +41,11 @@ final class RemoteMediaBackendTest extends TestCase
     private $translatorMock;
 
     /**
+     * @var \Netgen\ContentBrowser\Config\Configuration
+     */
+    private $config;
+
+    /**
      * @var \Netgen\Layouts\RemoteMedia\ContentBrowser\Backend\RemoteMediaBackend
      */
     private $backend;
@@ -49,21 +55,77 @@ final class RemoteMediaBackendTest extends TestCase
         $this->providerMock = $this->createMock(RemoteMediaProvider::class);
         $this->nextCursorResolverMock = $this->createMock(NextCursorResolver::class);
         $this->translatorMock = $this->createMock(TranslatorInterface::class);
+        $this->config = new Configuration('remote_media', 'Remote media', []);
 
         $this->backend = new RemoteMediaBackend(
             $this->providerMock,
             $this->nextCursorResolverMock,
             $this->translatorMock,
+            $this->config,
         );
     }
 
     /**
      * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Backend\RemoteMediaBackend::__construct
      * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Backend\RemoteMediaBackend::buildSections
+     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Backend\RemoteMediaBackend::getAllowedTypes
      * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Backend\RemoteMediaBackend::getSections
      */
     public function testGetSections(): void
     {
+        $this->translatorMock
+            ->expects(self::exactly(4))
+            ->method('trans')
+            ->withConsecutive(
+                ['backend.remote_media.resource_type.all', [], 'ngcb'],
+                ['backend.remote_media.resource_type.image', [], 'ngcb'],
+                ['backend.remote_media.resource_type.video', [], 'ngcb'],
+                ['backend.remote_media.resource_type.raw', [], 'ngcb'],
+            )
+            ->willReturnOnConsecutiveCalls('All', 'Image', 'Video', 'RAW');
+
+        $sections = $this->backend->getSections();
+
+        self::assertCount(4, $sections);
+        self::assertContainsOnlyInstancesOf(Location::class, $sections);
+    }
+
+    /**
+     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Backend\RemoteMediaBackend::__construct
+     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Backend\RemoteMediaBackend::buildSections
+     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Backend\RemoteMediaBackend::getAllowedTypes
+     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Backend\RemoteMediaBackend::getSections
+     */
+    public function testGetSectionsWithFilter(): void
+    {
+        $this->config->setParameter('allowed_types', 'image,video');
+
+        $this->translatorMock
+            ->expects(self::exactly(3))
+            ->method('trans')
+            ->withConsecutive(
+                ['backend.remote_media.resource_type.all', [], 'ngcb'],
+                ['backend.remote_media.resource_type.image', [], 'ngcb'],
+                ['backend.remote_media.resource_type.video', [], 'ngcb'],
+            )
+            ->willReturnOnConsecutiveCalls('All', 'Image', 'Video');
+
+        $sections = $this->backend->getSections();
+
+        self::assertCount(3, $sections);
+        self::assertContainsOnlyInstancesOf(Location::class, $sections);
+    }
+
+    /**
+     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Backend\RemoteMediaBackend::__construct
+     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Backend\RemoteMediaBackend::buildSections
+     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Backend\RemoteMediaBackend::getAllowedTypes
+     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Backend\RemoteMediaBackend::getSections
+     */
+    public function testGetSectionsWithEmptyFilter(): void
+    {
+        $this->config->setParameter('allowed_types', '');
+
         $this->translatorMock
             ->expects(self::exactly(4))
             ->method('trans')
@@ -298,6 +360,7 @@ final class RemoteMediaBackendTest extends TestCase
     }
 
     /**
+     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Backend\RemoteMediaBackend::getAllowedTypes
      * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Backend\RemoteMediaBackend::getSubItems
      */
     public function testGetSubItemsWithOffset(): void
@@ -307,7 +370,7 @@ final class RemoteMediaBackendTest extends TestCase
 
         $query = new Query(
             '',
-            null,
+            ['image', 'video', 'raw'],
             5,
             'some/folder',
         );
@@ -320,7 +383,7 @@ final class RemoteMediaBackendTest extends TestCase
 
         $query = new Query(
             '',
-            null,
+            ['image', 'video', 'raw'],
             5,
             'some/folder',
             null,
@@ -341,6 +404,46 @@ final class RemoteMediaBackendTest extends TestCase
             ->with($query, 10, 'testcursor123');
 
         $items = $this->backend->getSubItems($location, 5, 5);
+
+        self::assertCount(5, $items);
+        self::assertContainsOnlyInstancesOf(Item::class, $items);
+    }
+
+    /**
+     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Backend\RemoteMediaBackend::getAllowedTypes
+     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Backend\RemoteMediaBackend::getSubItems
+     */
+    public function testGetSubItemsWithFilter(): void
+    {
+        $location = Location::createFromId('all|some|folder');
+
+        $this->config->setParameter('allowed_types', 'image,raw');
+
+        $query = new Query(
+            '',
+            ['image', 'raw'],
+            5,
+            'some/folder',
+        );
+
+        $this->nextCursorResolverMock
+            ->expects(self::never())
+            ->method('resolve');
+
+        $searchResult = Result::fromResponse(new Response($this->getSearchResponse()));
+
+        $this->providerMock
+            ->expects(self::once())
+            ->method('searchResources')
+            ->with($query)
+            ->willReturn($searchResult);
+
+        $this->nextCursorResolverMock
+            ->expects(self::once())
+            ->method('save')
+            ->with($query, 5, 'testcursor123');
+
+        $items = $this->backend->getSubItems($location, 0, 5);
 
         self::assertCount(5, $items);
         self::assertContainsOnlyInstancesOf(Item::class, $items);
@@ -381,35 +484,101 @@ final class RemoteMediaBackendTest extends TestCase
     /**
      * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Backend\RemoteMediaBackend::getSubItemsCount
      */
-    public function testGetSubItemsCount(): void
+    public function testGetSubItemsCountInSection(): void
     {
         $location = Location::createAsSection('video', 'Video');
 
+        $query = new Query(
+            '',
+            'video',
+            0,
+        );
+
         $this->providerMock
             ->expects(self::once())
-            ->method('countResources')
-            ->willReturn(5);
+            ->method('searchResourcesCount')
+            ->with($query)
+            ->willReturn(150);
 
-        self::assertSame(5, $this->backend->getSubItemsCount($location));
+        self::assertSame(150, $this->backend->getSubItemsCount($location));
     }
 
     /**
+     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Backend\RemoteMediaBackend::getAllowedTypes
      * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Backend\RemoteMediaBackend::getSubItemsCount
      */
-    public function testGetSubItemsCountInFolder(): void
+    public function testGetSubItemsCount(): void
+    {
+        $location = Location::createAsSection('all', 'All');
+
+        $query = new Query(
+            '',
+            ['image', 'video', 'raw'],
+            0,
+        );
+
+        $this->providerMock
+            ->expects(self::once())
+            ->method('searchResourcesCount')
+            ->with($query)
+            ->willReturn(1000);
+
+        self::assertSame(1000, $this->backend->getSubItemsCount($location));
+    }
+
+    /**
+     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Backend\RemoteMediaBackend::getAllowedTypes
+     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Backend\RemoteMediaBackend::getSubItemsCount
+     */
+    public function testGetSubItemsCountInFolderWithFilter(): void
     {
         $location = Location::createFromId('all|test|folder|subfolder');
 
+        $this->config->setParameter('allowed_types', 'image');
+
+        $query = new Query(
+            '',
+            ['image'],
+            0,
+            'test/folder/subfolder',
+        );
+
         $this->providerMock
             ->expects(self::once())
-            ->method('countResourcesInFolder')
-            ->with('test/folder/subfolder')
-            ->willReturn(2);
+            ->method('searchResourcesCount')
+            ->with($query)
+            ->willReturn(6000);
 
-        self::assertSame(2, $this->backend->getSubItemsCount($location));
+        self::assertSame(6000, $this->backend->getSubItemsCount($location));
     }
 
     /**
+     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Backend\RemoteMediaBackend::getAllowedTypes
+     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Backend\RemoteMediaBackend::getSubItemsCount
+     */
+    public function testGetSubItemsCountWithEmptyFilter(): void
+    {
+        $location = Location::createAsSection('all', 'All');
+
+        $this->config->setParameter('allowed_types', '');
+
+        $query = new Query(
+            '',
+            ['image', 'video', 'raw'],
+            0,
+        );
+
+        $this->providerMock
+            ->expects(self::once())
+            ->method('searchResourcesCount')
+            ->with($query)
+            ->willReturn(1000);
+
+        self::assertSame(1000, $this->backend->getSubItemsCount($location));
+    }
+
+    /**
+     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Backend\RemoteMediaBackend::getAllowedTypes
      * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Backend\RemoteMediaBackend::searchItems
      */
     public function testSearchItems(): void
@@ -424,7 +593,48 @@ final class RemoteMediaBackendTest extends TestCase
 
         $query = new Query(
             'test',
-            null,
+            ['image', 'video', 'raw'],
+            25,
+        );
+
+        $searchResult = Result::fromResponse(new Response($this->getSearchResponse()));
+
+        $this->providerMock
+            ->expects(self::once())
+            ->method('searchResources')
+            ->with($query)
+            ->willReturn($searchResult);
+
+        $this->nextCursorResolverMock
+            ->expects(self::once())
+            ->method('save')
+            ->with($query, 25, 'testcursor123');
+
+        $searchResult = $this->backend->searchItems($searchQuery);
+
+        self::assertCount(5, $searchResult->getResults());
+        self::assertContainsOnlyInstancesOf(Item::class, $searchResult->getResults());
+    }
+
+    /**
+     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Backend\RemoteMediaBackend::getAllowedTypes
+     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Backend\RemoteMediaBackend::searchItems
+     */
+    public function testSearchItemsWithFilter(): void
+    {
+        $location = Location::createFromId('all');
+
+        $searchQuery = new SearchQuery('test', $location);
+
+        $this->config->setParameter('allowed_types', 'raw');
+
+        $this->nextCursorResolverMock
+            ->expects(self::never())
+            ->method('resolve');
+
+        $query = new Query(
+            'test',
+            ['raw'],
             25,
         );
 
@@ -563,6 +773,34 @@ final class RemoteMediaBackendTest extends TestCase
     }
 
     /**
+     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Backend\RemoteMediaBackend::getAllowedTypes
+     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Backend\RemoteMediaBackend::searchItemsCount
+     */
+    public function testSearchItemsCountWithFilter(): void
+    {
+        $location = Location::createFromId('all|some|folder');
+
+        $searchQuery = new SearchQuery('test', $location);
+
+        $this->config->setParameter('allowed_types', 'video');
+
+        $query = new Query(
+            'test',
+            ['video'],
+            25,
+            'some/folder',
+        );
+
+        $this->providerMock
+            ->expects(self::once())
+            ->method('searchResourcesCount')
+            ->with($query)
+            ->willReturn(12);
+
+        self::assertSame(12, $this->backend->searchItemsCount($searchQuery));
+    }
+
+    /**
      * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Backend\RemoteMediaBackend::searchItemsCount
      */
     public function testSearchItemsCountWithoutLocation(): void
@@ -646,7 +884,7 @@ final class RemoteMediaBackendTest extends TestCase
 
     private function getSearchResponse(): stdClass
     {
-        $response = new \stdClass();
+        $response = new stdClass();
         $response->body = json_encode([
             'total_count' => 15,
             'next_cursor' => 'testcursor123',

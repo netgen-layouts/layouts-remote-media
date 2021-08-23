@@ -1,0 +1,6 @@
+block_definitions:
+    remote_media:
+        name: 'Remote media'
+        view_types:
+            remote_media:
+                name: 'Remote media'

@@ -1,0 +1,12 @@
+view:
+    block_view:
+        default:
+            remote_media:
+                template: "@nglayouts/block/remote_media.html.twig"
+                match:
+                    block\definition: remote_media
+        app:
+            remote_media:
+                template: "@NetgenLayoutsRemoteMedia/app/block/remote_media.html.twig"
+                match:
+                    block\definition: remote_media

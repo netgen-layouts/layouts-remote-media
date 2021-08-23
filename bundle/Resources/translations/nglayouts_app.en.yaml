@@ -1,0 +1,2 @@
+block.info.remote_media: 'Remote media with resourceID "%resource_id%" will be rendered here.'
+block.notice.empty_remote_media: 'This block is not configured yet. Please select the remote media resource which will be rendered here.'
