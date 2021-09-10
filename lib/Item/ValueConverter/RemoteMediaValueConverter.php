@@ -46,7 +46,7 @@ final class RemoteMediaValueConverter implements ValueConverterInterface
         return true;
     }
 
-    public function getObject(object $object): object
+    public function getObject(object $object): Value
     {
         return $object;
     }
