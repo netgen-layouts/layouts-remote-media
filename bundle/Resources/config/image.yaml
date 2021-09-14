@@ -1,16 +1,14 @@
-system:
-    default:
-        image_variations:
-            netgen_layouts_block:
-                small:
-                    transformations:
-                        - { name: crop, params: [200, 200] }
-                        - { name: resize, params: [200, 200] }
-                medium:
-                    transformations:
-                        - { name: crop, params: [800, 450] }
-                        - { name: resize, params: [800, 450] }
-                large:
-                    transformations:
-                        - { name: crop, params: [1600, 900] }
-                        - { name: resize, params: [1600, 900] }
+image_variations:
+    netgen_layouts_block:
+        small:
+            transformations:
+                - { name: crop, params: [200, 200] }
+                - { name: resize, params: [200, 200] }
+        medium:
+            transformations:
+                - { name: crop, params: [800, 450] }
+                - { name: resize, params: [800, 450] }
+        large:
+            transformations:
+                - { name: crop, params: [1600, 900] }
+                - { name: resize, params: [1600, 900] }
