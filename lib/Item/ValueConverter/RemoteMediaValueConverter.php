@@ -4,19 +4,19 @@ declare(strict_types=1);
 
 namespace Netgen\Layouts\RemoteMedia\Item\ValueConverter;
 
-use Netgen\Bundle\RemoteMediaBundle\Core\FieldType\RemoteMedia\Value;
 use Netgen\Layouts\Item\ValueConverterInterface;
+use Netgen\RemoteMedia\API\Values\RemoteResource;
 use function array_pop;
 use function explode;
 
 /**
- * @implements \Netgen\Layouts\Item\ValueConverterInterface<\Netgen\Bundle\RemoteMediaBundle\Core\FieldType\RemoteMedia\Value>
+ * @implements \Netgen\Layouts\Item\ValueConverterInterface<\Netgen\RemoteMedia\API\Values\RemoteResource>
  */
 final class RemoteMediaValueConverter implements ValueConverterInterface
 {
     public function supports(object $object): bool
     {
-        return $object instanceof Value;
+        return $object instanceof RemoteResource;
     }
 
     public function getValueType(object $object): string
@@ -46,7 +46,7 @@ final class RemoteMediaValueConverter implements ValueConverterInterface
         return true;
     }
 
-    public function getObject(object $object): Value
+    public function getObject(object $object): RemoteResource
     {
         return $object;
     }

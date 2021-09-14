@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Netgen\Layouts\RemoteMedia\Tests\Validator;
 
-use Netgen\Bundle\RemoteMediaBundle\RemoteMedia\RemoteMediaProvider;
 use Netgen\Layouts\RemoteMedia\Validator\RemoteMediaValidator;
+use Netgen\RemoteMedia\Core\RemoteMediaProvider;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidatorFactory;
 use Symfony\Component\Validator\ConstraintValidatorFactoryInterface;

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Netgen\Layouts\RemoteMedia\Block\BlockDefinition\Handler;
 
-use Netgen\Bundle\RemoteMediaBundle\RemoteMedia\VariationResolver;
 use Netgen\Layouts\API\Values\Block\Block;
 use Netgen\Layouts\Block\BlockDefinition\BlockDefinitionHandler;
 use Netgen\Layouts\Block\DynamicParameters;
@@ -13,6 +12,7 @@ use Netgen\Layouts\Parameters\ParameterBuilderInterface;
 use Netgen\Layouts\Parameters\ParameterType\ChoiceType;
 use Netgen\Layouts\Parameters\ParameterType\TextLineType;
 use Netgen\Layouts\RemoteMedia\Parameters\ParameterType\RemoteMediaType;
+use Netgen\RemoteMedia\Core\VariationResolver;
 
 final class RemoteMediaHandler extends BlockDefinitionHandler
 {
@@ -87,7 +87,7 @@ final class RemoteMediaHandler extends BlockDefinitionHandler
             '(no variation)' => null,
         ];
 
-        $variations = $this->variationResolver->getVariationsForContentType(self::LAYOUTS_BLOCK_VARIATIONS);
+        $variations = $this->variationResolver->getVariationsForGroup(self::LAYOUTS_BLOCK_VARIATIONS);
 
         foreach ($variations as $key => $value) {
             $options[(string) $key] = (string) $key;

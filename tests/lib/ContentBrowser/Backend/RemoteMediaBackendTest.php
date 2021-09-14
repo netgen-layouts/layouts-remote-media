@@ -6,10 +6,6 @@ namespace Netgen\Layouts\RemoteMedia\Tests\ContentBrowser\Backend;
 
 use Cloudinary\Api\NotFound as CloudinaryNotFoundException;
 use Cloudinary\Api\Response;
-use Netgen\Bundle\RemoteMediaBundle\RemoteMedia\NextCursorResolver;
-use Netgen\Bundle\RemoteMediaBundle\RemoteMedia\Provider\Cloudinary\Search\Query;
-use Netgen\Bundle\RemoteMediaBundle\RemoteMedia\Provider\Cloudinary\Search\Result;
-use Netgen\Bundle\RemoteMediaBundle\RemoteMedia\RemoteMediaProvider;
 use Netgen\ContentBrowser\Backend\SearchQuery;
 use Netgen\ContentBrowser\Backend\SearchResult;
 use Netgen\ContentBrowser\Config\Configuration;
@@ -18,6 +14,10 @@ use Netgen\Layouts\RemoteMedia\ContentBrowser\Backend\RemoteMediaBackend;
 use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Item;
 use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Location;
 use Netgen\Layouts\RemoteMedia\Tests\Stubs\RemoteMedia as RemoteMediaStub;
+use Netgen\RemoteMedia\Core\NextCursorResolver;
+use Netgen\RemoteMedia\Core\Provider\Cloudinary\Search\Query;
+use Netgen\RemoteMedia\Core\Provider\Cloudinary\Search\Result;
+use Netgen\RemoteMedia\Core\RemoteMediaProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use stdClass;
@@ -27,12 +27,12 @@ use function json_encode;
 final class RemoteMediaBackendTest extends TestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject&\Netgen\Bundle\RemoteMediaBundle\RemoteMedia\RemoteMediaProvider
+     * @var \PHPUnit\Framework\MockObject\MockObject&\Netgen\RemoteMedia\Core\RemoteMediaProvider
      */
     private MockObject $providerMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject&\Netgen\Bundle\RemoteMediaBundle\RemoteMedia\NextCursorResolver
+     * @var \PHPUnit\Framework\MockObject\MockObject&\Netgen\RemoteMedia\Core\NextCursorResolver
      */
     private MockObject $nextCursorResolverMock;
 

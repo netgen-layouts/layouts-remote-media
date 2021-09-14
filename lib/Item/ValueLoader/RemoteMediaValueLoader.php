@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Netgen\Layouts\RemoteMedia\Item\ValueLoader;
 
 use Cloudinary\Api\NotFound as CloudinaryNotFoundException;
-use Netgen\Bundle\RemoteMediaBundle\RemoteMedia\RemoteMediaProvider;
 use Netgen\Layouts\Item\ValueLoaderInterface;
 use Netgen\Layouts\RemoteMedia\Core\RemoteMedia\ResourceQuery;
+use Netgen\RemoteMedia\Core\RemoteMediaProvider;
 
 final class RemoteMediaValueLoader implements ValueLoaderInterface
 {

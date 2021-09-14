@@ -5,9 +5,9 @@
         {% set resource = block.dynamicParameter('resource') %}
         {% set variation = block.parameter('variation').value %}
 
-        {% set videoConst = constant('Netgen\\Bundle\\RemoteMediaBundle\\Core\\FieldType\\RemoteMedia\\Value::TYPE_VIDEO') %}
-        {% set imageConst = constant('Netgen\\Bundle\\RemoteMediaBundle\\Core\\FieldType\\RemoteMedia\\Value::TYPE_IMAGE') %}
-        {% set otherConst = constant('Netgen\\Bundle\\RemoteMediaBundle\\Core\\FieldType\\RemoteMedia\\Value::TYPE_OTHER') %}
+        {% set videoConst = constant('Netgen\\RemoteMedia\\API\\Values\\RemoteResource::TYPE_VIDEO') %}
+        {% set imageConst = constant('Netgen\\RemoteMedia\\API\\Values\\RemoteResource::TYPE_IMAGE') %}
+        {% set otherConst = constant('Netgen\\RemoteMedia\\API\\Values\\RemoteResource::TYPE_OTHER') %}
 
         {% if resource %}
             <div class="remote-media">

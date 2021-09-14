@@ -5,10 +5,6 @@ declare(strict_types=1);
 namespace Netgen\Layouts\RemoteMedia\ContentBrowser\Backend;
 
 use Cloudinary\Api\NotFound as CloudinaryNotFoundException;
-use Netgen\Bundle\RemoteMediaBundle\Core\FieldType\RemoteMedia\Value;
-use Netgen\Bundle\RemoteMediaBundle\RemoteMedia\NextCursorResolver;
-use Netgen\Bundle\RemoteMediaBundle\RemoteMedia\Provider\Cloudinary\Search\Query;
-use Netgen\Bundle\RemoteMediaBundle\RemoteMedia\RemoteMediaProvider;
 use Netgen\ContentBrowser\Backend\BackendInterface;
 use Netgen\ContentBrowser\Backend\SearchQuery;
 use Netgen\ContentBrowser\Backend\SearchResult;
@@ -20,6 +16,10 @@ use Netgen\ContentBrowser\Item\LocationInterface;
 use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Item;
 use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Location;
 use Netgen\Layouts\RemoteMedia\Core\RemoteMedia\ResourceQuery;
+use Netgen\RemoteMedia\API\Values\RemoteResource;
+use Netgen\RemoteMedia\Core\NextCursorResolver;
+use Netgen\RemoteMedia\Core\Provider\Cloudinary\Search\Query;
+use Netgen\RemoteMedia\Core\RemoteMediaProvider;
 use Symfony\Component\Translation\TranslatorInterface;
 use function count;
 use function explode;
@@ -148,7 +148,7 @@ final class RemoteMediaBackend implements BackendInterface
         $items = [];
 
         foreach ($result->getResults() as $resource) {
-            $items[] = new Item(Value::createFromCloudinaryResponse($resource));
+            $items[] = new Item(RemoteResource::createFromCloudinaryResponse($resource));
         }
 
         return $items;
@@ -211,7 +211,7 @@ final class RemoteMediaBackend implements BackendInterface
         $items = [];
 
         foreach ($result->getResults() as $resource) {
-            $items[] = new Item(Value::createFromCloudinaryResponse($resource));
+            $items[] = new Item(RemoteResource::createFromCloudinaryResponse($resource));
         }
 
         return new SearchResult($items);

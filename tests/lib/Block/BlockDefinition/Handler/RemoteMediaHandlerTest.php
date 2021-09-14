@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Netgen\Layouts\RemoteMedia\Tests\Block\BlockDefinition\Handler;
 
-use Netgen\Bundle\RemoteMediaBundle\RemoteMedia\VariationResolver;
 use Netgen\Layouts\API\Values\Block\Block;
 use Netgen\Layouts\Block\DynamicParameters;
 use Netgen\Layouts\Item\ValueLoaderInterface;
@@ -15,6 +14,7 @@ use Netgen\Layouts\Parameters\ParameterType\TextLineType;
 use Netgen\Layouts\RemoteMedia\Block\BlockDefinition\Handler\RemoteMediaHandler;
 use Netgen\Layouts\RemoteMedia\Parameters\ParameterType\RemoteMediaType;
 use Netgen\Layouts\RemoteMedia\Tests\Stubs\RemoteMedia as RemoteMediaStub;
+use Netgen\RemoteMedia\Core\VariationResolver;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -26,7 +26,7 @@ final class RemoteMediaHandlerTest extends TestCase
     private MockObject $valueLoaderMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject&\Netgen\Bundle\RemoteMediaBundle\RemoteMedia\VariationResolver
+     * @var \PHPUnit\Framework\MockObject\MockObject&\Netgen\RemoteMedia\Core\VariationResolver
      */
     private MockObject $variationResolverMock;
 

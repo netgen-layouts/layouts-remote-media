@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Netgen\Layouts\RemoteMedia\Tests\Item\ValueLoader;
 
 use Cloudinary\Api\NotFound as CloudinaryNotFoundException;
-use Netgen\Bundle\RemoteMediaBundle\RemoteMedia\RemoteMediaProvider;
 use Netgen\Layouts\RemoteMedia\Item\ValueLoader\RemoteMediaValueLoader;
 use Netgen\Layouts\RemoteMedia\Tests\Stubs\RemoteMedia as RemoteMediaStub;
+use Netgen\RemoteMedia\Core\RemoteMediaProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 

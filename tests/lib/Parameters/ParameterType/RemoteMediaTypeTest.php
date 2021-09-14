@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Netgen\Layouts\RemoteMedia\Tests\Parameters\ParameterType;
 
 use Cloudinary\Api\NotFound as CloudinaryNotFoundException;
-use Netgen\Bundle\RemoteMediaBundle\RemoteMedia\RemoteMediaProvider;
 use Netgen\Layouts\Parameters\ParameterDefinition;
 use Netgen\Layouts\RemoteMedia\Parameters\ParameterType\RemoteMediaType;
 use Netgen\Layouts\RemoteMedia\Tests\Stubs\RemoteMedia as RemoteMediaStub;
 use Netgen\Layouts\RemoteMedia\Tests\Validator\RemoteMediaValidatorFactory;
 use Netgen\Layouts\Tests\Parameters\ParameterType\ParameterTypeTestTrait;
+use Netgen\RemoteMedia\Core\RemoteMediaProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\OptionsResolver\Exception\InvalidArgumentException;
@@ -21,7 +21,7 @@ final class RemoteMediaTypeTest extends TestCase
     use ParameterTypeTestTrait;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject&\Netgen\Bundle\RemoteMediaBundle\RemoteMedia\RemoteMediaProvider
+     * @var \PHPUnit\Framework\MockObject\MockObject&\Netgen\RemoteMedia\Core\RemoteMediaProvider
      */
     private MockObject $providerMock;
 

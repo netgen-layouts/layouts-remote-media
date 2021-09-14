@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\LayoutsRemoteMediaBundle\Templating\Twig\Runtime;
 
-use Netgen\Bundle\RemoteMediaBundle\Core\FieldType\RemoteMedia\Value;
-use Netgen\Bundle\RemoteMediaBundle\Core\FieldType\RemoteMedia\Variation;
-use Netgen\Bundle\RemoteMediaBundle\RemoteMedia\RemoteMediaProvider;
+use Netgen\RemoteMedia\API\Values\RemoteResource;
+use Netgen\RemoteMedia\API\Values\Variation;
+use Netgen\RemoteMedia\Core\RemoteMediaProvider;
 use Twig\Extension\AbstractExtension;
 
 final class RemoteMediaRuntime extends AbstractExtension
@@ -18,13 +18,13 @@ final class RemoteMediaRuntime extends AbstractExtension
         $this->provider = $provider;
     }
 
-    public function getBlockVariation(Value $value, string $variation, bool $secure = true): Variation
+    public function getBlockVariation(RemoteResource $resource, string $variation, bool $secure = true): Variation
     {
-        return $this->provider->buildVariation($value, 'netgen_layouts_block', $variation, $secure);
+        return $this->provider->buildVariation($resource, 'netgen_layouts_block', $variation, $secure);
     }
 
-    public function getRemoteVideoTagEmbed(Value $value, ?string $variation = null): string
+    public function getRemoteVideoTagEmbed(RemoteResource $resource, ?string $variation = null): string
     {
-        return $this->provider->generateVideoTag($value, 'netgen_layouts_block', $variation ?? '');
+        return $this->provider->generateVideoTag($resource, 'netgen_layouts_block', $variation ?? '');
     }
 }

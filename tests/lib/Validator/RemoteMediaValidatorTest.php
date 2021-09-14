@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Netgen\Layouts\RemoteMedia\Tests\Validator;
 
 use Cloudinary\Api\NotFound as CloudinaryNotFoundException;
-use Netgen\Bundle\RemoteMediaBundle\RemoteMedia\RemoteMediaProvider;
 use Netgen\Layouts\RemoteMedia\Tests\Stubs\RemoteMedia as RemoteMediaStub;
 use Netgen\Layouts\RemoteMedia\Validator\Constraint\RemoteMedia;
 use Netgen\Layouts\RemoteMedia\Validator\RemoteMediaValidator;
 use Netgen\Layouts\Tests\TestCase\ValidatorTestCase;
+use Netgen\RemoteMedia\Core\RemoteMediaProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\ConstraintValidatorInterface;

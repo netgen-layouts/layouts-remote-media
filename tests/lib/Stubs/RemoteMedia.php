@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Netgen\Layouts\RemoteMedia\Tests\Stubs;
 
-use Netgen\Bundle\RemoteMediaBundle\Core\FieldType\RemoteMedia\Value as RemoteMediaValue;
+use Netgen\RemoteMedia\API\Values\RemoteResource;
 
-final class RemoteMedia extends RemoteMediaValue
+final class RemoteMedia extends RemoteResource
 {
     public function __construct(
         string $resourceId,
