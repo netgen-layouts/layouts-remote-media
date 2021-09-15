@@ -5,18 +5,21 @@ declare(strict_types=1);
 namespace Netgen\Layouts\RemoteMedia\Tests\ContentBrowser\Item\RemoteMedia;
 
 use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Item;
-use Netgen\Layouts\RemoteMedia\Tests\Stubs\RemoteMedia as RemoteMediaStub;
+use Netgen\RemoteMedia\API\Values\RemoteResource;
 use PHPUnit\Framework\TestCase;
 
 final class ItemTest extends TestCase
 {
-    private RemoteMediaStub $resource;
+    private RemoteResource $resource;
 
     private Item $item;
 
     protected function setUp(): void
     {
-        $this->resource = new RemoteMediaStub('folder/test_resource');
+        $this->resource = RemoteResource::createFromParameters([
+            'resourceId' => 'folder/test_resource',
+            'resourceType' => 'image',
+        ]);
 
         $this->item = new Item($this->resource);
     }

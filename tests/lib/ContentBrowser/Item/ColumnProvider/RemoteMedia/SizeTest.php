@@ -6,7 +6,7 @@ namespace Netgen\Layouts\RemoteMedia\Tests\ContentBrowser\Item\ColumnProvider\Re
 
 use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\ColumnProvider\RemoteMedia\Size;
 use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Item as RemoteMediaItem;
-use Netgen\Layouts\RemoteMedia\Tests\Stubs\RemoteMedia as RemoteMediaStub;
+use Netgen\RemoteMedia\API\Values\RemoteResource;
 use PHPUnit\Framework\TestCase;
 
 final class SizeTest extends TestCase
@@ -23,7 +23,7 @@ final class SizeTest extends TestCase
      */
     public function testGetValueInB(): void
     {
-        $resource = new RemoteMediaStub('folder/test_resource');
+        $resource = RemoteResource::createFromParameters(['resourceId' => 'folder/test_resource']);
         $resource->size = 586;
 
         $item = new RemoteMediaItem($resource);
@@ -36,7 +36,7 @@ final class SizeTest extends TestCase
      */
     public function testGetValueInkB(): void
     {
-        $resource = new RemoteMediaStub('folder/test_resource');
+        $resource = RemoteResource::createFromParameters(['resourceId' => 'folder/test_resource']);
         $resource->size = 1086;
 
         $item = new RemoteMediaItem($resource);
@@ -49,7 +49,7 @@ final class SizeTest extends TestCase
      */
     public function testGetValueInMB(): void
     {
-        $resource = new RemoteMediaStub('folder/test_resource');
+        $resource = RemoteResource::createFromParameters(['resourceId' => 'folder/test_resource']);
         $resource->size = 269840548;
 
         $item = new RemoteMediaItem($resource);
@@ -62,7 +62,7 @@ final class SizeTest extends TestCase
      */
     public function testGetValueInGB(): void
     {
-        $resource = new RemoteMediaStub('folder/test_resource');
+        $resource = RemoteResource::createFromParameters(['resourceId' => 'folder/test_resource']);
         $resource->size = 269840548462;
 
         $item = new RemoteMediaItem($resource);
@@ -75,7 +75,7 @@ final class SizeTest extends TestCase
      */
     public function testGetValueInTB(): void
     {
-        $resource = new RemoteMediaStub('folder/test_resource');
+        $resource = RemoteResource::createFromParameters(['resourceId' => 'folder/test_resource']);
         $resource->size = 269840548462634;
 
         $item = new RemoteMediaItem($resource);
@@ -88,7 +88,7 @@ final class SizeTest extends TestCase
      */
     public function testGetValueInPB(): void
     {
-        $resource = new RemoteMediaStub('folder/test_resource');
+        $resource = RemoteResource::createFromParameters(['resourceId' => 'folder/test_resource']);
         $resource->size = 269840548462634154;
 
         $item = new RemoteMediaItem($resource);
@@ -101,8 +101,7 @@ final class SizeTest extends TestCase
      */
     public function testGetValueWithNoSize(): void
     {
-        $resource = new RemoteMediaStub('folder/test_resource');
-
+        $resource = RemoteResource::createFromParameters(['resourceId' => 'folder/test_resource']);
         $item = new RemoteMediaItem($resource);
 
         self::assertSame('0B', $this->sizeColumn->getValue($item));

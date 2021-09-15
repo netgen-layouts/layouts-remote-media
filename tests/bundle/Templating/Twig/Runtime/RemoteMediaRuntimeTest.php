@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Netgen\Bundle\LayoutsRemoteMediaBundle\Tests\Templating\Twig\Runtime;
 
 use Netgen\Bundle\LayoutsRemoteMediaBundle\Templating\Twig\Runtime\RemoteMediaRuntime;
-use Netgen\Layouts\RemoteMedia\Tests\Stubs\RemoteMedia as RemoteMediaStub;
+use Netgen\RemoteMedia\API\Values\RemoteResource;
 use Netgen\RemoteMedia\API\Values\Variation;
 use Netgen\RemoteMedia\Core\RemoteMediaProvider;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -35,7 +35,7 @@ final class RemoteMediaRuntimeTest extends TestCase
      */
     public function testGetBlockVariation(): void
     {
-        $value = new RemoteMediaStub('test_image');
+        $value = RemoteResource::createFromParameters(['resourceId' => 'test_image']);
         $variationUrl = 'https://cloudinary.com/upload/some_variation_config/test_image';
         $variation = new Variation([
             'url' => $variationUrl,
@@ -59,7 +59,7 @@ final class RemoteMediaRuntimeTest extends TestCase
      */
     public function testGetRemoteVideoTagEmbed(): void
     {
-        $value = new RemoteMediaStub('test_video');
+        $value = RemoteResource::createFromParameters(['resourceId' => 'test_video']);
         $videoTagString = '<video src="https://cloudinary.com/upload/some_variation_config/test_video">';
 
         $this->providerMock

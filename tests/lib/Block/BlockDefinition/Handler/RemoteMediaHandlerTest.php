@@ -13,7 +13,7 @@ use Netgen\Layouts\Parameters\ParameterType\ChoiceType;
 use Netgen\Layouts\Parameters\ParameterType\TextLineType;
 use Netgen\Layouts\RemoteMedia\Block\BlockDefinition\Handler\RemoteMediaHandler;
 use Netgen\Layouts\RemoteMedia\Parameters\ParameterType\RemoteMediaType;
-use Netgen\Layouts\RemoteMedia\Tests\Stubs\RemoteMedia as RemoteMediaStub;
+use Netgen\RemoteMedia\API\Values\RemoteResource;
 use Netgen\RemoteMedia\Core\VariationResolver;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -26,11 +26,6 @@ final class RemoteMediaHandlerTest extends TestCase
     private MockObject $valueLoaderMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject&\Netgen\RemoteMedia\Core\VariationResolver
-     */
-    private MockObject $variationResolverMock;
-
-    /**
      * @var string[]
      */
     private array $allowedResourceTypes;
@@ -40,12 +35,28 @@ final class RemoteMediaHandlerTest extends TestCase
     protected function setUp(): void
     {
         $this->valueLoaderMock = $this->createMock(ValueLoaderInterface::class);
-        $this->variationResolverMock = $this->createMock(VariationResolver::class);
+
+        $variationResolver = new VariationResolver();
+        $variationResolver->setVariations([
+            'netgen_layouts_block' => [
+                'Small' => [
+                    'transformations' => [
+                        'limit' => [300],
+                    ],
+                ],
+                'Big' => [
+                    'transformations' => [
+                        'limit' => [1200],
+                    ],
+                ],
+            ],
+        ]);
+
         $this->allowedResourceTypes = ['image', 'video'];
 
         $this->handler = new RemoteMediaHandler(
             $this->valueLoaderMock,
-            $this->variationResolverMock,
+            $variationResolver,
             $this->allowedResourceTypes,
         );
     }
@@ -65,25 +76,6 @@ final class RemoteMediaHandlerTest extends TestCase
      */
     public function testBuildParameters(): void
     {
-        $variations = [
-            'Small' => [
-                'transformations' => [
-                    'limit' => [300],
-                ],
-            ],
-            'Big' => [
-                'transformations' => [
-                    'limit' => [1200],
-                ],
-            ],
-        ];
-
-        $this->variationResolverMock
-            ->expects(self::once())
-            ->method('getVariationsForContentType')
-            ->with('netgen_layouts_block')
-            ->willReturn($variations);
-
         $builderMock = $this->createMock(ParameterBuilderInterface::class);
 
         $variationOptions = [
@@ -132,7 +124,10 @@ final class RemoteMediaHandlerTest extends TestCase
             ],
         ]);
 
-        $value = new RemoteMediaStub('folder/subfolder/image_name.jpg', 'image');
+        $value = RemoteResource::createFromParameters([
+            'resourceId' => 'folder/subfolder/image_name.jpg',
+            'resourceType' => 'image',
+        ]);
 
         $this->valueLoaderMock
             ->expects(self::once())

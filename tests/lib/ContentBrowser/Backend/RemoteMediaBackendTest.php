@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Netgen\Layouts\RemoteMedia\Tests\ContentBrowser\Backend;
 
-use Cloudinary\Api\NotFound as CloudinaryNotFoundException;
 use Cloudinary\Api\Response;
 use Netgen\ContentBrowser\Backend\SearchQuery;
 use Netgen\ContentBrowser\Backend\SearchResult;
@@ -13,15 +12,16 @@ use Netgen\ContentBrowser\Exceptions\NotFoundException;
 use Netgen\Layouts\RemoteMedia\ContentBrowser\Backend\RemoteMediaBackend;
 use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Item;
 use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Location;
-use Netgen\Layouts\RemoteMedia\Tests\Stubs\RemoteMedia as RemoteMediaStub;
-use Netgen\RemoteMedia\Core\NextCursorResolver;
-use Netgen\RemoteMedia\Core\Provider\Cloudinary\Search\Query;
-use Netgen\RemoteMedia\Core\Provider\Cloudinary\Search\Result;
+use Netgen\RemoteMedia\API\NextCursorResolverInterface;
+use Netgen\RemoteMedia\API\Search\Query;
+use Netgen\RemoteMedia\API\Search\Result;
+use Netgen\RemoteMedia\API\Values\RemoteResource;
 use Netgen\RemoteMedia\Core\RemoteMediaProvider;
+use Netgen\RemoteMedia\Exception\RemoteResourceNotFoundException;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use stdClass;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Component\Translation\Translator;
 use function json_encode;
 
 final class RemoteMediaBackendTest extends TestCase
@@ -32,12 +32,16 @@ final class RemoteMediaBackendTest extends TestCase
     private MockObject $providerMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject&\Netgen\RemoteMedia\Core\NextCursorResolver
+     * @var \PHPUnit\Framework\MockObject\MockObject&\Netgen\RemoteMedia\API\NextCursorResolverInterface
      */
     private MockObject $nextCursorResolverMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject&\Symfony\Component\Translation\TranslatorInterface
+     * Mocked Translator class directly due to supporting Symfony versions from 3 to 5
+     * (TranslationInterface has been deprecated in v4 and replaced in v5 with TranslatorInterface
+     * from symfony/translation-contracts bundle).
+     *
+     * @var \PHPUnit\Framework\MockObject\MockObject&\Symfony\Component\Translation\Translator
      */
     private MockObject $translatorMock;
 
@@ -48,8 +52,8 @@ final class RemoteMediaBackendTest extends TestCase
     protected function setUp(): void
     {
         $this->providerMock = $this->createMock(RemoteMediaProvider::class);
-        $this->nextCursorResolverMock = $this->createMock(NextCursorResolver::class);
-        $this->translatorMock = $this->createMock(TranslatorInterface::class);
+        $this->nextCursorResolverMock = $this->createMock(NextCursorResolverInterface::class);
+        $this->translatorMock = $this->createMock(Translator::class);
         $this->config = new Configuration('remote_media', 'Remote media', []);
 
         $this->backend = new RemoteMediaBackend(
@@ -156,7 +160,10 @@ final class RemoteMediaBackendTest extends TestCase
     public function testLoadItem(): void
     {
         $value = 'video|some|folder|path|my_video.mp4';
-        $resource = new RemoteMediaStub('some/folder/path/my_video.mp4', 'video');
+        $resource = RemoteResource::createFromParameters([
+            'resourceId' => 'some/folder/path/my_video.mp4',
+            'resourceType' => 'video',
+        ]);
 
         $this->providerMock
             ->expects(self::once())
@@ -182,7 +189,9 @@ final class RemoteMediaBackendTest extends TestCase
             ->expects(self::once())
             ->method('getRemoteResource')
             ->with('some/folder/path/my_video.mp4', 'video')
-            ->willThrowException(new CloudinaryNotFoundException());
+            ->willThrowException(
+                new RemoteResourceNotFoundException('some/folder/path/my_video.mp4', 'video'),
+            );
 
         $this->expectException(NotFoundException::class);
         $this->expectExceptionMessage('Remote media with ID "' . $value . '" not found.');

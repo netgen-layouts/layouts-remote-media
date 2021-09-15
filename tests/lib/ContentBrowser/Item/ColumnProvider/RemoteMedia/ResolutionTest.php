@@ -6,7 +6,7 @@ namespace Netgen\Layouts\RemoteMedia\Tests\ContentBrowser\Item\ColumnProvider\Re
 
 use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\ColumnProvider\RemoteMedia\Resolution;
 use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Item as RemoteMediaItem;
-use Netgen\Layouts\RemoteMedia\Tests\Stubs\RemoteMedia as RemoteMediaStub;
+use Netgen\RemoteMedia\API\Values\RemoteResource;
 use PHPUnit\Framework\TestCase;
 
 final class ResolutionTest extends TestCase
@@ -23,7 +23,7 @@ final class ResolutionTest extends TestCase
      */
     public function testGetValue(): void
     {
-        $resource = new RemoteMediaStub('folder/test_resource');
+        $resource = RemoteResource::createFromParameters(['resourceId' => 'folder/test_resource']);
         $resource->metaData['width'] = 1920;
         $resource->metaData['height'] = 1080;
 
@@ -37,7 +37,7 @@ final class ResolutionTest extends TestCase
      */
     public function testGetValueWithEmptyWidth(): void
     {
-        $resource = new RemoteMediaStub('folder/test_resource');
+        $resource = RemoteResource::createFromParameters(['resourceId' => 'folder/test_resource']);
         $resource->metaData['width'] = 1920;
 
         $item = new RemoteMediaItem($resource);
@@ -50,7 +50,7 @@ final class ResolutionTest extends TestCase
      */
     public function testGetValueWithEmptyHeight(): void
     {
-        $resource = new RemoteMediaStub('folder/test_resource');
+        $resource = RemoteResource::createFromParameters(['resourceId' => 'folder/test_resource']);
         $resource->metaData['height'] = 1080;
 
         $item = new RemoteMediaItem($resource);
@@ -63,7 +63,7 @@ final class ResolutionTest extends TestCase
      */
     public function testGetValueWithMissingKeys(): void
     {
-        $resource = new RemoteMediaStub('folder/test_resource');
+        $resource = RemoteResource::createFromParameters(['resourceId' => 'folder/test_resource']);
         unset($resource->metaData['width'], $resource->metaData['height']);
 
         $item = new RemoteMediaItem($resource);

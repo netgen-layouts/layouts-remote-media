@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Netgen\Layouts\RemoteMedia\Tests\Item\ValueConverter;
 
 use Netgen\Layouts\RemoteMedia\Item\ValueConverter\RemoteMediaValueConverter;
-use Netgen\Layouts\RemoteMedia\Tests\Stubs\RemoteMedia as RemoteMediaStub;
+use Netgen\RemoteMedia\API\Values\RemoteResource;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 
@@ -25,7 +25,7 @@ final class RemoteMediaValueConverterTest extends TestCase
     {
         self::assertTrue(
             $this->valueConverter->supports(
-                new RemoteMediaStub('test_resource'),
+                RemoteResource::createFromParameters(['resourceId' => 'test_resource']),
             ),
         );
 
@@ -40,7 +40,7 @@ final class RemoteMediaValueConverterTest extends TestCase
         self::assertSame(
             'remote_media',
             $this->valueConverter->getValueType(
-                new RemoteMediaStub('test_resource'),
+                RemoteResource::createFromParameters(['resourceId' => 'test_resource']),
             ),
         );
     }
@@ -53,7 +53,7 @@ final class RemoteMediaValueConverterTest extends TestCase
         self::assertSame(
             'folder/test_resource',
             $this->valueConverter->getId(
-                new RemoteMediaStub('folder/test_resource'),
+                RemoteResource::createFromParameters(['resourceId' => 'folder/test_resource']),
             ),
         );
     }
@@ -66,7 +66,7 @@ final class RemoteMediaValueConverterTest extends TestCase
         self::assertSame(
             'folder/test_resource',
             $this->valueConverter->getRemoteId(
-                new RemoteMediaStub('folder/test_resource'),
+                RemoteResource::createFromParameters(['resourceId' => 'folder/test_resource']),
             ),
         );
     }
@@ -79,7 +79,7 @@ final class RemoteMediaValueConverterTest extends TestCase
         self::assertSame(
             'test_resource',
             $this->valueConverter->getName(
-                new RemoteMediaStub('folder/test_resource'),
+                RemoteResource::createFromParameters(['resourceId' => 'folder/test_resource']),
             ),
         );
     }
@@ -91,7 +91,7 @@ final class RemoteMediaValueConverterTest extends TestCase
     {
         self::assertTrue(
             $this->valueConverter->getIsVisible(
-                new RemoteMediaStub('folder/test_resource'),
+                RemoteResource::createFromParameters(['resourceId' => 'folder/test_resource']),
             ),
         );
     }
@@ -101,7 +101,7 @@ final class RemoteMediaValueConverterTest extends TestCase
      */
     public function testGetObject(): void
     {
-        $object = new RemoteMediaStub('folder/test_resource');
+        $object = RemoteResource::createFromParameters(['resourceId' => 'folder/test_resource']);
 
         self::assertSame($object, $this->valueConverter->getObject($object));
     }

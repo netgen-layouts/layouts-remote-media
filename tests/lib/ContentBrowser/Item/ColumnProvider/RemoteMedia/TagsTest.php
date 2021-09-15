@@ -6,7 +6,7 @@ namespace Netgen\Layouts\RemoteMedia\Tests\ContentBrowser\Item\ColumnProvider\Re
 
 use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\ColumnProvider\RemoteMedia\Tags;
 use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Item as RemoteMediaItem;
-use Netgen\Layouts\RemoteMedia\Tests\Stubs\RemoteMedia as RemoteMediaStub;
+use Netgen\RemoteMedia\API\Values\RemoteResource;
 use PHPUnit\Framework\TestCase;
 
 final class TagsTest extends TestCase
@@ -23,7 +23,7 @@ final class TagsTest extends TestCase
      */
     public function testGetValue(): void
     {
-        $resource = new RemoteMediaStub('folder/test_resource');
+        $resource = RemoteResource::createFromParameters(['resourceId' => 'folder/test_resource']);
         $resource->metaData['tags'] = ['tag1', 'tag2', 'tag3'];
 
         $item = new RemoteMediaItem($resource);
@@ -36,7 +36,7 @@ final class TagsTest extends TestCase
      */
     public function testGetValueWithMissingTagsKey(): void
     {
-        $resource = new RemoteMediaStub('folder/test_resource');
+        $resource = RemoteResource::createFromParameters(['resourceId' => 'folder/test_resource']);
         unset($resource->metaData['tags']);
 
         $item = new RemoteMediaItem($resource);
@@ -49,7 +49,7 @@ final class TagsTest extends TestCase
      */
     public function testGetValueWithNoTags(): void
     {
-        $resource = new RemoteMediaStub('folder/test_resource');
+        $resource = RemoteResource::createFromParameters(['resourceId' => 'folder/test_resource']);
 
         $item = new RemoteMediaItem($resource);
 

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Netgen\Layouts\RemoteMedia\Tests\Item\ValueUrlGenerator;
 
 use Netgen\Layouts\RemoteMedia\Item\ValueUrlGenerator\RemoteMediaValueUrlGenerator;
-use Netgen\Layouts\RemoteMedia\Tests\Stubs\RemoteMedia as RemoteMediaStub;
+use Netgen\RemoteMedia\API\Values\RemoteResource;
 use PHPUnit\Framework\TestCase;
 
 final class RemoteMediaUrlGeneratorTest extends TestCase
@@ -22,7 +22,10 @@ final class RemoteMediaUrlGeneratorTest extends TestCase
      */
     public function testGenerate(): void
     {
-        $resource = new RemoteMediaStub('folder/test_resource', 'video');
+        $resource = RemoteResource::createFromParameters([
+            'resourceId' => 'folder/test_resource',
+            'resourceType' => 'video',
+        ]);
         $resource->secure_url = 'https://cloudinary.com/test/folder/test_resource';
 
         self::assertSame('https://cloudinary.com/test/folder/test_resource', $this->urlGenerator->generate($resource));

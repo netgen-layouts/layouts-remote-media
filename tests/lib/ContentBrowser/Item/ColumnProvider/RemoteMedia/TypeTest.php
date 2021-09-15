@@ -6,7 +6,7 @@ namespace Netgen\Layouts\RemoteMedia\Tests\ContentBrowser\Item\ColumnProvider\Re
 
 use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\ColumnProvider\RemoteMedia\Type;
 use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Item as RemoteMediaItem;
-use Netgen\Layouts\RemoteMedia\Tests\Stubs\RemoteMedia as RemoteMediaStub;
+use Netgen\RemoteMedia\API\Values\RemoteResource;
 use PHPUnit\Framework\TestCase;
 
 final class TypeTest extends TestCase
@@ -23,7 +23,7 @@ final class TypeTest extends TestCase
      */
     public function testGetValue(): void
     {
-        $resource = new RemoteMediaStub('folder/test_resource');
+        $resource = RemoteResource::createFromParameters(['resourceId' => 'folder/test_resource']);
         $item = new RemoteMediaItem($resource);
 
         self::assertSame('image', $this->typeColumn->getValue($item));
@@ -34,7 +34,7 @@ final class TypeTest extends TestCase
      */
     public function testGetValueWithFormat(): void
     {
-        $resource = new RemoteMediaStub('folder/test_resource');
+        $resource = RemoteResource::createFromParameters(['resourceId' => 'folder/test_resource']);
         $resource->resourceType = 'video';
         $resource->metaData['format'] = 'mp4';
 
@@ -48,7 +48,7 @@ final class TypeTest extends TestCase
      */
     public function testGetValueWithoutFormatKey(): void
     {
-        $resource = new RemoteMediaStub('folder/test_resource');
+        $resource = RemoteResource::createFromParameters(['resourceId' => 'folder/test_resource']);
         $resource->resourceType = 'video';
         unset($resource->metaData['format']);
 

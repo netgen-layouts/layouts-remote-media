@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Netgen\Layouts\RemoteMedia\Tests\Validator;
 
-use Cloudinary\Api\NotFound as CloudinaryNotFoundException;
-use Netgen\Layouts\RemoteMedia\Tests\Stubs\RemoteMedia as RemoteMediaStub;
 use Netgen\Layouts\RemoteMedia\Validator\Constraint\RemoteMedia;
 use Netgen\Layouts\RemoteMedia\Validator\RemoteMediaValidator;
 use Netgen\Layouts\Tests\TestCase\ValidatorTestCase;
+use Netgen\RemoteMedia\API\Values\RemoteResource;
 use Netgen\RemoteMedia\Core\RemoteMediaProvider;
+use Netgen\RemoteMedia\Exception\RemoteResourceNotFoundException;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\ConstraintValidatorInterface;
@@ -43,7 +43,7 @@ final class RemoteMediaValidatorTest extends ValidatorTestCase
             ->expects(self::once())
             ->method('getRemoteResource')
             ->with(self::identicalTo('folder/test_resource'), self::identicalTo('image'))
-            ->willReturn(new RemoteMediaStub('folder/test_resource'));
+            ->willReturn(RemoteResource::createFromParameters(['resourceId' => 'folder/test_resource']));
 
         $this->assertValid(true, 'image|folder|test_resource');
     }
@@ -71,7 +71,7 @@ final class RemoteMediaValidatorTest extends ValidatorTestCase
             ->expects(self::once())
             ->method('getRemoteResource')
             ->with(self::identicalTo('folder/test_resource'), self::identicalTo('image'))
-            ->willThrowException(new CloudinaryNotFoundException());
+            ->willThrowException(new RemoteResourceNotFoundException('folder/test_resource', 'image'));
 
         $this->assertValid(false, 'image|folder|test_resource');
     }
