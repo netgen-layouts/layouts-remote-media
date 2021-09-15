@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Netgen\Layouts\RemoteMedia\Item\ValueLoader;
 
-use Cloudinary\Api\NotFound as CloudinaryNotFoundException;
 use Netgen\Layouts\Item\ValueLoaderInterface;
 use Netgen\Layouts\RemoteMedia\Core\RemoteMedia\ResourceQuery;
 use Netgen\RemoteMedia\Core\RemoteMediaProvider;
+use Netgen\RemoteMedia\Exception\RemoteResourceNotFoundException;
 
 final class RemoteMediaValueLoader implements ValueLoaderInterface
 {
@@ -27,7 +27,7 @@ final class RemoteMediaValueLoader implements ValueLoaderInterface
                 $query->getResourceId(),
                 $query->getResourceType(),
             );
-        } catch (CloudinaryNotFoundException $e) {
+        } catch (RemoteResourceNotFoundException $e) {
             return null;
         }
     }

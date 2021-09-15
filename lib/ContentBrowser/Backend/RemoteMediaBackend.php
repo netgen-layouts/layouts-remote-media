@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Netgen\Layouts\RemoteMedia\ContentBrowser\Backend;
 
-use Cloudinary\Api\NotFound as CloudinaryNotFoundException;
 use Netgen\ContentBrowser\Backend\BackendInterface;
 use Netgen\ContentBrowser\Backend\SearchQuery;
 use Netgen\ContentBrowser\Backend\SearchResult;
@@ -16,11 +15,11 @@ use Netgen\ContentBrowser\Item\LocationInterface;
 use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Item;
 use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Location;
 use Netgen\Layouts\RemoteMedia\Core\RemoteMedia\ResourceQuery;
-use Netgen\RemoteMedia\API\Values\RemoteResource;
-use Netgen\RemoteMedia\Core\NextCursorResolver;
-use Netgen\RemoteMedia\Core\Provider\Cloudinary\Search\Query;
+use Netgen\RemoteMedia\API\NextCursorResolverInterface;
+use Netgen\RemoteMedia\API\Search\Query;
 use Netgen\RemoteMedia\Core\RemoteMediaProvider;
-use Symfony\Component\Translation\TranslatorInterface;
+use Netgen\RemoteMedia\Exception\RemoteResourceNotFoundException;
+use Symfony\Component\Translation\Translator;
 use function count;
 use function explode;
 use function in_array;
@@ -31,16 +30,16 @@ final class RemoteMediaBackend implements BackendInterface
 {
     private RemoteMediaProvider $provider;
 
-    private NextCursorResolver $nextCursorResolver;
+    private NextCursorResolverInterface $nextCursorResolver;
 
-    private TranslatorInterface $translator;
+    private Translator $translator;
 
     private Configuration $config;
 
     public function __construct(
         RemoteMediaProvider $provider,
-        NextCursorResolver $nextCursorResolver,
-        TranslatorInterface $translator,
+        NextCursorResolverInterface $nextCursorResolver,
+        Translator $translator,
         Configuration $config
     ) {
         $this->provider = $provider;
@@ -68,7 +67,7 @@ final class RemoteMediaBackend implements BackendInterface
                 $query->getResourceId(),
                 $query->getResourceType(),
             );
-        } catch (CloudinaryNotFoundException $e) {
+        } catch (RemoteResourceNotFoundException $e) {
             throw new NotFoundException(
                 sprintf(
                     'Remote media with ID "%s" not found.',
@@ -146,9 +145,8 @@ final class RemoteMediaBackend implements BackendInterface
         }
 
         $items = [];
-
-        foreach ($result->getResults() as $resource) {
-            $items[] = new Item(RemoteResource::createFromCloudinaryResponse($resource));
+        foreach ($result->getResources() as $resource) {
+            $items[] = new Item($resource);
         }
 
         return $items;
@@ -209,9 +207,8 @@ final class RemoteMediaBackend implements BackendInterface
         }
 
         $items = [];
-
-        foreach ($result->getResults() as $resource) {
-            $items[] = new Item(RemoteResource::createFromCloudinaryResponse($resource));
+        foreach ($result->getResources() as $resource) {
+            $items[] = new Item($resource);
         }
 
         return new SearchResult($items);

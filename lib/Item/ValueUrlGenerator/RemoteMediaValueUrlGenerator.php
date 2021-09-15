@@ -7,7 +7,7 @@ namespace Netgen\Layouts\RemoteMedia\Item\ValueUrlGenerator;
 use Netgen\Layouts\Item\ValueUrlGeneratorInterface;
 
 /**
- * @implements \Netgen\Layouts\Item\ValueUrlGeneratorInterface<\Netgen\RemoteMedia\API\Values\Value>
+ * @implements \Netgen\Layouts\Item\ValueUrlGeneratorInterface<\Netgen\RemoteMedia\API\Values\RemoteResource>
  */
 final class RemoteMediaValueUrlGenerator implements ValueUrlGeneratorInterface
 {

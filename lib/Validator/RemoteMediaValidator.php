@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace Netgen\Layouts\RemoteMedia\Validator;
 
-use Cloudinary\Api\NotFound as CloudinaryNotFoundException;
 use Netgen\Layouts\RemoteMedia\Core\RemoteMedia\ResourceQuery;
 use Netgen\Layouts\RemoteMedia\Validator\Constraint\RemoteMedia;
-use Netgen\RemoteMedia\API\Values\RemoteResource;
 use Netgen\RemoteMedia\Core\RemoteMediaProvider;
+use Netgen\RemoteMedia\Exception\RemoteResourceNotFoundException;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
@@ -40,16 +39,13 @@ final class RemoteMediaValidator extends ConstraintValidator
         $query = ResourceQuery::createFromString($value);
 
         try {
-            $resource = $this->provider->getRemoteResource(
+            $this->provider->getRemoteResource(
                 $query->getResourceId(),
                 $query->getResourceType(),
             );
-        } catch (CloudinaryNotFoundException $e) {
-            $resource = null;
-        }
-
-        if (!$resource instanceof RemoteResource) {
-            $this->context->buildViolation($constraint->message)
+        } catch (RemoteResourceNotFoundException $e) {
+            $this->context
+                ->buildViolation($constraint->message)
                 ->setParameter('%resourceId%', $query->getResourceId())
                 ->setParameter('%resourceType%', $query->getResourceType())
                 ->addViolation();
