@@ -15,12 +15,12 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php: ['7.4']
-        symfony: ['~5.3.0']
+        php: ['7.4', '8.0']
+        symfony: ['~5.2.0', '~5.3.0']
         deps: ['normal']
         include:
           - php: '7.4'
-            symfony: '~5.3.0'
+            symfony: '~5.2.0'
             deps: 'low'
 
     steps:
