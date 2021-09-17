@@ -3,7 +3,7 @@
         <img src="{{ item.remoteMediaValue.secure_url }}" />
     </div>
 {% elseif item.remoteMediaValue.mediaType == 'video' %}
-    {% set thumbnail = netgen_remote_video_thumbnail(item.remoteMediaValue) %}
+    {% set thumbnail = netgen_remote_media_video_thumbnail_url(item.remoteMediaValue) %}
 
     {% if thumbnail %}
         <div class="remote-media">

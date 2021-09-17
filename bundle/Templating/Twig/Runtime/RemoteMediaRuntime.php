@@ -23,7 +23,7 @@ final class RemoteMediaRuntime extends AbstractExtension
         return $this->provider->buildVariation($resource, 'netgen_layouts_block', $variation, $secure);
     }
 
-    public function getRemoteVideoTagEmbed(RemoteResource $resource, ?string $variation = null): string
+    public function getBlockVideoTag(RemoteResource $resource, ?string $variation = null): string
     {
         return $this->provider->generateVideoTag($resource, 'netgen_layouts_block', $variation ?? '');
     }

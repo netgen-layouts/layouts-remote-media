@@ -3,7 +3,7 @@
         {% if item.object.mediaType == 'image' %}
             <img src="{{ nglayouts_item_path(item) }}" />
         {% elseif item.object.mediaType == 'video' %}
-            {% set thumbnail = netgen_remote_video_thumbnail(item.object) %}
+            {% set thumbnail = netgen_remote_media_video_thumbnail_url(item.object) %}
 
             {% if thumbnail %}
                 <img src="{{ thumbnail }}" />

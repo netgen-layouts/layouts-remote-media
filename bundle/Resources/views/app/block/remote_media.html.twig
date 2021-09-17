@@ -12,7 +12,7 @@
             {% if resource.mediaType == 'image' %}
                 <img src="{{ resource.secure_url }}" />
             {% elseif resource.mediaType == 'video' %}
-                {% set thumbnail = netgen_remote_video_thumbnail(resource) %}
+                {% set thumbnail = netgen_remote_media_video_thumbnail_url(resource) %}
 
                 {% if thumbnail %}
                     <img src="{{ thumbnail }}" />

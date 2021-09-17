@@ -24,7 +24,7 @@
                 {% elseif resource.mediaType == videoConst %}
                     {{ netgen_layouts_remote_media_block_video_tag(resource, variation)|raw }}
                 {% else %}
-                    <a href="{{ netgen_remote_download(resource) }}">{{ resource.resourceId }}</a>
+                    <a href="{{ netgen_remote_media_download_url(resource) }}">{{ resource.resourceId }}</a>
                 {% endif %}
             </div>
         {% endif %}

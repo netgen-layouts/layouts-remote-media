@@ -22,7 +22,7 @@ final class RemoteMediaExtension extends AbstractExtension
             ),
             new TwigFunction(
                 'netgen_layouts_remote_media_block_video_tag',
-                [RemoteMediaRuntime::class, 'getRemoteVideoTagEmbed'],
+                [RemoteMediaRuntime::class, 'getBlockVideoTag'],
             ),
         ];
     }

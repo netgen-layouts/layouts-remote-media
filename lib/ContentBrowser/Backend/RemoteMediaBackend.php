@@ -19,7 +19,6 @@ use Netgen\RemoteMedia\API\NextCursorResolverInterface;
 use Netgen\RemoteMedia\API\Search\Query;
 use Netgen\RemoteMedia\Core\RemoteMediaProvider;
 use Netgen\RemoteMedia\Exception\RemoteResourceNotFoundException;
-use Symfony\Component\Translation\Translator;
 use function count;
 use function explode;
 use function in_array;
@@ -32,14 +31,20 @@ final class RemoteMediaBackend implements BackendInterface
 
     private NextCursorResolverInterface $nextCursorResolver;
 
-    private Translator $translator;
+    /**
+     * @var \Symfony\Contracts\Translation\TranslatorInterface
+     */
+    private $translator;
 
     private Configuration $config;
 
+    /**
+     * @param \Symfony\Contracts\Translation\TranslatorInterface $translator
+     */
     public function __construct(
         RemoteMediaProvider $provider,
         NextCursorResolverInterface $nextCursorResolver,
-        Translator $translator,
+        $translator,
         Configuration $config
     ) {
         $this->provider = $provider;

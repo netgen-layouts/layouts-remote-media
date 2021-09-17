@@ -35,7 +35,7 @@ final class RemoteMediaRuntimeTest extends TestCase
      */
     public function testGetBlockVariation(): void
     {
-        $value = RemoteResource::createFromParameters(['resourceId' => 'test_image']);
+        $resource = RemoteResource::createFromParameters(['resourceId' => 'test_image']);
         $variationUrl = 'https://cloudinary.com/upload/some_variation_config/test_image';
         $variation = new Variation([
             'url' => $variationUrl,
@@ -44,33 +44,37 @@ final class RemoteMediaRuntimeTest extends TestCase
         $this->providerMock
             ->expects(self::once())
             ->method('buildVariation')
-            ->with($value, 'netgen_layouts_block', 'test_variation', true)
+            ->with($resource, 'netgen_layouts_block', 'test_variation', true)
             ->willReturn($variation);
 
         self::assertSame(
             $variationUrl,
-            $this->runtime->getBlockVariation($value, 'test_variation')->url,
+            $this->runtime->getBlockVariation($resource, 'test_variation')->url,
         );
     }
 
     /**
      * @covers \Netgen\Bundle\LayoutsRemoteMediaBundle\Templating\Twig\Runtime\RemoteMediaRuntime::__construct
-     * @covers \Netgen\Bundle\LayoutsRemoteMediaBundle\Templating\Twig\Runtime\RemoteMediaRuntime::getRemoteVideoTagEmbed
+     * @covers \Netgen\Bundle\LayoutsRemoteMediaBundle\Templating\Twig\Runtime\RemoteMediaRuntime::getBlockVideoTag
      */
-    public function testGetRemoteVideoTagEmbed(): void
+    public function testGetBlockVideoTag(): void
     {
-        $value = RemoteResource::createFromParameters(['resourceId' => 'test_video']);
+        $resource = RemoteResource::createFromParameters([
+            'resourceId' => 'test_video',
+            'resourceType' => 'video',
+        ]);
+
         $videoTagString = '<video src="https://cloudinary.com/upload/some_variation_config/test_video">';
 
         $this->providerMock
             ->expects(self::once())
             ->method('generateVideoTag')
-            ->with($value, 'netgen_layouts_block', 'test_variation')
+            ->with($resource, 'netgen_layouts_block', 'test_variation')
             ->willReturn($videoTagString);
 
         self::assertSame(
             $videoTagString,
-            $this->runtime->getRemoteVideoTagEmbed($value, 'test_variation'),
+            $this->runtime->getBlockVideoTag($resource, 'test_variation'),
         );
     }
 }
