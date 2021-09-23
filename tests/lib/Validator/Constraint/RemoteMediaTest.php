@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase;
 final class RemoteMediaTest extends TestCase
 {
     /**
-     * @covers \Netgen\Layouts\Ez\Validator\Constraint\Section::validatedBy
+     * @covers \Netgen\Layouts\RemoteMedia\Validator\Constraint\RemoteMedia::validatedBy
      */
     public function testValidatedBy(): void
     {
