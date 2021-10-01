@@ -1,5 +1,15 @@
 view:
     item_view:
+        default:
+            remote_media:
+                template: "@nglayouts/item/remote_media.html.twig"
+                match:
+                    item\value_type: remote_media
+        ajax:
+            remote_media:
+                template: "@nglayouts/item/remote_media.html.twig"
+                match:
+                    item\value_type: remote_media
         app:
             remote_media:
                 template: "@NetgenLayoutsRemoteMedia/app/item/view/remote_media.html.twig"
