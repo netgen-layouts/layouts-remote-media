@@ -21,6 +21,10 @@ final class RemoteMediaExtension extends AbstractExtension
                 [RemoteMediaRuntime::class, 'getBlockVariation'],
             ),
             new TwigFunction(
+                'netgen_layouts_remote_media_item_variation',
+                [RemoteMediaRuntime::class, 'getItemVariation'],
+            ),
+            new TwigFunction(
                 'netgen_layouts_remote_media_block_video_tag',
                 [RemoteMediaRuntime::class, 'getBlockVideoTag'],
             ),
