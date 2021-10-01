@@ -57,6 +57,30 @@ final class RemoteMediaRuntimeTest extends TestCase
 
     /**
      * @covers \Netgen\Bundle\LayoutsRemoteMediaBundle\Templating\Twig\Runtime\RemoteMediaRuntime::__construct
+     * @covers \Netgen\Bundle\LayoutsRemoteMediaBundle\Templating\Twig\Runtime\RemoteMediaRuntime::getItemVariation
+     */
+    public function testGetItemVariation(): void
+    {
+        $value = new RemoteMediaStub('test_image');
+        $variationUrl = 'https://cloudinary.com/upload/some_variation_config/test_image';
+        $variation = new Variation([
+            'url' => $variationUrl,
+        ]);
+
+        $this->providerMock
+            ->expects(self::once())
+            ->method('buildVariation')
+            ->with($value, 'netgen_layouts_item', 'test_variation', true)
+            ->willReturn($variation);
+
+        self::assertSame(
+            $variationUrl,
+            $this->runtime->getBlockVariation($value, 'test_variation')->url,
+        );
+    }
+
+    /**
+     * @covers \Netgen\Bundle\LayoutsRemoteMediaBundle\Templating\Twig\Runtime\RemoteMediaRuntime::__construct
      * @covers \Netgen\Bundle\LayoutsRemoteMediaBundle\Templating\Twig\Runtime\RemoteMediaRuntime::getRemoteVideoTagEmbed
      */
     public function testGetRemoteVideoTagEmbed(): void
