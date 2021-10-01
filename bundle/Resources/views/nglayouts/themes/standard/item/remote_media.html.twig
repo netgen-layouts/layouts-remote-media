@@ -1,8 +1,8 @@
 {% set resource = item.object %}
 
-{% set videoConst = constant('Netgen\\Bundle\\RemoteMediaBundle\\Core\\FieldType\\RemoteMedia\\Value::TYPE_VIDEO') %}
-{% set imageConst = constant('Netgen\\Bundle\\RemoteMediaBundle\\Core\\FieldType\\RemoteMedia\\Value::TYPE_IMAGE') %}
-{% set otherConst = constant('Netgen\\Bundle\\RemoteMediaBundle\\Core\\FieldType\\RemoteMedia\\Value::TYPE_OTHER') %}
+{% set imageConst = constant('Netgen\\RemoteMedia\\API\\Values\\RemoteResource::TYPE_IMAGE') %}
+{% set videoConst = constant('Netgen\\RemoteMedia\\API\\Values\\RemoteResource::TYPE_VIDEO') %}
+{% set otherConst = constant('Netgen\\RemoteMedia\\API\\Values\\RemoteResource::TYPE_OTHER') %}
 
 {% if resource %}
     <div class="remote-media">
@@ -21,7 +21,7 @@
         {% elseif resource.mediaType == videoConst %}
             {{ netgen_layouts_remote_media_block_video_tag(resource, view_type)|raw }}
         {% else %}
-            <a href="{{ netgen_remote_download(resource) }}">{{ resource.resourceId }}</a>
+            <a href="{{ netgen_remote_media_download_url(resource) }}">{{ resource.resourceId }}</a>
         {% endif %}
     </div>
 {% endif %}

@@ -59,7 +59,7 @@ final class RemoteMediaRuntimeTest extends TestCase
      */
     public function testGetItemVariation(): void
     {
-        $value = new RemoteMediaStub('test_image');
+        $resource = RemoteResource::createFromParameters(['resourceId' => 'test_image']);
         $variationUrl = 'https://cloudinary.com/upload/some_variation_config/test_image';
         $variation = new Variation([
             'url' => $variationUrl,
@@ -68,12 +68,12 @@ final class RemoteMediaRuntimeTest extends TestCase
         $this->providerMock
             ->expects(self::once())
             ->method('buildVariation')
-            ->with($value, 'netgen_layouts_item', 'test_variation', true)
+            ->with($resource, 'netgen_layouts_item', 'test_variation', true)
             ->willReturn($variation);
 
         self::assertSame(
             $variationUrl,
-            $this->runtime->getBlockVariation($value, 'test_variation')->url,
+            $this->runtime->getBlockVariation($resource, 'test_variation')->url,
         );
     }
 
