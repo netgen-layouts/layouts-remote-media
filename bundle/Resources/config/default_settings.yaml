@@ -3,3 +3,5 @@ parameters:
         - image
         - video
         - raw
+
+    netgen_layouts.app.ezplatform.item_preview_template: '@@NetgenLayoutsRemoteMedia/app/item/nglayouts_app_preview.html.twig'
