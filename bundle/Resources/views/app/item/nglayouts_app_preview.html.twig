@@ -1,14 +1,20 @@
-{% if content.hasField('image') and not content.fields.image.empty %}
+{# Fallback from Site API Content to eZ Content #}
+{% if content.innerContent is defined %}
+    {% set content = content.innerContent %}
+{% endif %}
+
+{# We should use ez_field_is_empty function, but it does not exist on eZ kernel 7.5 #}
+{% if content.fields.image is defined and not nglayouts_ez_field_is_empty(content, 'image') %}
     <div class="image">
-        {% if content.fields.image.fieldTypeIdentifier is same as 'ngremotemedia' %}
-            {% set variation = netgen_remote_variation(content.innerContent, 'image', 'nglayouts_app_preview') %}
+        {% if ez_field(content, 'image').fieldTypeIdentifier is same as 'ngremotemedia' %}
+            {% set variation = netgen_remote_variation(content, 'image', 'nglayouts_app_preview') %}
 
             <img src="{{ variation.url }}" />
-        {% elseif content.fields.image.fieldTypeIdentifier is same as 'ezimage' %}
-            {% set image_alias = ng_image_alias(content.fields.image, 'nglayouts_app_preview') %}
+        {% elseif ez_field(content, 'image').fieldTypeIdentifier is same as 'ezimage' %}
+            {% set image_alias = ez_image_alias(ez_field(content, 'image'), content.versionInfo, 'nglayouts_app_preview') %}
 
             {% if image_alias %}
-                    <img src="{{ asset(image_alias.uri) }}" />
+                <img src="{{ asset(image_alias.uri) }}" />
             {% endif %}
         {% endif %}
     </div>
@@ -19,5 +25,5 @@
 </div>
 
 <div class="value-type">
-    <p>{{ nglayouts_value_type_name(nglayouts_item) }} ({{ content.innerContent.contentType.name }})</p>
+    <p>{{ nglayouts_value_type_name(nglayouts_item) }} ({{ content.contentType.name }})</p>
 </div>
