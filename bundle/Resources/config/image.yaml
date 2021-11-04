@@ -1,6 +1,11 @@
 system:
     default:
         image_variations:
+            default:
+                nglayouts_app_preview:
+                    transformations:
+                        - { name: resize, params: [ 160, 90 ] }
+                        - { name: quality, params: [ 'auto:low' ] }
             netgen_layouts_block:
                 small:
                     transformations:
