@@ -11,7 +11,7 @@
     ],
     "require": {
         "netgen/layouts-ezplatform": "^1.2",
-        "netgen/remote-media-bundle": "dev-master"
+        "netgen/remote-media-bundle": "^2.0@alpha"
     },
     "require-dev": {
         "netgen/layouts-coding-standard": "^1.0 || ^2.0",
