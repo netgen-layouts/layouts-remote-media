@@ -11,6 +11,7 @@ use Netgen\RemoteMedia\Exception\RemoteResourceNotFoundException;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
+
 use function is_string;
 
 final class RemoteMediaValidator extends ConstraintValidator

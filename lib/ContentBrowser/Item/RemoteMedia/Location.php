@@ -6,6 +6,7 @@ namespace Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia;
 
 use InvalidArgumentException;
 use Netgen\ContentBrowser\Item\LocationInterface;
+
 use function array_pop;
 use function array_shift;
 use function array_slice;

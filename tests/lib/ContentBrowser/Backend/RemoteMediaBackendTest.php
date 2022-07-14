@@ -22,6 +22,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 use Symfony\Component\Translation\Translator;
+
 use function json_encode;
 
 final class RemoteMediaBackendTest extends TestCase

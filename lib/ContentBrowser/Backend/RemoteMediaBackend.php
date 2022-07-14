@@ -19,6 +19,7 @@ use Netgen\RemoteMedia\API\NextCursorResolverInterface;
 use Netgen\RemoteMedia\API\Search\Query;
 use Netgen\RemoteMedia\Core\RemoteMediaProvider;
 use Netgen\RemoteMedia\Exception\RemoteResourceNotFoundException;
+
 use function count;
 use function explode;
 use function in_array;

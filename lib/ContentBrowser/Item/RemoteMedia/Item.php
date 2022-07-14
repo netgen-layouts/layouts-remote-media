@@ -6,6 +6,7 @@ namespace Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia;
 
 use Netgen\ContentBrowser\Item\ItemInterface;
 use Netgen\RemoteMedia\API\Values\RemoteResource;
+
 use function array_pop;
 use function explode;
 use function str_replace;
