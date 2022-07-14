@@ -7,6 +7,7 @@ namespace Netgen\Layouts\RemoteMedia\ContentBrowser\Item\ColumnProvider\RemoteMe
 use Netgen\ContentBrowser\Item\ColumnProvider\ColumnValueProviderInterface;
 use Netgen\ContentBrowser\Item\ItemInterface;
 use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Item;
+
 use function round;
 
 final class Size implements ColumnValueProviderInterface

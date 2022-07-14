@@ -21,6 +21,7 @@ use Netgen\Layouts\RemoteMedia\Tests\Stubs\RemoteMedia as RemoteMediaStub;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 use Symfony\Component\Translation\TranslatorInterface;
+
 use function json_encode;
 
 final class RemoteMediaBackendTest extends TestCase

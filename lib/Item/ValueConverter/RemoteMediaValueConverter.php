@@ -6,6 +6,7 @@ namespace Netgen\Layouts\RemoteMedia\Item\ValueConverter;
 
 use Netgen\Bundle\RemoteMediaBundle\Core\FieldType\RemoteMedia\Value;
 use Netgen\Layouts\Item\ValueConverterInterface;
+
 use function array_pop;
 use function explode;
 
