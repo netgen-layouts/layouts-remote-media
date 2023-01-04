@@ -32,6 +32,6 @@ final class Size implements ColumnValueProviderInterface
             ++$unitIndex;
         }
 
-        return round($size, $precision) . $units[$unitIndex];
+        return round($size, $precision) . ($units[$unitIndex] ?? '');
     }
 }

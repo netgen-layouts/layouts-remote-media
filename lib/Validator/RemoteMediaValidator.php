@@ -23,6 +23,9 @@ final class RemoteMediaValidator extends ConstraintValidator
         $this->provider = $provider;
     }
 
+    /**
+     * @param mixed $value
+     */
     public function validate($value, Constraint $constraint): void
     {
         if ($value === null) {
