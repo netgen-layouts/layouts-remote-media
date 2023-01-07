@@ -7,6 +7,6 @@ view:
                     block\definition: remote_media
         app:
             remote_media:
-                template: "@NetgenLayoutsRemoteMedia/app/block/remote_media.html.twig"
+                template: "@nglayouts_admin/app/block/remote_media.html.twig"
                 match:
                     block\definition: remote_media
