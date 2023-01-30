@@ -9,6 +9,7 @@ use Netgen\RemoteMedia\Core\RemoteMediaProvider;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidatorFactory;
 use Symfony\Component\Validator\ConstraintValidatorFactoryInterface;
+use Symfony\Component\Validator\ConstraintValidatorInterface;
 
 final class RemoteMediaValidatorFactory implements ConstraintValidatorFactoryInterface
 {
@@ -22,7 +23,7 @@ final class RemoteMediaValidatorFactory implements ConstraintValidatorFactoryInt
         $this->baseValidatorFactory = new ConstraintValidatorFactory();
     }
 
-    public function getInstance(Constraint $constraint)
+    public function getInstance(Constraint $constraint): ConstraintValidatorInterface
     {
         $name = $constraint->validatedBy();
 

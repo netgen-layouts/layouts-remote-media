@@ -8,7 +8,7 @@ use Netgen\Layouts\RemoteMedia\Item\ValueUrlGenerator\RemoteMediaValueUrlGenerat
 use Netgen\RemoteMedia\API\Values\RemoteResource;
 use PHPUnit\Framework\TestCase;
 
-final class RemoteMediaUrlGeneratorTest extends TestCase
+final class RemoteMediaValueUrlGeneratorTest extends TestCase
 {
     private RemoteMediaValueUrlGenerator $urlGenerator;
 
