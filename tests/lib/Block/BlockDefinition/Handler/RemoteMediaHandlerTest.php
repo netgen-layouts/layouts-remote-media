@@ -87,10 +87,12 @@ final class RemoteMediaHandlerTest extends TestCase
         $builderMock
             ->expects(self::exactly(3))
             ->method('add')
-            ->withConsecutive(
-                ['remote_media', RemoteMediaType::class, ['required' => false, 'allowed_types' => $this->allowedResourceTypes]],
-                ['variation', ChoiceType::class, ['required' => false, 'options' => $variationOptions]],
-                ['title', TextLineType::class],
+            ->willReturnMap(
+                [
+                    ['remote_media', RemoteMediaType::class, ['required' => false, 'allowed_types' => $this->allowedResourceTypes], $builderMock],
+                    ['variation', ChoiceType::class, ['required' => false, 'options' => $variationOptions], $builderMock],
+                    ['title', TextLineType::class, [], $builderMock],
+                ],
             );
 
         $this->handler->buildParameters($builderMock);

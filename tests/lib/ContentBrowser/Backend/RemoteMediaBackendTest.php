@@ -76,13 +76,14 @@ final class RemoteMediaBackendTest extends TestCase
         $this->translatorMock
             ->expects(self::exactly(4))
             ->method('trans')
-            ->withConsecutive(
-                ['backend.remote_media.resource_type.all', [], 'ngcb'],
-                ['backend.remote_media.resource_type.image', [], 'ngcb'],
-                ['backend.remote_media.resource_type.video', [], 'ngcb'],
-                ['backend.remote_media.resource_type.raw', [], 'ngcb'],
-            )
-            ->willReturnOnConsecutiveCalls('All', 'Image', 'Video', 'RAW');
+            ->willReturnMap(
+                [
+                    ['backend.remote_media.resource_type.all', [], 'ngcb', null, 'All'],
+                    ['backend.remote_media.resource_type.image', [], 'ngcb', null, 'Image'],
+                    ['backend.remote_media.resource_type.video', [], 'ngcb', null, 'Video'],
+                    ['backend.remote_media.resource_type.raw', [], 'ngcb', null, 'RAW'],
+                ],
+            );
 
         $sections = $this->backend->getSections();
 
@@ -103,12 +104,13 @@ final class RemoteMediaBackendTest extends TestCase
         $this->translatorMock
             ->expects(self::exactly(3))
             ->method('trans')
-            ->withConsecutive(
-                ['backend.remote_media.resource_type.all', [], 'ngcb'],
-                ['backend.remote_media.resource_type.image', [], 'ngcb'],
-                ['backend.remote_media.resource_type.video', [], 'ngcb'],
-            )
-            ->willReturnOnConsecutiveCalls('All', 'Image', 'Video');
+            ->willReturnMap(
+                [
+                    ['backend.remote_media.resource_type.all', [], 'ngcb', null, 'All'],
+                    ['backend.remote_media.resource_type.image', [], 'ngcb', null, 'Image'],
+                    ['backend.remote_media.resource_type.video', [], 'ngcb', null, 'Video'],
+                ],
+            );
 
         $sections = $this->backend->getSections();
 
@@ -129,13 +131,14 @@ final class RemoteMediaBackendTest extends TestCase
         $this->translatorMock
             ->expects(self::exactly(4))
             ->method('trans')
-            ->withConsecutive(
-                ['backend.remote_media.resource_type.all', [], 'ngcb'],
-                ['backend.remote_media.resource_type.image', [], 'ngcb'],
-                ['backend.remote_media.resource_type.video', [], 'ngcb'],
-                ['backend.remote_media.resource_type.raw', [], 'ngcb'],
-            )
-            ->willReturnOnConsecutiveCalls('All', 'Image', 'Video', 'RAW');
+            ->willReturnMap(
+                [
+                    ['backend.remote_media.resource_type.all', [], 'ngcb', null, 'All'],
+                    ['backend.remote_media.resource_type.image', [], 'ngcb', null, 'Image'],
+                    ['backend.remote_media.resource_type.video', [], 'ngcb', null, 'Video'],
+                    ['backend.remote_media.resource_type.raw', [], 'ngcb', null, 'RAW'],
+                ],
+            );
 
         $sections = $this->backend->getSections();
 
