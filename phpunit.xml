@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.0/phpunit.xsd"
+    xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.1/phpunit.xsd"
     bootstrap="vendor/autoload.php"
     colors="true"
     requireCoverageMetadata="true"
@@ -9,7 +9,7 @@
     beStrictAboutChangesToGlobalState="true"
 >
     <php>
-        <env name="SYMFONY_DEPRECATIONS_HELPER" value="max[self]=0" />
+        <env name="SYMFONY_DEPRECATIONS_HELPER" value="max[self]=0"/>
     </php>
 
     <testsuites>
@@ -18,15 +18,18 @@
         </testsuite>
     </testsuites>
 
-    <coverage>
+    <coverage/>
+
+    <source>
         <include>
             <directory suffix=".php">lib</directory>
             <directory suffix=".php">bundle</directory>
         </include>
+
         <exclude>
             <directory>bundle/Resources</directory>
             <file>bundle/NetgenLayoutsRemoteMediaBundle.php</file>
             <file>bundle/DependencyInjection/NetgenLayoutsRemoteMediaExtension.php</file>
         </exclude>
-    </coverage>
+    </source>
 </phpunit>

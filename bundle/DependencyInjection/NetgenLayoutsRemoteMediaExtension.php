@@ -35,13 +35,27 @@ final class NetgenLayoutsRemoteMediaExtension extends Extension implements Prepe
             ),
         );
 
-        $loader->load('default_settings.yaml');
+        $configuration = new Configuration();
+        $config = $this->processConfiguration($configuration, $configs);
+
+        $container->setParameter(
+            'netgen_layouts.remote_media.cache.pool_name',
+            $config['cache']['pool'],
+        );
+
+        $container->setParameter(
+            'netgen_layouts.remote_media.cache.ttl',
+            $config['cache']['ttl'],
+        );
+
+        $loader->load('default_parameters.yaml');
         $loader->load('services/**/*.yaml', 'glob');
     }
 
     public function prepend(ContainerBuilder $container): void
     {
         $prependConfigs = [
+            'default_settings.yaml' => 'netgen_layouts_remote_media',
             'item_types.yaml' => 'netgen_content_browser',
             'block_definitions.yaml' => 'netgen_layouts',
             'value_types.yaml' => 'netgen_layouts',
@@ -49,6 +63,7 @@ final class NetgenLayoutsRemoteMediaExtension extends Extension implements Prepe
             'view/block_view.yaml' => 'netgen_layouts',
             'view/item_view.yaml' => 'netgen_layouts',
             'image.yaml' => 'netgen_remote_media',
+            'doctrine.yaml' => 'doctrine',
         ];
 
         foreach ($prependConfigs as $configFile => $prependConfig) {

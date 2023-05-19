@@ -4,38 +4,42 @@ declare(strict_types=1);
 
 namespace Netgen\Layouts\RemoteMedia\Core\RemoteMedia;
 
-use function array_shift;
+use function array_map;
 use function explode;
 use function implode;
+use function str_replace;
 
 final class ResourceQuery
 {
-    private string $resourceId;
-
-    private string $resourceType;
-
-    private function __construct(string $resourceId, string $resourceType)
-    {
-        $this->resourceId = $resourceId;
-        $this->resourceType = $resourceType;
+    private function __construct(
+        private string $value
+    ) {
     }
 
-    public static function createFromString(string $input): self
+    public static function createFromValue(string $value): self
     {
-        $parts = explode('|', $input);
-        $resourceType = array_shift($parts);
-        $resourceId = implode('/', $parts);
-
-        return new self($resourceId, $resourceType);
+        return new self($value);
     }
 
-    public function getResourceId(): string
+    public static function createFromRemoteId(string $remoteId): self
     {
-        return $this->resourceId;
+        $value = str_replace(['|', '/'], ['||', '|'], $remoteId);
+
+        return new self($value);
     }
 
-    public function getResourceType(): string
+    public function getRemoteId(): string
     {
-        return $this->resourceType;
+        $parts = array_map(
+            static fn ($part) => str_replace('|', '/', $part),
+            explode('||', $this->value),
+        );
+
+        return implode('|', $parts);
+    }
+
+    public function getValue(): string
+    {
+        return $this->value;
     }
 }

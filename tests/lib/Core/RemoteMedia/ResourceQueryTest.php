@@ -9,28 +9,31 @@ use PHPUnit\Framework\TestCase;
 
 final class ResourceQueryTest extends TestCase
 {
-    private ResourceQuery $resourceQuery;
-
-    protected function setUp(): void
+    /**
+     * @covers \Netgen\Layouts\RemoteMedia\Core\RemoteMedia\ResourceQuery::__construct
+     * @covers \Netgen\Layouts\RemoteMedia\Core\RemoteMedia\ResourceQuery::createFromValue
+     * @covers \Netgen\Layouts\RemoteMedia\Core\RemoteMedia\ResourceQuery::getRemoteId
+     * @covers \Netgen\Layouts\RemoteMedia\Core\RemoteMedia\ResourceQuery::getValue
+     */
+    public function testFromValue(): void
     {
-        $this->resourceQuery = ResourceQuery::createFromString('image|folder|resource.jpg');
+        $resourceQuery = ResourceQuery::createFromValue('upload||image||folder|subfolder|resource.jpg');
+
+        self::assertSame('upload||image||folder|subfolder|resource.jpg', $resourceQuery->getValue());
+        self::assertSame('upload|image|folder/subfolder/resource.jpg', $resourceQuery->getRemoteId());
     }
 
     /**
      * @covers \Netgen\Layouts\RemoteMedia\Core\RemoteMedia\ResourceQuery::__construct
-     * @covers \Netgen\Layouts\RemoteMedia\Core\RemoteMedia\ResourceQuery::createFromString
-     * @covers \Netgen\Layouts\RemoteMedia\Core\RemoteMedia\ResourceQuery::getResourceId
+     * @covers \Netgen\Layouts\RemoteMedia\Core\RemoteMedia\ResourceQuery::createFromRemoteId
+     * @covers \Netgen\Layouts\RemoteMedia\Core\RemoteMedia\ResourceQuery::getRemoteId
+     * @covers \Netgen\Layouts\RemoteMedia\Core\RemoteMedia\ResourceQuery::getValue
      */
-    public function testGetResourceId(): void
+    public function testFromRemoteId(): void
     {
-        self::assertSame('folder/resource.jpg', $this->resourceQuery->getResourceId());
-    }
+        $resourceQuery = ResourceQuery::createFromRemoteId('upload|image|folder/subfolder/resource.jpg');
 
-    /**
-     * @covers \Netgen\Layouts\RemoteMedia\Core\RemoteMedia\ResourceQuery::getResourceType
-     */
-    public function testGetResourceType(): void
-    {
-        self::assertSame('image', $this->resourceQuery->getResourceType());
+        self::assertSame('upload||image||folder|subfolder|resource.jpg', $resourceQuery->getValue());
+        self::assertSame('upload|image|folder/subfolder/resource.jpg', $resourceQuery->getRemoteId());
     }
 }
