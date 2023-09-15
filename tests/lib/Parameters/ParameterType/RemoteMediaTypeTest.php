@@ -73,7 +73,7 @@ final class RemoteMediaTypeTest extends TestCase
      *
      * @return mixed[]
      */
-    public static function validOptionsDataProvider(): array
+    public static function validOptionsDataProvider(): iterable
     {
         return [
             [
@@ -98,7 +98,7 @@ final class RemoteMediaTypeTest extends TestCase
      *
      * @return mixed[]
      */
-    public static function invalidOptionsDataProvider(): array
+    public static function invalidOptionsDataProvider(): iterable
     {
         return [
             [
@@ -182,7 +182,7 @@ final class RemoteMediaTypeTest extends TestCase
     /**
      * @return mixed[]
      */
-    public static function emptyDataProvider(): array
+    public static function emptyDataProvider(): iterable
     {
         return [
             [null, true],
