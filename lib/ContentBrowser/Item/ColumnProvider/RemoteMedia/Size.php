@@ -28,7 +28,7 @@ final class Size implements ColumnValueProviderInterface
 
         $unitIndex = 0;
         while (($size / $step) > 0.9) {
-            $size = $size / $step;
+            $size /= $step;
             ++$unitIndex;
         }
 
