@@ -16,8 +16,7 @@ class RemoteMediaItem
     public function __construct(
         private string $value,
         private RemoteResourceLocation $remoteResourceLocation
-    ) {
-    }
+    ) {}
 
     public function getId(): ?int
     {

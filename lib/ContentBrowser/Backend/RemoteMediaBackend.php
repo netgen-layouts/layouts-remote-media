@@ -36,8 +36,7 @@ final class RemoteMediaBackend implements BackendInterface
         private NextCursorResolverInterface $nextCursorResolver,
         private TranslatorInterface $translator,
         private Configuration $config
-    ) {
-    }
+    ) {}
 
     public function getSections(): iterable
     {

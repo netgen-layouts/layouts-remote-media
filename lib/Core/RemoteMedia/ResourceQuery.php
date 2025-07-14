@@ -13,8 +13,7 @@ final class ResourceQuery
 {
     private function __construct(
         private string $value
-    ) {
-    }
+    ) {}
 
     public static function createFromValue(string $value): self
     {

@@ -167,7 +167,7 @@ final class MigrateDataV1ToV2Command extends Command
             )
             ->setParameter(
                 'query_string',
-                sprintf('%%"link":"%s:\\\\/\\\\/%%', self::REMOTE_MEDIA_LINK_PREFIX),
+                sprintf('%%"link":"%s:\\\/\\\/%%', self::REMOTE_MEDIA_LINK_PREFIX),
                 Types::STRING,
             );
 

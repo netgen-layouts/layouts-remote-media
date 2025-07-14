@@ -18,8 +18,7 @@ final class RemoteMediaValidator extends ConstraintValidator
 {
     public function __construct(
         private ProviderInterface $provider
-    ) {
-    }
+    ) {}
 
     /**
      * @param mixed $value

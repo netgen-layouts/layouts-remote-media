@@ -13,8 +13,7 @@ final class Item implements ItemInterface
 {
     public function __construct(
         private RemoteResourceLocation $location
-    ) {
-    }
+    ) {}
 
     public function getValue(): string
     {

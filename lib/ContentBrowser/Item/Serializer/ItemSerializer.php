@@ -18,8 +18,7 @@ final class ItemSerializer implements ItemSerializerInterface
         private ItemSerializerInterface $innerItemSerializer,
         private BackendInterface $backend,
         private ColumnProviderInterface $columnProvider
-    ) {
-    }
+    ) {}
 
     public function serializeItem(ItemInterface $item): array
     {
