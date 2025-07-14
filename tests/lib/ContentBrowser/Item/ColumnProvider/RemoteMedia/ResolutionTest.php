@@ -9,8 +9,10 @@ use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\ColumnProvider\RemoteMedia\Re
 use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Item as RemoteMediaItem;
 use Netgen\RemoteMedia\API\Values\RemoteResource;
 use Netgen\RemoteMedia\API\Values\RemoteResourceLocation;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
+#[CoversClass(Resolution::class)]
 final class ResolutionTest extends TestCase
 {
     private Resolution $resolutionColumn;
@@ -20,9 +22,6 @@ final class ResolutionTest extends TestCase
         $this->resolutionColumn = new Resolution();
     }
 
-    /**
-     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\ColumnProvider\RemoteMedia\Resolution::getValue
-     */
     public function testGetValue(): void
     {
         $resource = new RemoteResource(
@@ -41,9 +40,6 @@ final class ResolutionTest extends TestCase
         self::assertSame('1920x1080', $this->resolutionColumn->getValue($item));
     }
 
-    /**
-     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\ColumnProvider\RemoteMedia\Resolution::getValue
-     */
     public function testGetValueWithEmptyWidth(): void
     {
         $resource = new RemoteResource(
@@ -62,9 +58,6 @@ final class ResolutionTest extends TestCase
         self::assertSame('', $this->resolutionColumn->getValue($item));
     }
 
-    /**
-     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\ColumnProvider\RemoteMedia\Resolution::getValue
-     */
     public function testGetValueWithEmptyHeight(): void
     {
         $resource = new RemoteResource(
@@ -83,9 +76,6 @@ final class ResolutionTest extends TestCase
         self::assertSame('', $this->resolutionColumn->getValue($item));
     }
 
-    /**
-     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\ColumnProvider\RemoteMedia\Resolution::getValue
-     */
     public function testGetValueWithMissingKeys(): void
     {
         $resource = new RemoteResource(
@@ -100,9 +90,6 @@ final class ResolutionTest extends TestCase
         self::assertSame('', $this->resolutionColumn->getValue($item));
     }
 
-    /**
-     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\ColumnProvider\RemoteMedia\Resolution::getValue
-     */
     public function testGetValueWithWrongItem(): void
     {
         $itemMock = $this->createMock(ItemInterface::class);

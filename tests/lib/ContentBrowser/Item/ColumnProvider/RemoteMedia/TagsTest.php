@@ -9,8 +9,10 @@ use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\ColumnProvider\RemoteMedia\Ta
 use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Item as RemoteMediaItem;
 use Netgen\RemoteMedia\API\Values\RemoteResource;
 use Netgen\RemoteMedia\API\Values\RemoteResourceLocation;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
+#[CoversClass(Tags::class)]
 final class TagsTest extends TestCase
 {
     private Tags $tagsColumn;
@@ -20,9 +22,6 @@ final class TagsTest extends TestCase
         $this->tagsColumn = new Tags();
     }
 
-    /**
-     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\ColumnProvider\RemoteMedia\Tags::getValue
-     */
     public function testGetValue(): void
     {
         $resource = new RemoteResource(
@@ -38,9 +37,6 @@ final class TagsTest extends TestCase
         self::assertSame('tag1, tag2, tag3', $this->tagsColumn->getValue($item));
     }
 
-    /**
-     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\ColumnProvider\RemoteMedia\Tags::getValue
-     */
     public function testGetValueWithNoTags(): void
     {
         $resource = new RemoteResource(
@@ -55,9 +51,6 @@ final class TagsTest extends TestCase
         self::assertSame('', $this->tagsColumn->getValue($item));
     }
 
-    /**
-     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\ColumnProvider\RemoteMedia\Tags::getValue
-     */
     public function testGetValueWithWrongItem(): void
     {
         $itemMock = $this->createMock(ItemInterface::class);

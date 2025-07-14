@@ -6,12 +6,11 @@ namespace Netgen\Bundle\LayoutsRemoteMediaBundle\Tests\DependencyInjection;
 
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionTestCase;
 use Netgen\Bundle\LayoutsRemoteMediaBundle\DependencyInjection\NetgenLayoutsRemoteMediaExtension;
+use PHPUnit\Framework\Attributes\CoversClass;
 
+#[CoversClass(NetgenLayoutsRemoteMediaExtension::class)]
 final class NetgenLayoutsRemoteMediaExtensionTest extends AbstractExtensionTestCase
 {
-    /**
-     * @covers \Netgen\Bundle\LayoutsRemoteMediaBundle\DependencyInjection\NetgenLayoutsRemoteMediaExtension::load
-     */
     public function testItSetsValidContainerParameters(): void
     {
         $this->setParameter('kernel.bundles', []);

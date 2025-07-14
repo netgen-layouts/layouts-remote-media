@@ -10,9 +10,11 @@ use Netgen\RemoteMedia\API\Values\Folder;
 use Netgen\RemoteMedia\API\Values\RemoteResource;
 use Netgen\RemoteMedia\API\Values\RemoteResourceLocation;
 use Netgen\RemoteMedia\API\Values\RemoteResourceVariation;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+#[CoversClass(RemoteMediaRuntime::class)]
 final class RemoteMediaRuntimeTest extends TestCase
 {
     /**
@@ -29,10 +31,6 @@ final class RemoteMediaRuntimeTest extends TestCase
         $this->runtime = new RemoteMediaRuntime($this->providerMock);
     }
 
-    /**
-     * @covers \Netgen\Bundle\LayoutsRemoteMediaBundle\Templating\Twig\Runtime\RemoteMediaRuntime::__construct
-     * @covers \Netgen\Bundle\LayoutsRemoteMediaBundle\Templating\Twig\Runtime\RemoteMediaRuntime::getBlockVariation
-     */
     public function testGetBlockVariation(): void
     {
         $resource = new RemoteResource(
@@ -61,10 +59,6 @@ final class RemoteMediaRuntimeTest extends TestCase
         );
     }
 
-    /**
-     * @covers \Netgen\Bundle\LayoutsRemoteMediaBundle\Templating\Twig\Runtime\RemoteMediaRuntime::__construct
-     * @covers \Netgen\Bundle\LayoutsRemoteMediaBundle\Templating\Twig\Runtime\RemoteMediaRuntime::getItemVariation
-     */
     public function testGetItemVariation(): void
     {
         $resource = new RemoteResource(
@@ -93,10 +87,6 @@ final class RemoteMediaRuntimeTest extends TestCase
         );
     }
 
-    /**
-     * @covers \Netgen\Bundle\LayoutsRemoteMediaBundle\Templating\Twig\Runtime\RemoteMediaRuntime::__construct
-     * @covers \Netgen\Bundle\LayoutsRemoteMediaBundle\Templating\Twig\Runtime\RemoteMediaRuntime::getBlockTag
-     */
     public function testGetBlockTag(): void
     {
         $resource = new RemoteResource(
@@ -123,10 +113,6 @@ final class RemoteMediaRuntimeTest extends TestCase
         );
     }
 
-    /**
-     * @covers \Netgen\Bundle\LayoutsRemoteMediaBundle\Templating\Twig\Runtime\RemoteMediaRuntime::__construct
-     * @covers \Netgen\Bundle\LayoutsRemoteMediaBundle\Templating\Twig\Runtime\RemoteMediaRuntime::getBlockTag
-     */
     public function testGetBlockTagWithVariation(): void
     {
         $resource = new RemoteResource(
@@ -153,10 +139,6 @@ final class RemoteMediaRuntimeTest extends TestCase
         );
     }
 
-    /**
-     * @covers \Netgen\Bundle\LayoutsRemoteMediaBundle\Templating\Twig\Runtime\RemoteMediaRuntime::__construct
-     * @covers \Netgen\Bundle\LayoutsRemoteMediaBundle\Templating\Twig\Runtime\RemoteMediaRuntime::getItemTag
-     */
     public function testGetItemTag(): void
     {
         $resource = new RemoteResource(
@@ -183,10 +165,6 @@ final class RemoteMediaRuntimeTest extends TestCase
         );
     }
 
-    /**
-     * @covers \Netgen\Bundle\LayoutsRemoteMediaBundle\Templating\Twig\Runtime\RemoteMediaRuntime::__construct
-     * @covers \Netgen\Bundle\LayoutsRemoteMediaBundle\Templating\Twig\Runtime\RemoteMediaRuntime::getItemTag
-     */
     public function testGetItemTagWithVariation(): void
     {
         $resource = new RemoteResource(

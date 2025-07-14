@@ -7,8 +7,10 @@ namespace Netgen\Layouts\RemoteMedia\Tests\Item\ValueUrlGenerator;
 use Netgen\Layouts\RemoteMedia\Item\ValueUrlGenerator\RemoteMediaValueUrlGenerator;
 use Netgen\RemoteMedia\API\Values\RemoteResource;
 use Netgen\RemoteMedia\API\Values\RemoteResourceLocation;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
+#[CoversClass(RemoteMediaValueUrlGenerator::class)]
 final class RemoteMediaValueUrlGeneratorTest extends TestCase
 {
     private RemoteMediaValueUrlGenerator $urlGenerator;
@@ -18,9 +20,6 @@ final class RemoteMediaValueUrlGeneratorTest extends TestCase
         $this->urlGenerator = new RemoteMediaValueUrlGenerator();
     }
 
-    /**
-     * @covers \Netgen\Layouts\RemoteMedia\Item\ValueUrlGenerator\RemoteMediaValueUrlGenerator::generate
-     */
     public function testGenerate(): void
     {
         $resource = new RemoteResource(

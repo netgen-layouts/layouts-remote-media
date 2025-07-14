@@ -9,8 +9,10 @@ use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\ColumnProvider\RemoteMedia\Ty
 use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Item as RemoteMediaItem;
 use Netgen\RemoteMedia\API\Values\RemoteResource;
 use Netgen\RemoteMedia\API\Values\RemoteResourceLocation;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
+#[CoversClass(Type::class)]
 final class TypeTest extends TestCase
 {
     private Type $typeColumn;
@@ -20,9 +22,6 @@ final class TypeTest extends TestCase
         $this->typeColumn = new Type();
     }
 
-    /**
-     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\ColumnProvider\RemoteMedia\Type::getValue
-     */
     public function testGetValue(): void
     {
         $resource = new RemoteResource(
@@ -37,9 +36,6 @@ final class TypeTest extends TestCase
         self::assertSame('image', $this->typeColumn->getValue($item));
     }
 
-    /**
-     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\ColumnProvider\RemoteMedia\Type::getValue
-     */
     public function testGetValueWithFormat(): void
     {
         $resource = new RemoteResource(
@@ -55,9 +51,6 @@ final class TypeTest extends TestCase
         self::assertSame('video / mp4', $this->typeColumn->getValue($item));
     }
 
-    /**
-     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\ColumnProvider\RemoteMedia\Type::getValue
-     */
     public function testGetValueWithWrongItem(): void
     {
         $itemMock = $this->createMock(ItemInterface::class);

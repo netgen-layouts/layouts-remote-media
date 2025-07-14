@@ -4,16 +4,17 @@ declare(strict_types=1);
 
 namespace Netgen\Layouts\RemoteMedia\Tests\Core\RemoteMedia\Resolver;
 
-use Netgen\Layouts\RemoteMedia\Core\RemoteMedia\NextCursorResolverInterface;
-use Netgen\Layouts\RemoteMedia\Core\RemoteMedia\Resolver\NextCursor as NextCursorResolver;
+use Netgen\Layouts\RemoteMedia\Core\RemoteMedia\Resolver\NextCursor;
 use Netgen\RemoteMedia\API\Search\Query;
 use Netgen\RemoteMedia\API\Values\Folder;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use RuntimeException;
 
+#[CoversClass(NextCursor::class)]
 final class NextCursorTest extends TestCase
 {
     private const CACHE_TTL = 3600;
@@ -24,21 +25,15 @@ final class NextCursorTest extends TestCase
 
     private MockObject $cache;
 
-    private NextCursorResolverInterface $resolver;
+    private NextCursor $resolver;
 
     protected function setUp(): void
     {
         $this->cache = $this->createMock(CacheItemPoolInterface::class);
 
-        $this->resolver = new NextCursorResolver($this->cache, self::CACHE_TTL);
+        $this->resolver = new NextCursor($this->cache, self::CACHE_TTL);
     }
 
-    /**
-     * @covers \Netgen\Layouts\RemoteMedia\Core\RemoteMedia\Resolver\NextCursor::__construct
-     * @covers \Netgen\Layouts\RemoteMedia\Core\RemoteMedia\Resolver\NextCursor::getCacheKey
-     * @covers \Netgen\Layouts\RemoteMedia\Core\RemoteMedia\Resolver\NextCursor::resolve
-     * @covers \Netgen\Layouts\RemoteMedia\Core\RemoteMedia\Resolver\NextCursor::washKey
-     */
     public function testResolve(): void
     {
         $cacheItemMock = $this->createMock(CacheItemInterface::class);
@@ -62,12 +57,6 @@ final class NextCursorTest extends TestCase
         self::assertSame(self::TEST_CURSOR, $this->resolver->resolve($this->getQuery(), 30));
     }
 
-    /**
-     * @covers \Netgen\Layouts\RemoteMedia\Core\RemoteMedia\Resolver\NextCursor::__construct
-     * @covers \Netgen\Layouts\RemoteMedia\Core\RemoteMedia\Resolver\NextCursor::getCacheKey
-     * @covers \Netgen\Layouts\RemoteMedia\Core\RemoteMedia\Resolver\NextCursor::resolve
-     * @covers \Netgen\Layouts\RemoteMedia\Core\RemoteMedia\Resolver\NextCursor::washKey
-     */
     public function testResolveWithoutMatch(): void
     {
         $cacheItemMock = $this->createMock(CacheItemInterface::class);
@@ -89,12 +78,6 @@ final class NextCursorTest extends TestCase
         $this->resolver->resolve($this->getQuery(), 30);
     }
 
-    /**
-     * @covers \Netgen\Layouts\RemoteMedia\Core\RemoteMedia\Resolver\NextCursor::__construct
-     * @covers \Netgen\Layouts\RemoteMedia\Core\RemoteMedia\Resolver\NextCursor::getCacheKey
-     * @covers \Netgen\Layouts\RemoteMedia\Core\RemoteMedia\Resolver\NextCursor::save
-     * @covers \Netgen\Layouts\RemoteMedia\Core\RemoteMedia\Resolver\NextCursor::washKey
-     */
     public function testSave(): void
     {
         $cacheItemMock = $this->createMock(CacheItemInterface::class);

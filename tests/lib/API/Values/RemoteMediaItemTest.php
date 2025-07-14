@@ -8,16 +8,12 @@ use Netgen\Layouts\RemoteMedia\API\Values\RemoteMediaItem;
 use Netgen\RemoteMedia\API\Values\CropSettings;
 use Netgen\RemoteMedia\API\Values\RemoteResource;
 use Netgen\RemoteMedia\API\Values\RemoteResourceLocation;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
+#[CoversClass(RemoteMediaItem::class)]
 final class RemoteMediaItemTest extends TestCase
 {
-    /**
-     * @covers \Netgen\Layouts\RemoteMedia\API\Values\RemoteMediaItem::__construct
-     * @covers \Netgen\Layouts\RemoteMedia\API\Values\RemoteMediaItem::getId
-     * @covers \Netgen\Layouts\RemoteMedia\API\Values\RemoteMediaItem::getRemoteResourceLocation
-     * @covers \Netgen\Layouts\RemoteMedia\API\Values\RemoteMediaItem::getValue
-     */
     public function test(): void
     {
         $resource = new RemoteResource(

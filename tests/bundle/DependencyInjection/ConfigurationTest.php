@@ -6,17 +6,15 @@ namespace Netgen\Bundle\LayoutsRemoteMediaBundle\Tests\DependencyInjection;
 
 use Matthias\SymfonyConfigTest\PhpUnit\ConfigurationTestCaseTrait;
 use Netgen\Bundle\LayoutsRemoteMediaBundle\DependencyInjection\Configuration;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
+#[CoversClass(Configuration::class)]
 final class ConfigurationTest extends TestCase
 {
     use ConfigurationTestCaseTrait;
 
-    /**
-     * @covers \Netgen\Bundle\LayoutsRemoteMediaBundle\DependencyInjection\Configuration::addCacheConfiguration
-     * @covers \Netgen\Bundle\LayoutsRemoteMediaBundle\DependencyInjection\Configuration::getConfigTreeBuilder
-     */
     public function testConfigurationValid(): void
     {
         $this->assertConfigurationIsValid(

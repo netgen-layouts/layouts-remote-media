@@ -10,11 +10,13 @@ use Netgen\Layouts\Tests\TestCase\ValidatorTestCase;
 use Netgen\RemoteMedia\API\ProviderInterface;
 use Netgen\RemoteMedia\API\Values\RemoteResource;
 use Netgen\RemoteMedia\Exception\RemoteResourceNotFoundException;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\ConstraintValidatorInterface;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 
+#[CoversClass(RemoteMediaValidator::class)]
 final class RemoteMediaValidatorTest extends ValidatorTestCase
 {
     private MockObject $provider;
@@ -33,10 +35,6 @@ final class RemoteMediaValidatorTest extends ValidatorTestCase
         return new RemoteMediaValidator($this->provider);
     }
 
-    /**
-     * @covers \Netgen\Layouts\RemoteMedia\Validator\RemoteMediaValidator::__construct
-     * @covers \Netgen\Layouts\RemoteMedia\Validator\RemoteMediaValidator::validate
-     */
     public function testValidateValid(): void
     {
         $this->provider
@@ -53,10 +51,6 @@ final class RemoteMediaValidatorTest extends ValidatorTestCase
         $this->assertValid(true, 'upload||image||folder|test_resource');
     }
 
-    /**
-     * @covers \Netgen\Layouts\RemoteMedia\Validator\RemoteMediaValidator::__construct
-     * @covers \Netgen\Layouts\RemoteMedia\Validator\RemoteMediaValidator::validate
-     */
     public function testValidateNull(): void
     {
         $this->provider
@@ -66,10 +60,6 @@ final class RemoteMediaValidatorTest extends ValidatorTestCase
         $this->assertValid(true, null);
     }
 
-    /**
-     * @covers \Netgen\Layouts\RemoteMedia\Validator\RemoteMediaValidator::__construct
-     * @covers \Netgen\Layouts\RemoteMedia\Validator\RemoteMediaValidator::validate
-     */
     public function testValidateNonExisting(): void
     {
         $this->provider
@@ -81,9 +71,6 @@ final class RemoteMediaValidatorTest extends ValidatorTestCase
         $this->assertValid(false, 'upload||image||folder|test_resource2');
     }
 
-    /**
-     * @covers \Netgen\Layouts\RemoteMedia\Validator\RemoteMediaValidator::validate
-     */
     public function testValidateThrowsUnexpectedTypeExceptionWithInvalidConstraint(): void
     {
         $this->expectException(UnexpectedTypeException::class);
@@ -93,9 +80,6 @@ final class RemoteMediaValidatorTest extends ValidatorTestCase
         $this->assertValid(true, 'value');
     }
 
-    /**
-     * @covers \Netgen\Layouts\RemoteMedia\Validator\RemoteMediaValidator::validate
-     */
     public function testValidateThrowsUnexpectedTypeExceptionWithInvalidValue(): void
     {
         $this->expectException(UnexpectedTypeException::class);

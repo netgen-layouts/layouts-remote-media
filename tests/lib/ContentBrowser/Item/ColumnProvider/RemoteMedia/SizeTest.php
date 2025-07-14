@@ -9,8 +9,10 @@ use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\ColumnProvider\RemoteMedia\Si
 use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Item as RemoteMediaItem;
 use Netgen\RemoteMedia\API\Values\RemoteResource;
 use Netgen\RemoteMedia\API\Values\RemoteResourceLocation;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
+#[CoversClass(Size::class)]
 final class SizeTest extends TestCase
 {
     private Size $sizeColumn;
@@ -20,10 +22,6 @@ final class SizeTest extends TestCase
         $this->sizeColumn = new Size();
     }
 
-    /**
-     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\ColumnProvider\RemoteMedia\Size::getValue
-     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\ColumnProvider\RemoteMedia\Size::prettyBytes
-     */
     public function testGetValueInB(): void
     {
         $resource = new RemoteResource(
@@ -39,10 +37,6 @@ final class SizeTest extends TestCase
         self::assertSame('586B', $this->sizeColumn->getValue($item));
     }
 
-    /**
-     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\ColumnProvider\RemoteMedia\Size::getValue
-     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\ColumnProvider\RemoteMedia\Size::prettyBytes
-     */
     public function testGetValueInkB(): void
     {
         $resource = new RemoteResource(
@@ -58,10 +52,6 @@ final class SizeTest extends TestCase
         self::assertSame('1.06kB', $this->sizeColumn->getValue($item));
     }
 
-    /**
-     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\ColumnProvider\RemoteMedia\Size::getValue
-     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\ColumnProvider\RemoteMedia\Size::prettyBytes
-     */
     public function testGetValueInMB(): void
     {
         $resource = new RemoteResource(
@@ -77,10 +67,6 @@ final class SizeTest extends TestCase
         self::assertSame('257.34MB', $this->sizeColumn->getValue($item));
     }
 
-    /**
-     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\ColumnProvider\RemoteMedia\Size::getValue
-     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\ColumnProvider\RemoteMedia\Size::prettyBytes
-     */
     public function testGetValueInGB(): void
     {
         $resource = new RemoteResource(
@@ -96,10 +82,6 @@ final class SizeTest extends TestCase
         self::assertSame('251.31GB', $this->sizeColumn->getValue($item));
     }
 
-    /**
-     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\ColumnProvider\RemoteMedia\Size::getValue
-     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\ColumnProvider\RemoteMedia\Size::prettyBytes
-     */
     public function testGetValueInTB(): void
     {
         $resource = new RemoteResource(
@@ -115,10 +97,6 @@ final class SizeTest extends TestCase
         self::assertSame('245.42TB', $this->sizeColumn->getValue($item));
     }
 
-    /**
-     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\ColumnProvider\RemoteMedia\Size::getValue
-     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\ColumnProvider\RemoteMedia\Size::prettyBytes
-     */
     public function testGetValueInPB(): void
     {
         $resource = new RemoteResource(
@@ -134,10 +112,6 @@ final class SizeTest extends TestCase
         self::assertSame('239.67PB', $this->sizeColumn->getValue($item));
     }
 
-    /**
-     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\ColumnProvider\RemoteMedia\Size::getValue
-     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\ColumnProvider\RemoteMedia\Size::prettyBytes
-     */
     public function testGetValueWithNoSize(): void
     {
         $resource = new RemoteResource(
@@ -152,9 +126,6 @@ final class SizeTest extends TestCase
         self::assertSame('0B', $this->sizeColumn->getValue($item));
     }
 
-    /**
-     * @covers \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\ColumnProvider\RemoteMedia\Size::getValue
-     */
     public function testGetValueWithWrongItem(): void
     {
         $itemMock = $this->createMock(ItemInterface::class);

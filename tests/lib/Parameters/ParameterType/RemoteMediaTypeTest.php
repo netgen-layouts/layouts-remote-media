@@ -11,11 +11,14 @@ use Netgen\Layouts\Tests\Parameters\ParameterType\ParameterTypeTestTrait;
 use Netgen\RemoteMedia\API\ProviderInterface;
 use Netgen\RemoteMedia\API\Values\RemoteResource;
 use Netgen\RemoteMedia\Exception\RemoteResourceNotFoundException;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\OptionsResolver\Exception\InvalidArgumentException;
 use Symfony\Component\Validator\Validation;
 
+#[CoversClass(RemoteMediaType::class)]
 final class RemoteMediaTypeTest extends TestCase
 {
     use ParameterTypeTestTrait;
@@ -32,9 +35,6 @@ final class RemoteMediaTypeTest extends TestCase
         $this->type = new RemoteMediaType();
     }
 
-    /**
-     * @covers \Netgen\Layouts\RemoteMedia\Parameters\ParameterType\RemoteMediaType::getIdentifier
-     */
     public function testGetIdentifier(): void
     {
         self::assertSame('remote_media', $this->type::getIdentifier());
@@ -43,11 +43,8 @@ final class RemoteMediaTypeTest extends TestCase
     /**
      * @param mixed[] $options
      * @param mixed[] $resolvedOptions
-     *
-     * @covers \Netgen\Layouts\RemoteMedia\Parameters\ParameterType\RemoteMediaType::configureOptions
-     *
-     * @dataProvider validOptionsDataProvider
      */
+    #[DataProvider('validOptionsDataProvider')]
     public function testValidOptions(array $options, array $resolvedOptions): void
     {
         $parameter = $this->getParameterDefinition($options);
@@ -56,11 +53,8 @@ final class RemoteMediaTypeTest extends TestCase
 
     /**
      * @param mixed[] $options
-     *
-     * @covers \Netgen\Layouts\RemoteMedia\Parameters\ParameterType\RemoteMediaType::configureOptions
-     *
-     * @dataProvider invalidOptionsDataProvider
      */
+    #[DataProvider('invalidOptionsDataProvider')]
     public function testInvalidOptions(array $options): void
     {
         $this->expectException(InvalidArgumentException::class);
@@ -109,9 +103,6 @@ final class RemoteMediaTypeTest extends TestCase
         ];
     }
 
-    /**
-     * @covers \Netgen\Layouts\RemoteMedia\Parameters\ParameterType\RemoteMediaType::getValueConstraints
-     */
     public function testValidationValid(): void
     {
         $this->providerMock
@@ -138,9 +129,6 @@ final class RemoteMediaTypeTest extends TestCase
         self::assertCount(0, $errors);
     }
 
-    /**
-     * @covers \Netgen\Layouts\RemoteMedia\Parameters\ParameterType\RemoteMediaType::getValueConstraints
-     */
     public function testValidationValidWithNonRequiredValue(): void
     {
         $this->providerMock
@@ -156,9 +144,6 @@ final class RemoteMediaTypeTest extends TestCase
         self::assertCount(0, $errors);
     }
 
-    /**
-     * @covers \Netgen\Layouts\RemoteMedia\Parameters\ParameterType\RemoteMediaType::getValueConstraints
-     */
     public function testValidationInvalid(): void
     {
         $this->providerMock
@@ -180,14 +165,8 @@ final class RemoteMediaTypeTest extends TestCase
         self::assertNotCount(0, $errors);
     }
 
-    /**
-     * @param mixed $value
-     *
-     * @covers \Netgen\Layouts\RemoteMedia\Parameters\ParameterType\RemoteMediaType::isValueEmpty
-     *
-     * @dataProvider emptyDataProvider
-     */
-    public function testIsValueEmpty($value, bool $isEmpty): void
+    #[DataProvider('emptyDataProvider')]
+    public function testIsValueEmpty(mixed $value, bool $isEmpty): void
     {
         self::assertSame($isEmpty, $this->type->isValueEmpty(new ParameterDefinition(), $value));
     }

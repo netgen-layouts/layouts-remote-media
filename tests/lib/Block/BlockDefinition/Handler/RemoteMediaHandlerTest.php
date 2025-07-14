@@ -16,10 +16,12 @@ use Netgen\Layouts\RemoteMedia\Parameters\ParameterType\RemoteMediaType;
 use Netgen\RemoteMedia\API\Values\RemoteResource;
 use Netgen\RemoteMedia\Core\Resolver\Variation as VariationResolver;
 use Netgen\RemoteMedia\Core\Transformation\Registry;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 
+#[CoversClass(RemoteMediaHandler::class)]
 final class RemoteMediaHandlerTest extends TestCase
 {
     /**
@@ -66,19 +68,11 @@ final class RemoteMediaHandlerTest extends TestCase
         );
     }
 
-    /**
-     * @covers \Netgen\Layouts\RemoteMedia\Block\BlockDefinition\Handler\RemoteMediaHandler::isContextual
-     */
     public function testIsContextual(): void
     {
         self::assertFalse($this->handler->isContextual(new Block()));
     }
 
-    /**
-     * @covers \Netgen\Layouts\RemoteMedia\Block\BlockDefinition\Handler\RemoteMediaHandler::__construct
-     * @covers \Netgen\Layouts\RemoteMedia\Block\BlockDefinition\Handler\RemoteMediaHandler::buildParameters
-     * @covers \Netgen\Layouts\RemoteMedia\Block\BlockDefinition\Handler\RemoteMediaHandler::getVariationOptions
-     */
     public function testBuildParameters(): void
     {
         $builderMock = $this->createMock(ParameterBuilderInterface::class);
@@ -103,10 +97,6 @@ final class RemoteMediaHandlerTest extends TestCase
         $this->handler->buildParameters($builderMock);
     }
 
-    /**
-     * @covers \Netgen\Layouts\RemoteMedia\Block\BlockDefinition\Handler\RemoteMediaHandler::__construct
-     * @covers \Netgen\Layouts\RemoteMedia\Block\BlockDefinition\Handler\RemoteMediaHandler::getDynamicParameters
-     */
     public function testGetDynamicSettings(): void
     {
         $params = new DynamicParameters();
@@ -151,10 +141,6 @@ final class RemoteMediaHandlerTest extends TestCase
         self::assertSame($value->getUrl(), $params['remote_resource_location']->getUrl());
     }
 
-    /**
-     * @covers \Netgen\Layouts\RemoteMedia\Block\BlockDefinition\Handler\RemoteMediaHandler::__construct
-     * @covers \Netgen\Layouts\RemoteMedia\Block\BlockDefinition\Handler\RemoteMediaHandler::getDynamicParameters
-     */
     public function testGetDynamicSettingsEmpty(): void
     {
         $params = new DynamicParameters();

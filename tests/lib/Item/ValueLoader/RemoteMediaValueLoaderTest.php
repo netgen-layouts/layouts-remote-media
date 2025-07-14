@@ -13,9 +13,11 @@ use Netgen\RemoteMedia\API\Values\Folder;
 use Netgen\RemoteMedia\API\Values\RemoteResource;
 use Netgen\RemoteMedia\API\Values\RemoteResourceLocation;
 use Netgen\RemoteMedia\Exception\RemoteResourceNotFoundException;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+#[CoversClass(RemoteMediaValueLoader::class)]
 final class RemoteMediaValueLoaderTest extends TestCase
 {
     private MockObject $providerMock;
@@ -41,10 +43,6 @@ final class RemoteMediaValueLoaderTest extends TestCase
         $this->valueLoader = new RemoteMediaValueLoader($this->providerMock, $this->entityManagerMock);
     }
 
-    /**
-     * @covers \Netgen\Layouts\RemoteMedia\Item\ValueLoader\RemoteMediaValueLoader::__construct
-     * @covers \Netgen\Layouts\RemoteMedia\Item\ValueLoader\RemoteMediaValueLoader::load
-     */
     public function testLoadExisting(): void
     {
         $resource = new RemoteResource(
@@ -69,11 +67,6 @@ final class RemoteMediaValueLoaderTest extends TestCase
         self::assertSame($location, $this->valueLoader->load('upload||video||folder|test_resource'));
     }
 
-    /**
-     * @covers \Netgen\Layouts\RemoteMedia\Item\ValueLoader\RemoteMediaValueLoader::__construct
-     * @covers \Netgen\Layouts\RemoteMedia\Item\ValueLoader\RemoteMediaValueLoader::load
-     * @covers \Netgen\Layouts\RemoteMedia\Item\ValueLoader\RemoteMediaValueLoader::resolveRemoteResource
-     */
     public function testLoadNewLocation(): void
     {
         $resource = new RemoteResource(
@@ -121,11 +114,6 @@ final class RemoteMediaValueLoaderTest extends TestCase
         self::assertSame($location, $this->valueLoader->load('upload||video||folder|test_resource'));
     }
 
-    /**
-     * @covers \Netgen\Layouts\RemoteMedia\Item\ValueLoader\RemoteMediaValueLoader::__construct
-     * @covers \Netgen\Layouts\RemoteMedia\Item\ValueLoader\RemoteMediaValueLoader::load
-     * @covers \Netgen\Layouts\RemoteMedia\Item\ValueLoader\RemoteMediaValueLoader::resolveRemoteResource
-     */
     public function testLoadNewResource(): void
     {
         $resource = new RemoteResource(
@@ -179,11 +167,6 @@ final class RemoteMediaValueLoaderTest extends TestCase
         self::assertSame($location, $this->valueLoader->load('upload||video||folder|test_resource'));
     }
 
-    /**
-     * @covers \Netgen\Layouts\RemoteMedia\Item\ValueLoader\RemoteMediaValueLoader::__construct
-     * @covers \Netgen\Layouts\RemoteMedia\Item\ValueLoader\RemoteMediaValueLoader::load
-     * @covers \Netgen\Layouts\RemoteMedia\Item\ValueLoader\RemoteMediaValueLoader::resolveRemoteResource
-     */
     public function testLoadNotFound(): void
     {
         $this->remoteMediaItemRepositoryMock
@@ -207,10 +190,6 @@ final class RemoteMediaValueLoaderTest extends TestCase
         self::assertNull($this->valueLoader->load('upload||video||folder|test_resource'));
     }
 
-    /**
-     * @covers \Netgen\Layouts\RemoteMedia\Item\ValueLoader\RemoteMediaValueLoader::__construct
-     * @covers \Netgen\Layouts\RemoteMedia\Item\ValueLoader\RemoteMediaValueLoader::loadByRemoteId
-     */
     public function testLoadByRemoteId(): void
     {
         $resource = new RemoteResource(
