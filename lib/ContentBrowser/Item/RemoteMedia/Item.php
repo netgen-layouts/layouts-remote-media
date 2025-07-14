@@ -22,7 +22,7 @@ final class Item implements ItemInterface
 
     public function getName(): string
     {
-        return $this->location->getRemoteResource()->getName();
+        return $this->location->getRemoteResource()->getName() ?? 'Unknown';
     }
 
     public function isVisible(): bool
