@@ -24,7 +24,7 @@ final class RemoteMediaHandler extends BlockDefinitionHandler
     public function __construct(
         private ValueLoaderInterface $valueLoader,
         private VariationResolver $variationResolver,
-        private array $allowedResourceTypes
+        private array $allowedResourceTypes,
     ) {}
 
     public function buildParameters(ParameterBuilderInterface $builder): void

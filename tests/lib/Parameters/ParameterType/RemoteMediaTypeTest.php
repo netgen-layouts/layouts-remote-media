@@ -135,7 +135,7 @@ final class RemoteMediaTypeTest extends TestCase
             ->expects(self::never())
             ->method('loadFromRemote');
 
-        $parameter = $this->getParameterDefinition([], false);
+        $parameter = $this->getParameterDefinition();
         $validator = Validation::createValidatorBuilder()
             ->setConstraintValidatorFactory(new RemoteMediaValidatorFactory($this->providerMock))
             ->getValidator();

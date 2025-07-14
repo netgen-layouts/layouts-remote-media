@@ -12,7 +12,7 @@ use function str_replace;
 final class ResourceQuery
 {
     private function __construct(
-        private string $value
+        private string $value,
     ) {}
 
     public static function createFromValue(string $value): self

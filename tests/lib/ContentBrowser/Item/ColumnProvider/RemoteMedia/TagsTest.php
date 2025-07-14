@@ -27,7 +27,7 @@ final class TagsTest extends TestCase
         $resource = new RemoteResource(
             remoteId: 'folder/test_resource',
             type: RemoteResource::TYPE_IMAGE,
-            url: 'htstps://cloudinary.com/test/upload/image/folder/test_resource',
+            url: 'https://cloudinary.com/test/upload/image/folder/test_resource',
             md5: '3c15a1d4bbcda8d067478a6316518acc',
             tags: ['tag1', 'tag2', 'tag3'],
         );

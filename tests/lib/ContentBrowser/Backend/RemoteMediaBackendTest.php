@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Netgen\Layouts\RemoteMedia\Tests\ContentBrowser\Backend;
 
 use Netgen\ContentBrowser\Backend\SearchQuery;
-use Netgen\ContentBrowser\Backend\SearchResult;
 use Netgen\ContentBrowser\Config\Configuration;
 use Netgen\ContentBrowser\Exceptions\NotFoundException;
 use Netgen\ContentBrowser\Item\LocationInterface;
@@ -315,7 +314,7 @@ final class RemoteMediaBackendTest extends TestCase
         $this->nextCursorResolverMock
             ->expects(self::once())
             ->method('save')
-            ->with($query, 25, 'testcursor123');
+            ->with($query, 25, 'test-cursor-123');
 
         $items = $this->backend->getSubItems($location);
 
@@ -358,7 +357,7 @@ final class RemoteMediaBackendTest extends TestCase
         $this->nextCursorResolverMock
             ->expects(self::once())
             ->method('save')
-            ->with($query, 10, 'testcursor123');
+            ->with($query, 10, 'test-cursor-123');
 
         $items = $this->backend->getSubItems($location, 5, 5);
 
@@ -393,7 +392,7 @@ final class RemoteMediaBackendTest extends TestCase
         $this->nextCursorResolverMock
             ->expects(self::once())
             ->method('save')
-            ->with($query, 5, 'testcursor123');
+            ->with($query, 5, 'test-cursor-123');
 
         $items = $this->backend->getSubItems($location, 0, 5);
 
@@ -547,7 +546,7 @@ final class RemoteMediaBackendTest extends TestCase
         $this->nextCursorResolverMock
             ->expects(self::once())
             ->method('save')
-            ->with($query, 25, 'testcursor123');
+            ->with($query, 25, 'test-cursor-123');
 
         $searchResult = $this->backend->searchItems($searchQuery);
 
@@ -585,7 +584,7 @@ final class RemoteMediaBackendTest extends TestCase
         $this->nextCursorResolverMock
             ->expects(self::once())
             ->method('save')
-            ->with($query, 25, 'testcursor123');
+            ->with($query, 25, 'test-cursor-123');
 
         $searchResult = $this->backend->searchItems($searchQuery);
 
@@ -633,7 +632,7 @@ final class RemoteMediaBackendTest extends TestCase
         $this->nextCursorResolverMock
             ->expects(self::once())
             ->method('save')
-            ->with($query, 10, 'testcursor123');
+            ->with($query, 10, 'test-cursor-123');
 
         $searchResult = $this->backend->searchItems($searchQuery);
 
@@ -671,7 +670,6 @@ final class RemoteMediaBackendTest extends TestCase
 
         $searchResult = $this->backend->searchItems($searchQuery);
 
-        self::assertInstanceOf(SearchResult::class, $searchResult);
         self::assertCount(0, $searchResult->getResults());
     }
 
@@ -763,7 +761,7 @@ final class RemoteMediaBackendTest extends TestCase
         $this->nextCursorResolverMock
             ->expects(self::once())
             ->method('save')
-            ->with($query, 25, 'testcursor123');
+            ->with($query, 25, 'test-cursor-123');
 
         $items = $this->backend->search('test');
 
@@ -792,7 +790,7 @@ final class RemoteMediaBackendTest extends TestCase
     {
         return new Result(
             15,
-            'testcursor123',
+            'test-cursor-123',
             [
                 $this->getResource('test_resource_1', RemoteResource::TYPE_IMAGE, 'https://cloudinary.com/test/upload/image/test_resource_1', '857bcccd18b32a4463760bffd77d87f6'),
                 $this->getResource('test_resource_2', RemoteResource::TYPE_VIDEO, 'https://cloudinary.com/test/upload/video/test_resource_2', '83c98c7ec6a1d2ef4b609892ffb17f3e'),

@@ -21,7 +21,7 @@ final class RemoteMediaValueLoader implements ValueLoaderInterface
 
     public function __construct(
         private ProviderInterface $provider,
-        private EntityManagerInterface $entityManager
+        private EntityManagerInterface $entityManager,
     ) {
         $this->remoteMediaItemRepository = $entityManager->getRepository(RemoteMediaItem::class);
     }
@@ -39,7 +39,7 @@ final class RemoteMediaValueLoader implements ValueLoaderInterface
 
                 $this->provider->store($remoteResource);
                 $remoteResourceLocation = $this->provider->storeLocation($remoteResourceLocation);
-            } catch (RemoteResourceNotFoundException $e) {
+            } catch (RemoteResourceNotFoundException) {
                 return null;
             }
 
@@ -61,7 +61,7 @@ final class RemoteMediaValueLoader implements ValueLoaderInterface
     {
         try {
             return $this->provider->loadByRemoteId($query->getRemoteId());
-        } catch (RemoteResourceNotFoundException $e) {
+        } catch (RemoteResourceNotFoundException) {
             return $this->provider->loadFromRemote($query->getRemoteId());
         }
     }

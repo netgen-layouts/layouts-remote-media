@@ -35,7 +35,7 @@ final class RemoteMediaBackend implements BackendInterface
         private ProviderInterface $provider,
         private NextCursorResolverInterface $nextCursorResolver,
         private TranslatorInterface $translator,
-        private Configuration $config
+        private Configuration $config,
     ) {}
 
     public function getSections(): iterable
@@ -54,7 +54,7 @@ final class RemoteMediaBackend implements BackendInterface
 
         try {
             $resource = $this->provider->loadFromRemote($query->getRemoteId());
-        } catch (RemoteResourceNotFoundException $e) {
+        } catch (RemoteResourceNotFoundException) {
             throw new NotFoundException(
                 sprintf(
                     'Remote media with ID "%s" not found.',
@@ -150,14 +150,16 @@ final class RemoteMediaBackend implements BackendInterface
     {
         $types = $this->getAllowedTypes();
 
+        $location = $searchQuery->getLocation();
         $folders = [];
-        if ($searchQuery->getLocation() instanceof Location) {
-            $types = $searchQuery->getLocation()->getType() !== Location::RESOURCE_TYPE_ALL
-                ? [$searchQuery->getLocation()->getType()]
+
+        if ($location instanceof Location) {
+            $types = $location->getType() !== Location::RESOURCE_TYPE_ALL
+                ? [$location->getType()]
                 : $this->getAllowedTypes();
 
-            $folders = $searchQuery->getLocation()->getFolder() instanceof Folder
-                ? [$searchQuery->getLocation()->getFolder()]
+            $folders = $location->getFolder() instanceof Folder
+                ? [$location->getFolder()]
                 : [];
         }
 
@@ -192,14 +194,16 @@ final class RemoteMediaBackend implements BackendInterface
     {
         $types = $this->getAllowedTypes();
 
+        $location = $searchQuery->getLocation();
         $folders = [];
-        if ($searchQuery->getLocation() instanceof Location) {
-            $types = $searchQuery->getLocation()->getType() !== Location::RESOURCE_TYPE_ALL
-                ? [$searchQuery->getLocation()->getType()]
+
+        if ($location instanceof Location) {
+            $types = $location->getType() !== Location::RESOURCE_TYPE_ALL
+                ? [$location->getType()]
                 : $this->getAllowedTypes();
 
-            $folders = $searchQuery->getLocation()->getFolder() instanceof Folder
-                ? [$searchQuery->getLocation()->getFolder()]
+            $folders = $location->getFolder() instanceof Folder
+                ? [$location->getFolder()]
                 : [];
         }
 
@@ -219,9 +223,7 @@ final class RemoteMediaBackend implements BackendInterface
         $searchQuery->setOffset($offset);
         $searchQuery->setLimit($limit);
 
-        $searchResult = $this->searchItems($searchQuery);
-
-        return $searchResult->getResults();
+        return $this->searchItems($searchQuery)->getResults();
     }
 
     public function searchCount(string $searchText): int

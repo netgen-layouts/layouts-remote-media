@@ -17,7 +17,7 @@ use function is_string;
 final class RemoteMediaValidator extends ConstraintValidator
 {
     public function __construct(
-        private ProviderInterface $provider
+        private ProviderInterface $provider,
     ) {}
 
     public function validate(mixed $value, Constraint $constraint): void
@@ -38,7 +38,7 @@ final class RemoteMediaValidator extends ConstraintValidator
 
         try {
             $this->provider->loadFromRemote($query->getRemoteId());
-        } catch (RemoteResourceNotFoundException $e) {
+        } catch (RemoteResourceNotFoundException) {
             $this->context
                 ->buildViolation($constraint->message)
                 ->setParameter('%remoteId%', $query->getRemoteId())

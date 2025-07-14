@@ -14,6 +14,8 @@ use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use RuntimeException;
 
+use function sprintf;
+
 #[CoversClass(NextCursor::class)]
 final class NextCursorTest extends TestCase
 {
@@ -73,7 +75,7 @@ final class NextCursorTest extends TestCase
             ->willReturn(false);
 
         $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage("Can't get cursor key for query: " . (string) $this->getQuery() . ' with offset: 30');
+        $this->expectExceptionMessage(sprintf("Can't get cursor key for query: %s with offset: 30", $this->getQuery()));
 
         $this->resolver->resolve($this->getQuery(), 30);
     }

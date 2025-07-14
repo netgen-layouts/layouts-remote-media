@@ -31,7 +31,7 @@ final class Location implements LocationInterface
 
     private function __construct(
         private string $id,
-        private ?string $name = null
+        private ?string $name = null,
     ) {
         $this->validateId($id);
     }
@@ -116,7 +116,7 @@ final class Location implements LocationInterface
         $idParts = explode('||', $id);
         $type = array_shift($idParts);
 
-        if (!in_array($type, self::SUPPORTED_TYPES, true) && $type !== self::RESOURCE_TYPE_ALL) {
+        if ($type !== self::RESOURCE_TYPE_ALL && !in_array($type, self::SUPPORTED_TYPES, true)) {
             throw new InvalidArgumentException('Provided ID ' . $id . ' is invalid');
         }
     }

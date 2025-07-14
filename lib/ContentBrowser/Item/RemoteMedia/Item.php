@@ -12,7 +12,7 @@ use function str_replace;
 final class Item implements ItemInterface
 {
     public function __construct(
-        private RemoteResourceLocation $location
+        private RemoteResourceLocation $location,
     ) {}
 
     public function getValue(): string
