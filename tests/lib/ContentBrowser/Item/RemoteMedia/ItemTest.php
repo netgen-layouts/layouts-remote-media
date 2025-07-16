@@ -78,10 +78,9 @@ final class ItemTest extends TestCase
             $this->item->getRemoteResourceLocation()->getRemoteResource()->getUrl(),
         );
 
-        self::assertInstanceOf(
-            Folder::class,
-            $this->location->getRemoteResource()->getFolder(),
-        );
+        $folder = $this->location->getRemoteResource()->getFolder();
+
+        self::assertInstanceOf(Folder::class, $folder);
 
         self::assertInstanceOf(
             Folder::class,
@@ -89,7 +88,7 @@ final class ItemTest extends TestCase
         );
 
         self::assertSame(
-            $this->location->getRemoteResource()->getFolder()->getPath(),
+            $folder->getPath(),
             $this->item->getRemoteResourceLocation()->getRemoteResource()->getFolder()->getPath(),
         );
     }

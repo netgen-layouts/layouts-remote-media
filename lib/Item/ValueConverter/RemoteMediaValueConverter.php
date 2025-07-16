@@ -25,12 +25,12 @@ final class RemoteMediaValueConverter implements ValueConverterInterface
         return 'remote_media';
     }
 
-    public function getId(object $object)
+    public function getId(object $object): string
     {
         return $object->getRemoteResource()->getRemoteId();
     }
 
-    public function getRemoteId(object $object)
+    public function getRemoteId(object $object): string
     {
         return $object->getRemoteResource()->getRemoteId();
     }

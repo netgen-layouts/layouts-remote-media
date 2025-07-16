@@ -10,3 +10,4 @@ parameters:
         # Doctrine DBAL
         - '#Cannot call method fetchAllAssociative\(\) on Doctrine\\DBAL\\Result\|int#'
         - '#expects string\|null, Doctrine\\DBAL\\Query\\Expression\\CompositeExpression given#'
+        - '#Property Netgen\\Layouts\\RemoteMedia\\API\\Values\\RemoteMediaItem::\$id \(int\|null\) is never assigned int so it can be removed from the property type.#'

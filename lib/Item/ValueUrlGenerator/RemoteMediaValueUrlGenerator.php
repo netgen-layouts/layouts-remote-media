@@ -11,7 +11,7 @@ use Netgen\Layouts\Item\ValueUrlGeneratorInterface;
  */
 final class RemoteMediaValueUrlGenerator implements ValueUrlGeneratorInterface
 {
-    public function generate(object $object): ?string
+    public function generate(object $object): string
     {
         return $object->getRemoteResource()->getUrl();
     }
