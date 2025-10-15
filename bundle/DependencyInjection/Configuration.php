@@ -26,6 +26,7 @@ final class Configuration implements ConfigurationInterface
         $rootNode
             ->children()
                 ->arrayNode('cache')
+                    ->addDefaultsIfNotSet()
                     ->children()
                         ->scalarNode('pool')
                             ->cannotBeEmpty()
