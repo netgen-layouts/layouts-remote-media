@@ -6,7 +6,7 @@ namespace Netgen\Layouts\RemoteMedia\Validator;
 
 use Netgen\Layouts\RemoteMedia\Core\RemoteMedia\ResourceQuery;
 use Netgen\Layouts\RemoteMedia\Validator\Constraint\RemoteMedia;
-use Netgen\RemoteMedia\Core\RemoteMediaProvider;
+use Netgen\RemoteMedia\API\ProviderInterface;
 use Netgen\RemoteMedia\Exception\RemoteResourceNotFoundException;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
@@ -16,17 +16,11 @@ use function is_string;
 
 final class RemoteMediaValidator extends ConstraintValidator
 {
-    private RemoteMediaProvider $provider;
+    public function __construct(
+        private ProviderInterface $provider,
+    ) {}
 
-    public function __construct(RemoteMediaProvider $provider)
-    {
-        $this->provider = $provider;
-    }
-
-    /**
-     * @param mixed $value
-     */
-    public function validate($value, Constraint $constraint): void
+    public function validate(mixed $value, Constraint $constraint): void
     {
         if ($value === null) {
             return;
@@ -40,18 +34,14 @@ final class RemoteMediaValidator extends ConstraintValidator
             throw new UnexpectedTypeException($value, 'string');
         }
 
-        $query = ResourceQuery::createFromString($value);
+        $query = ResourceQuery::createFromValue($value);
 
         try {
-            $this->provider->getRemoteResource(
-                $query->getResourceId(),
-                $query->getResourceType(),
-            );
-        } catch (RemoteResourceNotFoundException $e) {
+            $this->provider->loadFromRemote($query->getRemoteId());
+        } catch (RemoteResourceNotFoundException) {
             $this->context
                 ->buildViolation($constraint->message)
-                ->setParameter('%resourceId%', $query->getResourceId())
-                ->setParameter('%resourceType%', $query->getResourceType())
+                ->setParameter('%remoteId%', $query->getRemoteId())
                 ->addViolation();
         }
     }

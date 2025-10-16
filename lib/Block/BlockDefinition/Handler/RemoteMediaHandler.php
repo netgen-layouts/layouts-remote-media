@@ -12,33 +12,20 @@ use Netgen\Layouts\Parameters\ParameterBuilderInterface;
 use Netgen\Layouts\Parameters\ParameterType\ChoiceType;
 use Netgen\Layouts\Parameters\ParameterType\TextLineType;
 use Netgen\Layouts\RemoteMedia\Parameters\ParameterType\RemoteMediaType;
-use Netgen\RemoteMedia\Core\VariationResolver;
+use Netgen\RemoteMedia\Core\Resolver\Variation as VariationResolver;
 
 final class RemoteMediaHandler extends BlockDefinitionHandler
 {
     private const LAYOUTS_BLOCK_VARIATIONS = 'netgen_layouts_block';
 
-    private ValueLoaderInterface $valueLoader;
-
-    private VariationResolver $variationResolver;
-
-    /**
-     * @var string[]
-     */
-    private array $allowedResourceTypes;
-
     /**
      * @param string[] $allowedResourceTypes
      */
     public function __construct(
-        ValueLoaderInterface $valueLoader,
-        VariationResolver $variationResolver,
-        array $allowedResourceTypes
-    ) {
-        $this->valueLoader = $valueLoader;
-        $this->variationResolver = $variationResolver;
-        $this->allowedResourceTypes = $allowedResourceTypes;
-    }
+        private ValueLoaderInterface $valueLoader,
+        private VariationResolver $variationResolver,
+        private array $allowedResourceTypes,
+    ) {}
 
     public function buildParameters(ParameterBuilderInterface $builder): void
     {
@@ -68,14 +55,14 @@ final class RemoteMediaHandler extends BlockDefinitionHandler
 
     public function getDynamicParameters(DynamicParameters $params, Block $block): void
     {
-        $params['resource'] = null;
+        $params['remote_resource_location'] = null;
 
         if ($block->getParameter('remote_media')->isEmpty()) {
             return;
         }
 
         $remoteMediaId = $block->getParameter('remote_media')->getValue();
-        $params['resource'] = $this->valueLoader->load($remoteMediaId);
+        $params['remote_resource_location'] = $this->valueLoader->load($remoteMediaId);
     }
 
     /**
@@ -87,10 +74,10 @@ final class RemoteMediaHandler extends BlockDefinitionHandler
             '(no variation)' => null,
         ];
 
-        $variations = $this->variationResolver->getVariationsForGroup(self::LAYOUTS_BLOCK_VARIATIONS);
+        $variations = $this->variationResolver->getAvailableVariations(self::LAYOUTS_BLOCK_VARIATIONS);
 
         foreach ($variations as $key => $value) {
-            $options[(string) $key] = (string) $key;
+            $options[$key] = $key;
         }
 
         return $options;

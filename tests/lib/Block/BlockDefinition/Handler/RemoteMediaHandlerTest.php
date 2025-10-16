@@ -14,10 +14,14 @@ use Netgen\Layouts\Parameters\ParameterType\TextLineType;
 use Netgen\Layouts\RemoteMedia\Block\BlockDefinition\Handler\RemoteMediaHandler;
 use Netgen\Layouts\RemoteMedia\Parameters\ParameterType\RemoteMediaType;
 use Netgen\RemoteMedia\API\Values\RemoteResource;
-use Netgen\RemoteMedia\Core\VariationResolver;
+use Netgen\RemoteMedia\Core\Resolver\Variation as VariationResolver;
+use Netgen\RemoteMedia\Core\Transformation\Registry;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
 
+#[CoversClass(RemoteMediaHandler::class)]
 final class RemoteMediaHandlerTest extends TestCase
 {
     /**
@@ -36,21 +40,24 @@ final class RemoteMediaHandlerTest extends TestCase
     {
         $this->valueLoaderMock = $this->createMock(ValueLoaderInterface::class);
 
-        $variationResolver = new VariationResolver();
-        $variationResolver->setVariations([
-            'netgen_layouts_block' => [
-                'Small' => [
-                    'transformations' => [
-                        'limit' => [300],
+        $variationResolver = new VariationResolver(
+            new Registry(),
+            new NullLogger(),
+            [
+                'netgen_layouts_block' => [
+                    'Small' => [
+                        'transformations' => [
+                            'limit' => [300],
+                        ],
                     ],
-                ],
-                'Big' => [
-                    'transformations' => [
-                        'limit' => [1200],
+                    'Big' => [
+                        'transformations' => [
+                            'limit' => [1200],
+                        ],
                     ],
                 ],
             ],
-        ]);
+        );
 
         $this->allowedResourceTypes = ['image', 'video'];
 
@@ -61,19 +68,11 @@ final class RemoteMediaHandlerTest extends TestCase
         );
     }
 
-    /**
-     * @covers \Netgen\Layouts\RemoteMedia\Block\BlockDefinition\Handler\RemoteMediaHandler::isContextual
-     */
     public function testIsContextual(): void
     {
         self::assertFalse($this->handler->isContextual(new Block()));
     }
 
-    /**
-     * @covers \Netgen\Layouts\RemoteMedia\Block\BlockDefinition\Handler\RemoteMediaHandler::__construct
-     * @covers \Netgen\Layouts\RemoteMedia\Block\BlockDefinition\Handler\RemoteMediaHandler::buildParameters
-     * @covers \Netgen\Layouts\RemoteMedia\Block\BlockDefinition\Handler\RemoteMediaHandler::getVariationOptions
-     */
     public function testBuildParameters(): void
     {
         $builderMock = $this->createMock(ParameterBuilderInterface::class);
@@ -98,10 +97,6 @@ final class RemoteMediaHandlerTest extends TestCase
         $this->handler->buildParameters($builderMock);
     }
 
-    /**
-     * @covers \Netgen\Layouts\RemoteMedia\Block\BlockDefinition\Handler\RemoteMediaHandler::__construct
-     * @covers \Netgen\Layouts\RemoteMedia\Block\BlockDefinition\Handler\RemoteMediaHandler::getDynamicParameters
-     */
     public function testGetDynamicSettings(): void
     {
         $params = new DynamicParameters();
@@ -126,10 +121,12 @@ final class RemoteMediaHandlerTest extends TestCase
             ],
         ]);
 
-        $value = RemoteResource::createFromParameters([
-            'resourceId' => 'folder/subfolder/image_name.jpg',
-            'resourceType' => 'image',
-        ]);
+        $value = new RemoteResource(
+            remoteId: 'folder/subfolder/image_name.jpg',
+            type: RemoteResource::TYPE_IMAGE,
+            url: 'https://cloudinary.com/test/upload/image/folder/subfolder/image_name.jpg',
+            md5: '185901e0a6f0c338cc4115a8b1923f44',
+        );
 
         $this->valueLoaderMock
             ->expects(self::once())
@@ -139,15 +136,11 @@ final class RemoteMediaHandlerTest extends TestCase
 
         $this->handler->getDynamicParameters($params, $block);
 
-        self::assertSame($value->resourceType, $params['resource']->resourceType);
-        self::assertSame($value->type, $params['resource']->type);
-        self::assertSame($value->url, $params['resource']->url);
+        self::assertSame($value->getRemoteId(), $params['remote_resource_location']->getRemoteId());
+        self::assertSame($value->getType(), $params['remote_resource_location']->getType());
+        self::assertSame($value->getUrl(), $params['remote_resource_location']->getUrl());
     }
 
-    /**
-     * @covers \Netgen\Layouts\RemoteMedia\Block\BlockDefinition\Handler\RemoteMediaHandler::__construct
-     * @covers \Netgen\Layouts\RemoteMedia\Block\BlockDefinition\Handler\RemoteMediaHandler::getDynamicParameters
-     */
     public function testGetDynamicSettingsEmpty(): void
     {
         $params = new DynamicParameters();
@@ -177,6 +170,6 @@ final class RemoteMediaHandlerTest extends TestCase
 
         $this->handler->getDynamicParameters($params, $block);
 
-        self::assertNull($params['resource']);
+        self::assertNull($params['remote_resource_location']);
     }
 }

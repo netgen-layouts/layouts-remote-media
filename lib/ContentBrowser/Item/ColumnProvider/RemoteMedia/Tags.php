@@ -8,7 +8,7 @@ use Netgen\ContentBrowser\Item\ColumnProvider\ColumnValueProviderInterface;
 use Netgen\ContentBrowser\Item\ItemInterface;
 use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Item;
 
-use function array_key_exists;
+use function count;
 use function implode;
 
 final class Tags implements ColumnValueProviderInterface
@@ -19,10 +19,10 @@ final class Tags implements ColumnValueProviderInterface
             return null;
         }
 
-        if (!array_key_exists('tags', $item->getRemoteMediaValue()->metaData)) {
+        if (count($item->getRemoteResourceLocation()->getRemoteResource()->getTags()) === 0) {
             return '';
         }
 
-        return implode(', ', $item->getRemoteMediaValue()->metaData['tags']);
+        return implode(', ', $item->getRemoteResourceLocation()->getRemoteResource()->getTags());
     }
 }

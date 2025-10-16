@@ -5,31 +5,24 @@ declare(strict_types=1);
 namespace Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia;
 
 use Netgen\ContentBrowser\Item\ItemInterface;
-use Netgen\RemoteMedia\API\Values\RemoteResource;
+use Netgen\RemoteMedia\API\Values\RemoteResourceLocation;
 
-use function array_pop;
-use function explode;
 use function str_replace;
 
 final class Item implements ItemInterface
 {
-    private RemoteResource $resource;
-
-    public function __construct(RemoteResource $resource)
-    {
-        $this->resource = $resource;
-    }
+    public function __construct(
+        private RemoteResourceLocation $location,
+    ) {}
 
     public function getValue(): string
     {
-        return $this->getResourceType() . '|' . str_replace('/', '|', $this->resource->resourceId);
+        return str_replace(['|', '/'], ['||', '|'], $this->location->getRemoteResource()->getRemoteId());
     }
 
     public function getName(): string
     {
-        $parts = explode('/', $this->resource->resourceId);
-
-        return array_pop($parts);
+        return $this->location->getRemoteResource()->getName() ?? 'Unknown';
     }
 
     public function isVisible(): bool
@@ -42,13 +35,13 @@ final class Item implements ItemInterface
         return true;
     }
 
-    public function getResourceType(): string
+    public function getType(): string
     {
-        return $this->resource->resourceType;
+        return $this->location->getRemoteResource()->getType();
     }
 
-    public function getRemoteMediaValue(): RemoteResource
+    public function getRemoteResourceLocation(): RemoteResourceLocation
     {
-        return $this->resource;
+        return $this->location;
     }
 }

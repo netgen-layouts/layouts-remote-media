@@ -6,107 +6,52 @@ namespace Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia;
 
 use InvalidArgumentException;
 use Netgen\ContentBrowser\Item\LocationInterface;
+use Netgen\RemoteMedia\API\Values\Folder;
+use Netgen\RemoteMedia\API\Values\RemoteResource;
 
 use function array_pop;
 use function array_shift;
-use function array_slice;
 use function count;
 use function explode;
 use function implode;
 use function in_array;
+use function str_replace;
 
 final class Location implements LocationInterface
 {
     public const RESOURCE_TYPE_ALL = 'all';
 
-    public const RESOURCE_TYPE_IMAGE = 'image';
-
-    public const RESOURCE_TYPE_VIDEO = 'video';
-
-    public const RESOURCE_TYPE_RAW = 'raw';
-
     public const SUPPORTED_TYPES = [
-        self::RESOURCE_TYPE_ALL,
-        self::RESOURCE_TYPE_IMAGE,
-        self::RESOURCE_TYPE_VIDEO,
-        self::RESOURCE_TYPE_RAW,
+        RemoteResource::TYPE_IMAGE,
+        RemoteResource::TYPE_AUDIO,
+        RemoteResource::TYPE_VIDEO,
+        RemoteResource::TYPE_DOCUMENT,
+        RemoteResource::TYPE_OTHER,
     ];
 
-    private string $id;
-
-    private string $name;
-
-    private string $resourceType;
-
-    private ?string $folder;
-
-    private ?string $parentId;
-
     private function __construct(
-        string $id,
-        string $name,
-        string $resourceType,
-        ?string $folder = null,
-        ?string $parentId = null
+        private string $id,
+        private ?string $name = null,
     ) {
-        $this->id = $id;
-        $this->name = $name;
-        $this->resourceType = $resourceType;
-        $this->folder = $folder;
-        $this->parentId = $parentId;
+        $this->validateId($id);
     }
 
     public static function createFromId(string $id): self
     {
-        $idParts = explode('|', $id);
-        $resourceType = array_shift($idParts);
-
-        if (!in_array($resourceType, self::SUPPORTED_TYPES, true)) {
-            throw new InvalidArgumentException('Provided ID ' . $id . ' is invalid');
-        }
-
-        $name = $resourceType;
-        $folder = null;
-        $parentId = null;
-
-        if (count($idParts) > 0) {
-            $folder = implode('/', $idParts);
-            $name = array_pop($idParts);
-
-            $parentId = count($idParts) > 0
-                ? $resourceType . '|' . implode('|', $idParts)
-                : $resourceType;
-        }
-
-        return new self($id, $name, $resourceType, $folder, $parentId);
+        return new self($id);
     }
 
-    public static function createAsSection(string $resourceType, ?string $sectionName = null): self
+    public static function createFromFolder(Folder $folder, string $type = self::RESOURCE_TYPE_ALL): self
     {
-        if (!in_array($resourceType, self::SUPPORTED_TYPES, true)) {
-            throw new InvalidArgumentException('Provided resource type ' . $resourceType . ' is invalid');
-        }
+        $folders = explode('/', $folder->getPath());
+        $id = $type . '||' . implode('|', $folders);
 
-        return new self(
-            $resourceType,
-            $sectionName ?? $resourceType,
-            $resourceType,
-        );
+        return new self($id, $folder->getName());
     }
 
-    public static function createFromFolder(string $folderPath, string $folderName, string $resourceType = self::RESOURCE_TYPE_ALL): self
+    public static function createAsSection(string $type, ?string $sectionName = null): self
     {
-        $folders = explode('/', $folderPath);
-        $folder = implode('/', $folders);
-
-        $id = $resourceType . '|' . implode('|', $folders);
-        $parentId = $resourceType;
-
-        if (count($folders) > 1) {
-            $parentId .= '|' . implode('|', array_slice($folders, 0, -1));
-        }
-
-        return new self($id, $folderName, $resourceType, $folder, $parentId);
+        return new self($type, $sectionName);
     }
 
     public function getLocationId(): string
@@ -116,21 +61,63 @@ final class Location implements LocationInterface
 
     public function getName(): string
     {
-        return $this->name;
+        if ($this->name !== null) {
+            return $this->name;
+        }
+
+        $idParts = explode('||', $this->id);
+
+        if (count($idParts) === 1) {
+            return $this->id;
+        }
+
+        array_shift($idParts);
+        $folderPath = array_shift($idParts);
+        $pathArray = explode('|', $folderPath ?? '|');
+
+        return array_pop($pathArray);
     }
 
     public function getParentId(): ?string
     {
-        return $this->parentId;
+        $folder = $this->getFolder();
+        if (!$folder instanceof Folder) {
+            return null;
+        }
+
+        $parent = $folder->getParent();
+        if (!$parent instanceof Folder) {
+            return $this->getType();
+        }
+
+        return self::createFromFolder($parent, $this->getType())->getLocationId();
     }
 
-    public function getFolder(): ?string
+    public function getFolder(): ?Folder
     {
-        return $this->folder;
+        $idParts = explode('||', $this->id);
+
+        if (count($idParts) <= 1) {
+            return null;
+        }
+
+        return Folder::fromPath(str_replace('|', '/', $idParts[1]));
     }
 
-    public function getResourceType(): string
+    public function getType(): string
     {
-        return $this->resourceType;
+        $idParts = explode('||', $this->id);
+
+        return array_shift($idParts);
+    }
+
+    private function validateId(string $id): void
+    {
+        $idParts = explode('||', $id);
+        $type = array_shift($idParts);
+
+        if ($type !== self::RESOURCE_TYPE_ALL && !in_array($type, self::SUPPORTED_TYPES, true)) {
+            throw new InvalidArgumentException('Provided ID ' . $id . ' is invalid');
+        }
     }
 }

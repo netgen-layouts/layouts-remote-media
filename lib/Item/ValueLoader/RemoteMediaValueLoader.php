@@ -4,36 +4,65 @@ declare(strict_types=1);
 
 namespace Netgen\Layouts\RemoteMedia\Item\ValueLoader;
 
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityRepository;
 use Netgen\Layouts\Item\ValueLoaderInterface;
+use Netgen\Layouts\RemoteMedia\API\Values\RemoteMediaItem;
 use Netgen\Layouts\RemoteMedia\Core\RemoteMedia\ResourceQuery;
-use Netgen\RemoteMedia\Core\RemoteMediaProvider;
+use Netgen\RemoteMedia\API\ProviderInterface;
+use Netgen\RemoteMedia\API\Values\RemoteResource;
+use Netgen\RemoteMedia\API\Values\RemoteResourceLocation;
 use Netgen\RemoteMedia\Exception\RemoteResourceNotFoundException;
 
 final class RemoteMediaValueLoader implements ValueLoaderInterface
 {
-    private RemoteMediaProvider $provider;
+    /** @var \Doctrine\ORM\EntityRepository<\Netgen\Layouts\RemoteMedia\API\Values\RemoteMediaItem> */
+    private EntityRepository $remoteMediaItemRepository;
 
-    public function __construct(RemoteMediaProvider $provider)
-    {
-        $this->provider = $provider;
+    public function __construct(
+        private ProviderInterface $provider,
+        private EntityManagerInterface $entityManager,
+    ) {
+        $this->remoteMediaItemRepository = $entityManager->getRepository(RemoteMediaItem::class);
     }
 
     public function load($id): ?object
     {
-        $query = ResourceQuery::createFromString((string) $id);
+        $query = ResourceQuery::createFromValue((string) $id);
 
-        try {
-            return $this->provider->getRemoteResource(
-                $query->getResourceId(),
-                $query->getResourceType(),
-            );
-        } catch (RemoteResourceNotFoundException $e) {
-            return null;
+        $remoteMediaItem = $this->remoteMediaItemRepository->findOneBy(['value' => $query->getValue()]);
+
+        if (!$remoteMediaItem instanceof RemoteMediaItem) {
+            try {
+                $remoteResource = $this->resolveRemoteResource($query);
+                $remoteResourceLocation = new RemoteResourceLocation($remoteResource, 'netgen_layouts_value');
+
+                $this->provider->store($remoteResource);
+                $remoteResourceLocation = $this->provider->storeLocation($remoteResourceLocation);
+            } catch (RemoteResourceNotFoundException) {
+                return null;
+            }
+
+            $remoteMediaItem = new RemoteMediaItem($query->getValue(), $remoteResourceLocation);
+
+            $this->entityManager->persist($remoteMediaItem);
+            $this->entityManager->flush();
         }
+
+        return $remoteMediaItem->getRemoteResourceLocation();
     }
 
     public function loadByRemoteId($remoteId): ?object
     {
         return $this->load($remoteId);
+    }
+
+    private function resolveRemoteResource(ResourceQuery $query): RemoteResource
+    {
+        try {
+            return $this->provider->loadByRemoteId($query->getRemoteId());
+        } catch (RemoteResourceNotFoundException) {
+            return $this->provider->loadFromRemote($query->getRemoteId());
+        }
     }
 }

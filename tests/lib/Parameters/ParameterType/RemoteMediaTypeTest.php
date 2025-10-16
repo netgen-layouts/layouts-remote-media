@@ -8,33 +8,33 @@ use Netgen\Layouts\Parameters\ParameterDefinition;
 use Netgen\Layouts\RemoteMedia\Parameters\ParameterType\RemoteMediaType;
 use Netgen\Layouts\RemoteMedia\Tests\Validator\RemoteMediaValidatorFactory;
 use Netgen\Layouts\Tests\Parameters\ParameterType\ParameterTypeTestTrait;
+use Netgen\RemoteMedia\API\ProviderInterface;
 use Netgen\RemoteMedia\API\Values\RemoteResource;
-use Netgen\RemoteMedia\Core\RemoteMediaProvider;
 use Netgen\RemoteMedia\Exception\RemoteResourceNotFoundException;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\OptionsResolver\Exception\InvalidArgumentException;
 use Symfony\Component\Validator\Validation;
 
+#[CoversClass(RemoteMediaType::class)]
 final class RemoteMediaTypeTest extends TestCase
 {
     use ParameterTypeTestTrait;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject&\Netgen\RemoteMedia\Core\RemoteMediaProvider
+     * @var \PHPUnit\Framework\MockObject\MockObject&\Netgen\RemoteMedia\API\ProviderInterface
      */
     private MockObject $providerMock;
 
     protected function setUp(): void
     {
-        $this->providerMock = $this->createMock(RemoteMediaProvider::class);
+        $this->providerMock = $this->createMock(ProviderInterface::class);
 
         $this->type = new RemoteMediaType();
     }
 
-    /**
-     * @covers \Netgen\Layouts\RemoteMedia\Parameters\ParameterType\RemoteMediaType::getIdentifier
-     */
     public function testGetIdentifier(): void
     {
         self::assertSame('remote_media', $this->type::getIdentifier());
@@ -43,11 +43,8 @@ final class RemoteMediaTypeTest extends TestCase
     /**
      * @param mixed[] $options
      * @param mixed[] $resolvedOptions
-     *
-     * @covers \Netgen\Layouts\RemoteMedia\Parameters\ParameterType\RemoteMediaType::configureOptions
-     *
-     * @dataProvider validOptionsDataProvider
      */
+    #[DataProvider('validOptionsDataProvider')]
     public function testValidOptions(array $options, array $resolvedOptions): void
     {
         $parameter = $this->getParameterDefinition($options);
@@ -56,11 +53,8 @@ final class RemoteMediaTypeTest extends TestCase
 
     /**
      * @param mixed[] $options
-     *
-     * @covers \Netgen\Layouts\RemoteMedia\Parameters\ParameterType\RemoteMediaType::configureOptions
-     *
-     * @dataProvider invalidOptionsDataProvider
      */
+    #[DataProvider('invalidOptionsDataProvider')]
     public function testInvalidOptions(array $options): void
     {
         $this->expectException(InvalidArgumentException::class);
@@ -109,36 +103,39 @@ final class RemoteMediaTypeTest extends TestCase
         ];
     }
 
-    /**
-     * @covers \Netgen\Layouts\RemoteMedia\Parameters\ParameterType\RemoteMediaType::getValueConstraints
-     */
     public function testValidationValid(): void
     {
         $this->providerMock
             ->expects(self::once())
-            ->method('getRemoteResource')
-            ->with(self::identicalTo('folder/test_resource'), self::identicalTo('image'))
-            ->willReturn(RemoteResource::createFromParameters(['resourceId' => 'folder/test_resource']));
+            ->method('loadFromRemote')
+            ->with(self::identicalTo('upload|image|folder/test_resource'))
+            ->willReturn(new RemoteResource(
+                remoteId: 'upload|image|folder/test_resource',
+                type: RemoteResource::TYPE_IMAGE,
+                url: 'https://cloudinary.com/test/upload/folder/test_resource',
+                md5: '5d7a812a020b40e23411edbc83cb809f',
+            ));
 
         $parameter = $this->getParameterDefinition([], true);
         $validator = Validation::createValidatorBuilder()
             ->setConstraintValidatorFactory(new RemoteMediaValidatorFactory($this->providerMock))
             ->getValidator();
 
-        $errors = $validator->validate('image|folder|test_resource', $this->type->getConstraints($parameter, 'image|folder|test_resource'));
+        $errors = $validator->validate(
+            'upload||image||folder|test_resource',
+            $this->type->getConstraints($parameter, 'upload||image||folder|test_resource'),
+        );
+
         self::assertCount(0, $errors);
     }
 
-    /**
-     * @covers \Netgen\Layouts\RemoteMedia\Parameters\ParameterType\RemoteMediaType::getValueConstraints
-     */
     public function testValidationValidWithNonRequiredValue(): void
     {
         $this->providerMock
             ->expects(self::never())
-            ->method('getRemoteResource');
+            ->method('loadFromRemote');
 
-        $parameter = $this->getParameterDefinition([], false);
+        $parameter = $this->getParameterDefinition();
         $validator = Validation::createValidatorBuilder()
             ->setConstraintValidatorFactory(new RemoteMediaValidatorFactory($this->providerMock))
             ->getValidator();
@@ -147,34 +144,29 @@ final class RemoteMediaTypeTest extends TestCase
         self::assertCount(0, $errors);
     }
 
-    /**
-     * @covers \Netgen\Layouts\RemoteMedia\Parameters\ParameterType\RemoteMediaType::getValueConstraints
-     */
     public function testValidationInvalid(): void
     {
         $this->providerMock
             ->expects(self::once())
-            ->method('getRemoteResource')
-            ->with(self::identicalTo('folder/test_resource'), self::identicalTo('image'))
-            ->willThrowException(new RemoteResourceNotFoundException('folder/test_resource', 'image'));
+            ->method('loadFromRemote')
+            ->with(self::identicalTo('upload|image|folder/test_resource'))
+            ->willThrowException(new RemoteResourceNotFoundException('upload|image|folder/test_resource'));
 
         $parameter = $this->getParameterDefinition([], true);
         $validator = Validation::createValidatorBuilder()
             ->setConstraintValidatorFactory(new RemoteMediaValidatorFactory($this->providerMock))
             ->getValidator();
 
-        $errors = $validator->validate('image|folder|test_resource', $this->type->getConstraints($parameter, 'image|folder|test_resource'));
+        $errors = $validator->validate(
+            'upload||image||folder|test_resource',
+            $this->type->getConstraints($parameter, 'upload||image||folder|test_resource'),
+        );
+
         self::assertNotCount(0, $errors);
     }
 
-    /**
-     * @param mixed $value
-     *
-     * @covers \Netgen\Layouts\RemoteMedia\Parameters\ParameterType\RemoteMediaType::isValueEmpty
-     *
-     * @dataProvider emptyDataProvider
-     */
-    public function testIsValueEmpty($value, bool $isEmpty): void
+    #[DataProvider('emptyDataProvider')]
+    public function testIsValueEmpty(mixed $value, bool $isEmpty): void
     {
         self::assertSame($isEmpty, $this->type->isValueEmpty(new ParameterDefinition(), $value));
     }
@@ -186,7 +178,15 @@ final class RemoteMediaTypeTest extends TestCase
     {
         return [
             [null, true],
-            [RemoteResource::createFromParameters(['resourceId' => 'folder/test_resource']), false],
+            [
+                new RemoteResource(
+                    remoteId: 'upload|image|folder/test_resource',
+                    type: RemoteResource::TYPE_IMAGE,
+                    url: 'https://cloudinary.com/test/upload/folder/test_resource',
+                    md5: 'f1b602d42f9760d1c658f780f12109df',
+                ),
+                false,
+            ],
         ];
     }
 }

@@ -16,14 +16,14 @@ final class Resolution implements ColumnValueProviderInterface
             return null;
         }
 
-        if (($item->getRemoteMediaValue()->metaData['width'] ?? '') === '') {
+        if (($item->getRemoteResourceLocation()->getRemoteResource()->getMetadataProperty('width') ?? '') === '') {
             return '';
         }
 
-        if (($item->getRemoteMediaValue()->metaData['height'] ?? '') === '') {
+        if (($item->getRemoteResourceLocation()->getRemoteResource()->getMetadataProperty('height') ?? '') === '') {
             return '';
         }
 
-        return $item->getRemoteMediaValue()->metaData['width'] . 'x' . $item->getRemoteMediaValue()->metaData['height'];
+        return $item->getRemoteResourceLocation()->getRemoteResource()->getMetadataProperty('width') . 'x' . $item->getRemoteResourceLocation()->getRemoteResource()->getMetadataProperty('height');
     }
 }

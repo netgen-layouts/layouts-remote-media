@@ -18,10 +18,10 @@ final class Size implements ColumnValueProviderInterface
             return null;
         }
 
-        return $this->prettyBytes($item->getRemoteMediaValue()->size);
+        return $this->prettyBytes($item->getRemoteResourceLocation()->getRemoteResource()->getSize());
     }
 
-    private function prettyBytes(int $size, int $precision = 2): string
+    private function prettyBytes(int $size): string
     {
         $units = ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
         $step = 1024;
@@ -32,6 +32,6 @@ final class Size implements ColumnValueProviderInterface
             ++$unitIndex;
         }
 
-        return round($size, $precision) . ($units[$unitIndex] ?? '');
+        return round($size, 2) . ($units[$unitIndex] ?? '');
     }
 }

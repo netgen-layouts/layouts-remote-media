@@ -1,2 +1,13 @@
 includes:
     - vendor/phpstan/phpstan-strict-rules/rules.neon
+    - vendor/phpstan/phpstan-doctrine/extension.neon
+    - vendor/phpstan/phpstan-doctrine/rules.neon
+    - vendor/phpstan/phpstan-symfony/extension.neon
+    - vendor/phpstan/phpstan-symfony/rules.neon
+
+parameters:
+    ignoreErrors:
+        # Doctrine DBAL
+        - '#Cannot call method fetchAllAssociative\(\) on Doctrine\\DBAL\\Result\|int#'
+        - '#expects string\|null, Doctrine\\DBAL\\Query\\Expression\\CompositeExpression given#'
+        - '#Property Netgen\\Layouts\\RemoteMedia\\API\\Values\\RemoteMediaItem::\$id \(int\|null\) is never assigned int so it can be removed from the property type.#'
