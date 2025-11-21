@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Netgen\Layouts\RemoteMedia\Tests\ContentBrowser\Item\ColumnProvider\RemoteMedia;
 
-use Netgen\ContentBrowser\Item\ItemInterface;
+use Netgen\ContentBrowser\Tests\Stubs\Item;
 use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\ColumnProvider\RemoteMedia\Tags;
 use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Item as RemoteMediaItem;
 use Netgen\RemoteMedia\API\Values\RemoteResource;
@@ -53,8 +53,6 @@ final class TagsTest extends TestCase
 
     public function testGetValueWithWrongItem(): void
     {
-        $itemMock = $this->createMock(ItemInterface::class);
-
-        self::assertNull($this->tagsColumn->getValue($itemMock));
+        self::assertNull($this->tagsColumn->getValue(new Item(42)));
     }
 }

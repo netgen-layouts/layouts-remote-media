@@ -7,7 +7,7 @@ namespace Netgen\Layouts\RemoteMedia\Tests\ContentBrowser\Backend;
 use Netgen\ContentBrowser\Backend\SearchQuery;
 use Netgen\ContentBrowser\Config\Configuration;
 use Netgen\ContentBrowser\Exceptions\NotFoundException;
-use Netgen\ContentBrowser\Item\LocationInterface;
+use Netgen\ContentBrowser\Tests\Stubs\Location as LocationStub;
 use Netgen\Layouts\RemoteMedia\ContentBrowser\Backend\RemoteMediaBackend;
 use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Item;
 use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Location;
@@ -21,29 +21,16 @@ use Netgen\RemoteMedia\Exception\RemoteResourceNotFoundException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Translation\Translator;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[CoversClass(RemoteMediaBackend::class)]
 final class RemoteMediaBackendTest extends TestCase
 {
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject&\Netgen\RemoteMedia\API\ProviderInterface
-     */
-    private MockObject $providerMock;
+    private MockObject&ProviderInterface $providerMock;
 
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject&\Netgen\Layouts\RemoteMedia\Core\RemoteMedia\NextCursorResolverInterface
-     */
-    private MockObject $nextCursorResolverMock;
+    private MockObject&NextCursorResolverInterface $nextCursorResolverMock;
 
-    /**
-     * Mocked Translator class directly due to supporting Symfony versions from 3 to 5
-     * (TranslationInterface has been deprecated in v4 and replaced in v5 with TranslatorInterface
-     * from symfony/translation-contracts bundle).
-     *
-     * @var \PHPUnit\Framework\MockObject\MockObject&\Symfony\Component\Translation\Translator
-     */
-    private MockObject $translatorMock;
+    private MockObject&TranslatorInterface $translatorMock;
 
     private Configuration $config;
 
@@ -53,7 +40,7 @@ final class RemoteMediaBackendTest extends TestCase
     {
         $this->providerMock = $this->createMock(ProviderInterface::class);
         $this->nextCursorResolverMock = $this->createMock(NextCursorResolverInterface::class);
-        $this->translatorMock = $this->createMock(Translator::class);
+        $this->translatorMock = $this->createMock(TranslatorInterface::class);
         $this->config = new Configuration('remote_media', 'Remote media', []);
 
         $this->backend = new RemoteMediaBackend(
@@ -170,21 +157,21 @@ final class RemoteMediaBackendTest extends TestCase
     {
         $location = $this->backend->loadLocation('video||media|videos');
 
-        self::assertSame('video||media|videos', $location->getLocationId());
-        self::assertSame('videos', $location->getName());
-        self::assertSame('video||media', $location->getParentId());
+        self::assertSame('video||media|videos', $location->locationId);
+        self::assertSame('videos', $location->name);
+        self::assertSame('video||media', $location->parentId);
 
         $location = $this->backend->loadLocation('video||media');
 
-        self::assertSame('video||media', $location->getLocationId());
-        self::assertSame('media', $location->getName());
-        self::assertSame('video', $location->getParentId());
+        self::assertSame('video||media', $location->locationId);
+        self::assertSame('media', $location->name);
+        self::assertSame('video', $location->parentId);
 
         $location = $this->backend->loadLocation('video');
 
-        self::assertSame('video', $location->getLocationId());
-        self::assertSame('video', $location->getName());
-        self::assertNull($location->getParentId());
+        self::assertSame('video', $location->locationId);
+        self::assertSame('video', $location->name);
+        self::assertNull($location->parentId);
     }
 
     public function testLoadItem(): void
@@ -208,8 +195,8 @@ final class RemoteMediaBackendTest extends TestCase
         $item = $this->backend->loadItem($value);
 
         self::assertInstanceOf(Item::class, $item);
-        self::assertSame($value, $item->getValue());
-        self::assertSame('my_video.mp4', $item->getName());
+        self::assertSame($value, $item->value);
+        self::assertSame('my_video.mp4', $item->name);
     }
 
     public function testLoadItemNotFound(): void
@@ -275,9 +262,7 @@ final class RemoteMediaBackendTest extends TestCase
 
     public function testGetSubLocationsInvalidLocation(): void
     {
-        $locationMock = $this->createMock(LocationInterface::class);
-
-        self::assertSame([], $this->backend->getSubLocations($locationMock));
+        self::assertSame([], $this->backend->getSubLocations(new LocationStub(42)));
     }
 
     public function testGetSubLocationsCountRoot(): void
@@ -319,9 +304,7 @@ final class RemoteMediaBackendTest extends TestCase
 
     public function testGetSubLocationsCountInvalidLocation(): void
     {
-        $locationMock = $this->createMock(LocationInterface::class);
-
-        self::assertSame(0, $this->backend->getSubLocationsCount($locationMock));
+        self::assertSame(0, $this->backend->getSubLocationsCount(new LocationStub(42)));
     }
 
     public function testGetSubItems(): void
@@ -464,9 +447,7 @@ final class RemoteMediaBackendTest extends TestCase
 
     public function testGetSubItemsInvalidLocation(): void
     {
-        $locationMock = $this->createMock(LocationInterface::class);
-
-        self::assertSame([], $this->backend->getSubItems($locationMock));
+        self::assertSame([], $this->backend->getSubItems(new LocationStub(42)));
     }
 
     public function testGetSubItemsCountInSection(): void
@@ -548,9 +529,7 @@ final class RemoteMediaBackendTest extends TestCase
 
     public function testGetSubItemsCountInvalidLocation(): void
     {
-        $locationMock = $this->createMock(LocationInterface::class);
-
-        self::assertSame(0, $this->backend->getSubItemsCount($locationMock));
+        self::assertSame(0, $this->backend->getSubItemsCount(new LocationStub(42)));
     }
 
     public function testSearchItems(): void
@@ -584,8 +563,8 @@ final class RemoteMediaBackendTest extends TestCase
 
         $searchResult = $this->backend->searchItems($searchQuery);
 
-        self::assertCount(5, $searchResult->getResults());
-        self::assertContainsOnlyInstancesOf(Item::class, $searchResult->getResults());
+        self::assertCount(5, $searchResult->results);
+        self::assertContainsOnlyInstancesOf(Item::class, $searchResult->results);
     }
 
     public function testSearchItemsWithFilter(): void
@@ -622,8 +601,8 @@ final class RemoteMediaBackendTest extends TestCase
 
         $searchResult = $this->backend->searchItems($searchQuery);
 
-        self::assertCount(5, $searchResult->getResults());
-        self::assertContainsOnlyInstancesOf(Item::class, $searchResult->getResults());
+        self::assertCount(5, $searchResult->results);
+        self::assertContainsOnlyInstancesOf(Item::class, $searchResult->results);
     }
 
     public function testSearchItemsWithOffset(): void
@@ -631,8 +610,8 @@ final class RemoteMediaBackendTest extends TestCase
         $location = Location::createFromId('image');
 
         $searchQuery = new SearchQuery('test', $location);
-        $searchQuery->setLimit(5);
-        $searchQuery->setOffset(5);
+        $searchQuery->limit = 5;
+        $searchQuery->offset = 5;
 
         $nextCursor = 'k83hn24hs92ao98';
 
@@ -670,8 +649,8 @@ final class RemoteMediaBackendTest extends TestCase
 
         $searchResult = $this->backend->searchItems($searchQuery);
 
-        self::assertCount(5, $searchResult->getResults());
-        self::assertContainsOnlyInstancesOf(Item::class, $searchResult->getResults());
+        self::assertCount(5, $searchResult->results);
+        self::assertContainsOnlyInstancesOf(Item::class, $searchResult->results);
     }
 
     public function testSearchItemsWithNoResults(): void
@@ -704,7 +683,7 @@ final class RemoteMediaBackendTest extends TestCase
 
         $searchResult = $this->backend->searchItems($searchQuery);
 
-        self::assertCount(0, $searchResult->getResults());
+        self::assertCount(0, $searchResult->results);
     }
 
     public function testSearchItemsCount(): void
@@ -770,54 +749,6 @@ final class RemoteMediaBackendTest extends TestCase
             ->willReturn(12);
 
         self::assertSame(12, $this->backend->searchItemsCount($searchQuery));
-    }
-
-    public function testSearch(): void
-    {
-        $this->nextCursorResolverMock
-            ->expects(self::never())
-            ->method('resolve');
-
-        $query = new Query(
-            query: 'test',
-            types: ['image', 'audio', 'video', 'document', 'other'],
-            limit: 25,
-        );
-
-        $searchResult = $this->getSearchResult();
-
-        $this->providerMock
-            ->expects(self::once())
-            ->method('search')
-            ->with($query)
-            ->willReturn($searchResult);
-
-        $this->nextCursorResolverMock
-            ->expects(self::once())
-            ->method('save')
-            ->with($query, 25, 'test-cursor-123');
-
-        $items = $this->backend->search('test');
-
-        self::assertCount(5, $items);
-        self::assertContainsOnlyInstancesOf(Item::class, $items);
-    }
-
-    public function testSearchCount(): void
-    {
-        $query = new Query(
-            query: 'test',
-            types: ['image', 'audio', 'video', 'document', 'other'],
-            limit: 25,
-        );
-
-        $this->providerMock
-            ->expects(self::once())
-            ->method('searchCount')
-            ->with($query)
-            ->willReturn(15);
-
-        self::assertSame(15, $this->backend->searchCount('test'));
     }
 
     private function getSearchResult(): Result

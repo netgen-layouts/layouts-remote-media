@@ -23,10 +23,7 @@ final class RemoteMediaTypeTest extends TestCase
 {
     use ParameterTypeTestTrait;
 
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject&\Netgen\RemoteMedia\API\ProviderInterface
-     */
-    private MockObject $providerMock;
+    private MockObject&ProviderInterface $providerMock;
 
     protected function setUp(): void
     {

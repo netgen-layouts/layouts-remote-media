@@ -20,7 +20,7 @@ final class RemoteMediaValueUrlGeneratorTest extends TestCase
         $this->urlGenerator = new RemoteMediaValueUrlGenerator();
     }
 
-    public function testGenerate(): void
+    public function testGenerateDefaultUrl(): void
     {
         $resource = new RemoteResource(
             remoteId: 'upload|video|folder/test_resource',
@@ -31,6 +31,20 @@ final class RemoteMediaValueUrlGeneratorTest extends TestCase
 
         $location = new RemoteResourceLocation($resource);
 
-        self::assertSame('https://cloudinary.com/test/upload/video/folder/test_resource', $this->urlGenerator->generate($location));
+        self::assertSame('https://cloudinary.com/test/upload/video/folder/test_resource', $this->urlGenerator->generateDefaultUrl($location));
+    }
+
+    public function testGenerateAdminUrl(): void
+    {
+        $resource = new RemoteResource(
+            remoteId: 'upload|video|folder/test_resource',
+            type: RemoteResource::TYPE_VIDEO,
+            url: 'https://cloudinary.com/test/upload/video/folder/test_resource',
+            md5: '25bd63baf9c2509af5c2d33a65da98ce',
+        );
+
+        $location = new RemoteResourceLocation($resource);
+
+        self::assertSame('https://cloudinary.com/test/upload/video/folder/test_resource', $this->urlGenerator->generateAdminUrl($location));
     }
 }

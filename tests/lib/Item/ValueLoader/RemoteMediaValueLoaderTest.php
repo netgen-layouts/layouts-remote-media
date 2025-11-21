@@ -20,11 +20,14 @@ use PHPUnit\Framework\TestCase;
 #[CoversClass(RemoteMediaValueLoader::class)]
 final class RemoteMediaValueLoaderTest extends TestCase
 {
-    private MockObject $providerMock;
+    private MockObject&ProviderInterface $providerMock;
 
-    private MockObject $entityManagerMock;
+    private MockObject&EntityManagerInterface $entityManagerMock;
 
-    private MockObject $remoteMediaItemRepositoryMock;
+    /**
+     * @var \PHPUnit\Framework\MockObject\MockObject&\Doctrine\ORM\EntityRepository<\Netgen\Layouts\RemoteMedia\API\Values\RemoteMediaItem>
+     */
+    private MockObject&EntityRepository $remoteMediaItemRepositoryMock;
 
     private RemoteMediaValueLoader $valueLoader;
 

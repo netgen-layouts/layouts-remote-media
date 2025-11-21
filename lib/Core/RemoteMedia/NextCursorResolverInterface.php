@@ -8,9 +8,9 @@ use Netgen\RemoteMedia\API\Search\Query;
 
 interface NextCursorResolverInterface
 {
-    public const PROJECT_KEY = 'layoutsremotemedia';
-    public const PROVIDER_KEY = 'cloudinary';
-    public const NEXT_CURSOR = 'nextcursor';
+    final public const string PROJECT_KEY = 'layoutsremotemedia';
+    final public const string PROVIDER_KEY = 'cloudinary';
+    final public const string NEXT_CURSOR = 'nextcursor';
 
     public function resolve(Query $query, int $offset): string;
 

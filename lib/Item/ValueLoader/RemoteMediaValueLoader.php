@@ -26,7 +26,7 @@ final class RemoteMediaValueLoader implements ValueLoaderInterface
         $this->remoteMediaItemRepository = $entityManager->getRepository(RemoteMediaItem::class);
     }
 
-    public function load($id): ?object
+    public function load(int|string $id): ?object
     {
         $query = ResourceQuery::createFromValue((string) $id);
 
@@ -52,7 +52,7 @@ final class RemoteMediaValueLoader implements ValueLoaderInterface
         return $remoteMediaItem->getRemoteResourceLocation();
     }
 
-    public function loadByRemoteId($remoteId): ?object
+    public function loadByRemoteId(int|string $remoteId): ?object
     {
         return $this->load($remoteId);
     }

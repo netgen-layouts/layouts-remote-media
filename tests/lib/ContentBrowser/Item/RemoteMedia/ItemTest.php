@@ -38,44 +38,34 @@ final class ItemTest extends TestCase
 
     public function testGetValue(): void
     {
-        self::assertSame('upload||image||folder|test_resource', $this->item->getValue());
+        self::assertSame('upload||image||folder|test_resource', $this->item->value);
     }
 
     public function testGetName(): void
     {
-        self::assertSame('test_resource', $this->item->getName());
-    }
-
-    public function testIsVisible(): void
-    {
-        self::assertTrue($this->item->isVisible());
-    }
-
-    public function testIsSelectable(): void
-    {
-        self::assertTrue($this->item->isSelectable());
+        self::assertSame('test_resource', $this->item->name);
     }
 
     public function testGetType(): void
     {
-        self::assertSame('image', $this->item->getType());
+        self::assertSame('image', $this->item->type);
     }
 
     public function testGetRemoteResource(): void
     {
         self::assertSame(
             $this->location->getRemoteResource()->getRemoteId(),
-            $this->item->getRemoteResourceLocation()->getRemoteResource()->getRemoteId(),
+            $this->item->remoteResourceLocation->getRemoteResource()->getRemoteId(),
         );
 
         self::assertSame(
             $this->location->getRemoteResource()->getType(),
-            $this->item->getRemoteResourceLocation()->getRemoteResource()->getType(),
+            $this->item->remoteResourceLocation->getRemoteResource()->getType(),
         );
 
         self::assertSame(
             $this->location->getRemoteResource()->getUrl(),
-            $this->item->getRemoteResourceLocation()->getRemoteResource()->getUrl(),
+            $this->item->remoteResourceLocation->getRemoteResource()->getUrl(),
         );
 
         $folder = $this->location->getRemoteResource()->getFolder();
@@ -84,12 +74,12 @@ final class ItemTest extends TestCase
 
         self::assertInstanceOf(
             Folder::class,
-            $this->item->getRemoteResourceLocation()->getRemoteResource()->getFolder(),
+            $this->item->remoteResourceLocation->getRemoteResource()->getFolder(),
         );
 
         self::assertSame(
             $folder->getPath(),
-            $this->item->getRemoteResourceLocation()->getRemoteResource()->getFolder()->getPath(),
+            $this->item->remoteResourceLocation->getRemoteResource()->getFolder()->getPath(),
         );
     }
 }

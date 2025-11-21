@@ -24,10 +24,7 @@ use Psr\Log\NullLogger;
 #[CoversClass(RemoteMediaHandler::class)]
 final class RemoteMediaHandlerTest extends TestCase
 {
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject&\Netgen\Layouts\Item\ValueLoaderInterface
-     */
-    private MockObject $valueLoaderMock;
+    private MockObject&ValueLoaderInterface $valueLoaderMock;
 
     /**
      * @var string[]

@@ -11,12 +11,9 @@ use Twig\Extension\AbstractExtension;
 
 final class RemoteMediaRuntime extends AbstractExtension
 {
-    protected ProviderInterface $provider;
-
-    public function __construct(ProviderInterface $provider)
-    {
-        $this->provider = $provider;
-    }
+    public function __construct(
+        private ProviderInterface $provider,
+    ) {}
 
     public function getBlockVariation(RemoteResourceLocation $remoteResourceLocation, string $variation): RemoteResourceVariation
     {

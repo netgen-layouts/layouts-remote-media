@@ -11,37 +11,27 @@ use function str_replace;
 
 final class Item implements ItemInterface
 {
+    public string $value {
+        get => str_replace(['|', '/'], ['||', '|'], $this->remoteResourceLocation->getRemoteResource()->getRemoteId());
+    }
+
+    public string $name {
+        get => $this->remoteResourceLocation->getRemoteResource()->getName() ?? 'Unknown';
+    }
+
+    public true $isVisible {
+        get => true;
+    }
+
+    public true $isSelectable {
+        get => true;
+    }
+
+    public string $type {
+        get => $this->remoteResourceLocation->getRemoteResource()->getType();
+    }
+
     public function __construct(
-        private RemoteResourceLocation $location,
+        private(set) RemoteResourceLocation $remoteResourceLocation,
     ) {}
-
-    public function getValue(): string
-    {
-        return str_replace(['|', '/'], ['||', '|'], $this->location->getRemoteResource()->getRemoteId());
-    }
-
-    public function getName(): string
-    {
-        return $this->location->getRemoteResource()->getName() ?? 'Unknown';
-    }
-
-    public function isVisible(): bool
-    {
-        return true;
-    }
-
-    public function isSelectable(): bool
-    {
-        return true;
-    }
-
-    public function getType(): string
-    {
-        return $this->location->getRemoteResource()->getType();
-    }
-
-    public function getRemoteResourceLocation(): RemoteResourceLocation
-    {
-        return $this->location;
-    }
 }
