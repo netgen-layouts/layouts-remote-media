@@ -16,12 +16,12 @@ final class Type implements ColumnValueProviderInterface
             return null;
         }
 
-        $value = $item->getRemoteResourceLocation()->getRemoteResource()->getType();
+        $value = $item->remoteResourceLocation->getRemoteResource()->getType();
 
-        $format = $item->getRemoteResourceLocation()->getRemoteResource()->getMetadataProperty('format') ?? '';
+        $format = $item->remoteResourceLocation->getRemoteResource()->getMetadataProperty('format') ?? '';
 
         if ($format !== '') {
-            $value .= ' / ' . $item->getRemoteResourceLocation()->getRemoteResource()->getMetadataProperty('format');
+            $value .= ' / ' . $item->remoteResourceLocation->getRemoteResource()->getMetadataProperty('format');
         }
 
         return $value;

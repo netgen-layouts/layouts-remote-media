@@ -19,7 +19,7 @@ use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 #[CoversClass(RemoteMediaValidator::class)]
 final class RemoteMediaValidatorTest extends ValidatorTestCase
 {
-    private MockObject $provider;
+    private MockObject&ProviderInterface $provider;
 
     protected function setUp(): void
     {

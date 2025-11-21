@@ -19,13 +19,13 @@ use function sprintf;
 #[CoversClass(NextCursor::class)]
 final class NextCursorTest extends TestCase
 {
-    private const CACHE_TTL = 3600;
+    private const int CACHE_TTL = 3600;
 
-    private const TEST_CACHE_KEY = 'layoutsremotemedia-cloudinary-nextcursor-test __ ble __ __ a _test$|15||image|test_folder||some tag||||created_at=desc-30';
+    private const string TEST_CACHE_KEY = 'layoutsremotemedia-cloudinary-nextcursor-test __ ble __ __ a _test$|15||image|test_folder||some tag||||created_at=desc-30';
 
-    private const TEST_CURSOR = 'k84jh71osdf355asder';
+    private const string TEST_CURSOR = 'k84jh71osdf355asder';
 
-    private MockObject $cache;
+    private MockObject&CacheItemPoolInterface $cache;
 
     private NextCursor $resolver;
 

@@ -12,10 +12,6 @@ final class NetgenLayoutsRemoteMediaBundle extends Bundle
 {
     public function build(ContainerBuilder $container): void
     {
-        parent::build($container);
-
-        $container->addCompilerPass(
-            new CachePoolPass(),
-        );
+        $container->addCompilerPass(new CachePoolPass());
     }
 }

@@ -16,7 +16,7 @@ use Netgen\RemoteMedia\Core\Resolver\Variation as VariationResolver;
 
 final class RemoteMediaHandler extends BlockDefinitionHandler
 {
-    private const LAYOUTS_BLOCK_VARIATIONS = 'netgen_layouts_block';
+    private const string LAYOUTS_BLOCK_VARIATIONS = 'netgen_layouts_block';
 
     /**
      * @param string[] $allowedResourceTypes

@@ -19,10 +19,10 @@ final class Tags implements ColumnValueProviderInterface
             return null;
         }
 
-        if (count($item->getRemoteResourceLocation()->getRemoteResource()->getTags()) === 0) {
+        if (count($item->remoteResourceLocation->getRemoteResource()->getTags()) === 0) {
             return '';
         }
 
-        return implode(', ', $item->getRemoteResourceLocation()->getRemoteResource()->getTags());
+        return implode(', ', $item->remoteResourceLocation->getRemoteResource()->getTags());
     }
 }

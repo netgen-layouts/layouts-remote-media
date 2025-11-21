@@ -28,51 +28,51 @@ final class LocationTest extends TestCase
 
     public function testGetLocationId(): void
     {
-        self::assertSame('all', $this->sectionLocation->getLocationId());
-        self::assertSame('image||some|folder|path', $this->folderLocation->getLocationId());
-        self::assertSame('video||some|folder|path', $this->location->getLocationId());
+        self::assertSame('all', $this->sectionLocation->locationId);
+        self::assertSame('image||some|folder|path', $this->folderLocation->locationId);
+        self::assertSame('video||some|folder|path', $this->location->locationId);
     }
 
     public function testGetName(): void
     {
-        self::assertSame('All items', $this->sectionLocation->getName());
-        self::assertSame('path', $this->folderLocation->getName());
-        self::assertSame('path', $this->location->getName());
+        self::assertSame('All items', $this->sectionLocation->name);
+        self::assertSame('path', $this->folderLocation->name);
+        self::assertSame('path', $this->location->name);
     }
 
     public function testGetNameWithSectionWithoutName(): void
     {
-        self::assertSame('image', Location::createAsSection('image')->getName());
+        self::assertSame('image', Location::createAsSection('image')->name);
     }
 
     public function testGetParentId(): void
     {
-        self::assertNull($this->sectionLocation->getParentId());
-        self::assertSame('image||some|folder', $this->folderLocation->getParentId());
-        self::assertSame('video||some|folder', $this->location->getParentId());
+        self::assertNull($this->sectionLocation->parentId);
+        self::assertSame('image||some|folder', $this->folderLocation->parentId);
+        self::assertSame('video||some|folder', $this->location->parentId);
     }
 
     public function testGetParentIdWithSingleFolder(): void
     {
-        self::assertSame('image', Location::createFromFolder(Folder::fromPath('some'), 'image')->getParentId());
+        self::assertSame('image', Location::createFromFolder(Folder::fromPath('some'), 'image')->parentId);
     }
 
     public function testGetFolder(): void
     {
-        self::assertNull($this->sectionLocation->getFolder());
+        self::assertNull($this->sectionLocation->folder);
 
-        self::assertInstanceOf(Folder::class, $this->folderLocation->getFolder());
-        self::assertSame('some/folder/path', $this->folderLocation->getFolder()->getPath());
+        self::assertInstanceOf(Folder::class, $this->folderLocation->folder);
+        self::assertSame('some/folder/path', $this->folderLocation->folder->getPath());
 
-        self::assertInstanceOf(Folder::class, $this->location->getFolder());
-        self::assertSame('some/folder/path', $this->location->getFolder()->getPath());
+        self::assertInstanceOf(Folder::class, $this->location->folder);
+        self::assertSame('some/folder/path', $this->location->folder->getPath());
     }
 
     public function testGetType(): void
     {
-        self::assertSame('all', $this->sectionLocation->getType());
-        self::assertSame('image', $this->folderLocation->getType());
-        self::assertSame('video', $this->location->getType());
+        self::assertSame('all', $this->sectionLocation->type);
+        self::assertSame('image', $this->folderLocation->type);
+        self::assertSame('video', $this->location->type);
     }
 
     public function testCreateAsSectionWithFolder(): void
@@ -114,9 +114,9 @@ final class LocationTest extends TestCase
     {
         $location = Location::createFromFolder(Folder::fromPath('test/subtest'));
 
-        self::assertSame(Location::RESOURCE_TYPE_ALL, $location->getType());
-        self::assertInstanceOf(Folder::class, $location->getFolder());
-        self::assertSame('test/subtest', $location->getFolder()->getPath());
-        self::assertSame('all||test', $location->getParentId());
+        self::assertSame(Location::RESOURCE_TYPE_ALL, $location->type);
+        self::assertInstanceOf(Folder::class, $location->folder);
+        self::assertSame('test/subtest', $location->folder->getPath());
+        self::assertSame('all||test', $location->parentId);
     }
 }

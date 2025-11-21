@@ -25,22 +25,19 @@ use const PHP_EOL;
 
 final class MigrateDataV1ToV2Command extends Command
 {
-    private const REMOTE_MEDIA_BLOCK_DEFINITION = 'remote_media';
+    private const string REMOTE_MEDIA_BLOCK_DEFINITION = 'remote_media';
 
-    private const REMOTE_MEDIA_ITEM_DEFINITION = 'remote_media';
+    private const string REMOTE_MEDIA_ITEM_DEFINITION = 'remote_media';
 
-    private const REMOTE_MEDIA_BLOCK_VALUE_PARAMETER_NAME = 'remote_media';
+    private const string REMOTE_MEDIA_BLOCK_VALUE_PARAMETER_NAME = 'remote_media';
 
-    private const REMOTE_MEDIA_LINK_PREFIX = 'remote-media';
-
-    protected Connection $connection;
+    private const string REMOTE_MEDIA_LINK_PREFIX = 'remote-media';
 
     private OutputInterface $output;
 
-    public function __construct(Connection $connection)
-    {
-        $this->connection = $connection;
-
+    public function __construct(
+        private Connection $connection,
+    ) {
         parent::__construct();
     }
 
@@ -48,7 +45,7 @@ final class MigrateDataV1ToV2Command extends Command
     {
         $this
             ->setName('netgen-layouts:remote-media:migrate-v1-to-v2')
-            ->setHidden(true)
+            ->setHidden()
             ->setDescription('This command will migrate all the existing blocks and items from v1 to v2');
     }
 
@@ -63,7 +60,7 @@ final class MigrateDataV1ToV2Command extends Command
         $this->processItems();
         $this->processBlockTranslationsWithLink();
 
-        return 0;
+        return Command::SUCCESS;
     }
 
     private function processBlockTranslations(): void
@@ -135,7 +132,7 @@ final class MigrateDataV1ToV2Command extends Command
             )
             ->setParameter('definition_identifier', self::REMOTE_MEDIA_BLOCK_DEFINITION, Types::STRING);
 
-        return $query->execute()->fetchAllAssociative();
+        return $query->fetchAllAssociative();
     }
 
     /**
@@ -151,7 +148,7 @@ final class MigrateDataV1ToV2Command extends Command
             )
             ->setParameter('value_type', self::REMOTE_MEDIA_ITEM_DEFINITION, Types::STRING);
 
-        return $query->execute()->fetchAllAssociative();
+        return $query->fetchAllAssociative();
     }
 
     /**
@@ -171,7 +168,7 @@ final class MigrateDataV1ToV2Command extends Command
                 Types::STRING,
             );
 
-        return $query->execute()->fetchAllAssociative();
+        return $query->fetchAllAssociative();
     }
 
     private function convertValue(string $value): string
@@ -245,7 +242,7 @@ final class MigrateDataV1ToV2Command extends Command
             ->setParameter('status', $blockTranslation['status'], Types::STRING)
             ->setParameter('parameters', $blockTranslation['parameters'], Types::STRING);
 
-        $query->execute();
+        $query->executeStatement();
     }
 
     /**
@@ -263,6 +260,6 @@ final class MigrateDataV1ToV2Command extends Command
             ->setParameter('id', $item['id'], Types::INTEGER)
             ->setParameter('value', $item['value'], Types::STRING);
 
-        $query->execute();
+        $query->executeStatement();
     }
 }

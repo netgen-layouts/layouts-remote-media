@@ -44,12 +44,12 @@ final class RemoteMediaBackend implements BackendInterface
         return $this->buildSections();
     }
 
-    public function loadLocation($id): LocationInterface
+    public function loadLocation(int|string $id): LocationInterface
     {
         return Location::createFromId((string) $id);
     }
 
-    public function loadItem($value): ItemInterface
+    public function loadItem(int|string $value): ItemInterface
     {
         $query = ResourceQuery::createFromValue((string) $value);
 
@@ -73,11 +73,11 @@ final class RemoteMediaBackend implements BackendInterface
             return [];
         }
 
-        $folders = $this->provider->listFolders($location->getFolder());
+        $folders = $this->provider->listFolders($location->folder);
 
         $locations = [];
         foreach ($folders as $folder) {
-            $locations[] = Location::createFromFolder($folder, $location->getType());
+            $locations[] = Location::createFromFolder($folder, $location->type);
         }
 
         return $locations;
@@ -89,7 +89,7 @@ final class RemoteMediaBackend implements BackendInterface
             return 0;
         }
 
-        return count($this->provider->listFolders($location->getFolder()));
+        return count($this->provider->listFolders($location->folder));
     }
 
     public function getSubItems(LocationInterface $location, int $offset = 0, int $limit = 25): iterable
@@ -98,13 +98,13 @@ final class RemoteMediaBackend implements BackendInterface
             return [];
         }
 
-        $types = $location->getType() !== Location::RESOURCE_TYPE_ALL ?
-             [$location->getType()]
+        $types = $location->type !== Location::RESOURCE_TYPE_ALL ?
+             [$location->type]
             : $this->getAllowedTypes();
 
         $query = new Query(
             types: $types,
-            folders: $location->getFolder() instanceof Folder ? [$location->getFolder()] : [],
+            folders: $location->folder instanceof Folder ? [$location->folder] : [],
             limit: $limit,
         );
 
@@ -134,13 +134,13 @@ final class RemoteMediaBackend implements BackendInterface
             return 0;
         }
 
-        $types = $location->getType() !== Location::RESOURCE_TYPE_ALL ?
-            [$location->getType()]
+        $types = $location->type !== Location::RESOURCE_TYPE_ALL ?
+            [$location->type]
             : $this->getAllowedTypes();
 
         $query = new Query(
             types: $types,
-            folders: $location->getFolder() instanceof Folder ? [$location->getFolder()] : [],
+            folders: $location->folder instanceof Folder ? [$location->folder] : [],
             limit: 0,
         );
 
@@ -151,28 +151,28 @@ final class RemoteMediaBackend implements BackendInterface
     {
         $types = $this->getAllowedTypes();
 
-        $location = $searchQuery->getLocation();
+        $location = $searchQuery->location;
         $folders = [];
 
         if ($location instanceof Location) {
-            $types = $location->getType() !== Location::RESOURCE_TYPE_ALL
-                ? [$location->getType()]
+            $types = $location->type !== Location::RESOURCE_TYPE_ALL
+                ? [$location->type]
                 : $this->getAllowedTypes();
 
-            $folders = $location->getFolder() instanceof Folder
-                ? [$location->getFolder()]
+            $folders = $location->folder instanceof Folder
+                ? [$location->folder]
                 : [];
         }
 
         $query = new Query(
-            query: $searchQuery->getSearchText(),
+            query: $searchQuery->searchText,
             types: $types,
             folders: $folders,
-            limit: $searchQuery->getLimit(),
+            limit: $searchQuery->limit,
         );
 
-        if ($searchQuery->getOffset() > 0) {
-            $nextCursor = $this->nextCursorResolver->resolve($query, $searchQuery->getOffset());
+        if ($searchQuery->offset > 0) {
+            $nextCursor = $this->nextCursorResolver->resolve($query, $searchQuery->offset);
 
             $query->setNextCursor($nextCursor);
         }
@@ -180,7 +180,7 @@ final class RemoteMediaBackend implements BackendInterface
         $result = $this->provider->search($query);
 
         if (is_string($result->getNextCursor())) {
-            $this->nextCursorResolver->save($query, $searchQuery->getOffset() + $searchQuery->getLimit(), $result->getNextCursor());
+            $this->nextCursorResolver->save($query, $searchQuery->offset + $searchQuery->limit, $result->getNextCursor());
         }
 
         $items = [];
@@ -195,41 +195,27 @@ final class RemoteMediaBackend implements BackendInterface
     {
         $types = $this->getAllowedTypes();
 
-        $location = $searchQuery->getLocation();
+        $location = $searchQuery->location;
         $folders = [];
 
         if ($location instanceof Location) {
-            $types = $location->getType() !== Location::RESOURCE_TYPE_ALL
-                ? [$location->getType()]
+            $types = $location->type !== Location::RESOURCE_TYPE_ALL
+                ? [$location->type]
                 : $this->getAllowedTypes();
 
-            $folders = $location->getFolder() instanceof Folder
-                ? [$location->getFolder()]
+            $folders = $location->folder instanceof Folder
+                ? [$location->folder]
                 : [];
         }
 
         $query = new Query(
-            query: $searchQuery->getSearchText(),
+            query: $searchQuery->searchText,
             types: $types,
             folders: $folders,
-            limit: $searchQuery->getLimit(),
+            limit: $searchQuery->limit,
         );
 
         return $this->provider->searchCount($query);
-    }
-
-    public function search(string $searchText, int $offset = 0, int $limit = 25): iterable
-    {
-        $searchQuery = new SearchQuery($searchText);
-        $searchQuery->setOffset($offset);
-        $searchQuery->setLimit($limit);
-
-        return $this->searchItems($searchQuery)->getResults();
-    }
-
-    public function searchCount(string $searchText): int
-    {
-        return $this->searchItemsCount(new SearchQuery($searchText));
     }
 
     /**

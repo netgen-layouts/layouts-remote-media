@@ -107,22 +107,6 @@ final class RemoteMediaValueConverterTest extends TestCase
         );
     }
 
-    public function testGetIsVisible(): void
-    {
-        self::assertTrue(
-            $this->valueConverter->getIsVisible(
-                new RemoteResourceLocation(
-                    new RemoteResource(
-                        remoteId: 'upload|image|folder/test_resource',
-                        type: RemoteResource::TYPE_IMAGE,
-                        url: 'https://cloudinary.com/test/upload/folder/test_resource',
-                        md5: '88be2ccddf0d9841480b40c9ca599b37',
-                    ),
-                ),
-            ),
-        );
-    }
-
     public function testGetObject(): void
     {
         $object = new RemoteResourceLocation(

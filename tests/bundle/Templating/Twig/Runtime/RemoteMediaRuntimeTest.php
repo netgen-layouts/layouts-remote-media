@@ -17,10 +17,7 @@ use PHPUnit\Framework\TestCase;
 #[CoversClass(RemoteMediaRuntime::class)]
 final class RemoteMediaRuntimeTest extends TestCase
 {
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject&\Netgen\RemoteMedia\API\ProviderInterface
-     */
-    private MockObject $providerMock;
+    private MockObject&ProviderInterface $providerMock;
 
     private RemoteMediaRuntime $runtime;
 

@@ -20,9 +20,9 @@ use function str_replace;
 
 final class Location implements LocationInterface
 {
-    public const RESOURCE_TYPE_ALL = 'all';
+    public const string RESOURCE_TYPE_ALL = 'all';
 
-    public const SUPPORTED_TYPES = [
+    public const array SUPPORTED_TYPES = [
         RemoteResource::TYPE_IMAGE,
         RemoteResource::TYPE_AUDIO,
         RemoteResource::TYPE_VIDEO,
@@ -30,11 +30,67 @@ final class Location implements LocationInterface
         RemoteResource::TYPE_OTHER,
     ];
 
+    public string $name {
+        get {
+            if ($this->entryName !== null) {
+                return $this->entryName;
+            }
+
+            $idParts = explode('||', $this->locationId);
+
+            if (count($idParts) === 1) {
+                return $this->locationId;
+            }
+
+            array_shift($idParts);
+            $folderPath = array_shift($idParts);
+            $pathArray = explode('|', $folderPath ?? '|');
+
+            return array_pop($pathArray);
+        }
+    }
+
+    public ?string $parentId {
+        get {
+            $folder = $this->folder;
+            if (!$folder instanceof Folder) {
+                return null;
+            }
+
+            $parent = $folder->getParent();
+            if (!$parent instanceof Folder) {
+                return $this->type;
+            }
+
+            return self::createFromFolder($parent, $this->type)->locationId;
+        }
+    }
+
+    public ?Folder $folder {
+        get {
+            $idParts = explode('||', $this->locationId);
+
+            if (count($idParts) <= 1) {
+                return null;
+            }
+
+            return Folder::fromPath(str_replace('|', '/', $idParts[1]));
+        }
+    }
+
+    public string $type {
+        get {
+            $idParts = explode('||', $this->locationId);
+
+            return array_shift($idParts);
+        }
+    }
+
     private function __construct(
-        private string $id,
-        private ?string $name = null,
+        private(set) string $locationId,
+        private ?string $entryName = null,
     ) {
-        $this->validateId($id);
+        $this->validateId($this->locationId);
     }
 
     public static function createFromId(string $id): self
@@ -58,63 +114,6 @@ final class Location implements LocationInterface
                 : $type,
             $sectionName ?? $type,
         );
-    }
-
-    public function getLocationId(): string
-    {
-        return $this->id;
-    }
-
-    public function getName(): string
-    {
-        if ($this->name !== null) {
-            return $this->name;
-        }
-
-        $idParts = explode('||', $this->id);
-
-        if (count($idParts) === 1) {
-            return $this->id;
-        }
-
-        array_shift($idParts);
-        $folderPath = array_shift($idParts);
-        $pathArray = explode('|', $folderPath ?? '|');
-
-        return array_pop($pathArray);
-    }
-
-    public function getParentId(): ?string
-    {
-        $folder = $this->getFolder();
-        if (!$folder instanceof Folder) {
-            return null;
-        }
-
-        $parent = $folder->getParent();
-        if (!$parent instanceof Folder) {
-            return $this->getType();
-        }
-
-        return self::createFromFolder($parent, $this->getType())->getLocationId();
-    }
-
-    public function getFolder(): ?Folder
-    {
-        $idParts = explode('||', $this->id);
-
-        if (count($idParts) <= 1) {
-            return null;
-        }
-
-        return Folder::fromPath(str_replace('|', '/', $idParts[1]));
-    }
-
-    public function getType(): string
-    {
-        $idParts = explode('||', $this->id);
-
-        return array_shift($idParts);
     }
 
     private function validateId(string $id): void

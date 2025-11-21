@@ -42,7 +42,7 @@ final class RemoteMediaValueConverter implements ValueConverterInterface
         return array_pop($parts);
     }
 
-    public function getIsVisible(object $object): bool
+    public function getIsVisible(object $object): true
     {
         return true;
     }
