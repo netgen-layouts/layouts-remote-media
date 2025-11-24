@@ -7,6 +7,9 @@ namespace Netgen\Layouts\RemoteMedia\API\Values;
 use Netgen\RemoteMedia\API\Values\RemoteResourceLocation;
 use Netgen\RemoteMedia\API\Values\TimestampableTrait;
 
+/**
+ * @final
+ */
 class RemoteMediaItem
 {
     use TimestampableTrait;
