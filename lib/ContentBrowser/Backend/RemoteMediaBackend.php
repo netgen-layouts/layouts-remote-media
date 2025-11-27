@@ -27,6 +27,7 @@ use function count;
 use function explode;
 use function in_array;
 use function is_string;
+use function max;
 use function sprintf;
 
 final class RemoteMediaBackend implements BackendInterface
@@ -144,7 +145,7 @@ final class RemoteMediaBackend implements BackendInterface
             limit: 0,
         );
 
-        return $this->provider->searchCount($query);
+        return max(0, $this->provider->searchCount($query));
     }
 
     public function searchItems(SearchQuery $searchQuery): SearchResultInterface
@@ -215,7 +216,7 @@ final class RemoteMediaBackend implements BackendInterface
             limit: $searchQuery->limit,
         );
 
-        return $this->provider->searchCount($query);
+        return max(0, $this->provider->searchCount($query));
     }
 
     /**
