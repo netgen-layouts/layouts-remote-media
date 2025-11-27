@@ -57,11 +57,11 @@ final class RemoteMediaHandler extends BlockDefinitionHandler
     {
         $params['remote_resource_location'] = null;
 
-        if ($block->getParameter('remote_media')->isEmpty()) {
+        if ($block->getParameter('remote_media')->isEmpty) {
             return;
         }
 
-        $remoteMediaId = $block->getParameter('remote_media')->getValue();
+        $remoteMediaId = $block->getParameter('remote_media')->value;
         $params['remote_resource_location'] = $this->valueLoader->load($remoteMediaId);
     }
 
