@@ -11,12 +11,12 @@ use Netgen\Layouts\Item\ValueUrlGeneratorInterface;
  */
 final class RemoteMediaValueUrlGenerator implements ValueUrlGeneratorInterface
 {
-    public function generateDefaultUrl(object $object): ?string
+    public function generateDefaultUrl(object $object): string
     {
         return $object->getRemoteResource()->getUrl();
     }
 
-    public function generateAdminUrl(object $object): ?string
+    public function generateAdminUrl(object $object): string
     {
         return $object->getRemoteResource()->getUrl();
     }

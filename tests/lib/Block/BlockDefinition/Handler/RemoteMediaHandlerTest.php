@@ -9,6 +9,7 @@ use Netgen\Layouts\Block\DynamicParameters;
 use Netgen\Layouts\Item\ValueLoaderInterface;
 use Netgen\Layouts\Parameters\Parameter;
 use Netgen\Layouts\Parameters\ParameterBuilderInterface;
+use Netgen\Layouts\Parameters\ParameterList;
 use Netgen\Layouts\Parameters\ParameterType\ChoiceType;
 use Netgen\Layouts\Parameters\ParameterType\TextLineType;
 use Netgen\Layouts\RemoteMedia\Block\BlockDefinition\Handler\RemoteMediaHandler;
@@ -98,25 +99,35 @@ final class RemoteMediaHandlerTest extends TestCase
     {
         $params = new DynamicParameters();
 
-        $block = Block::fromArray([
-            'parameters' => [
-                'remote_media' => Parameter::fromArray([
-                    'name' => 'remote_media',
-                    'value' => 'image|folder|subfolder|image_name.jpg',
-                    'isEmpty' => false,
-                ]),
-                'variation' => Parameter::fromArray([
-                    'name' => 'variation',
-                    'value' => null,
-                    'isEmpty' => true,
-                ]),
-                'title' => Parameter::fromArray([
-                    'name' => 'title',
-                    'value' => 'Test title',
-                    'isEmpty' => false,
-                ]),
+        $block = Block::fromArray(
+            [
+                'parameters' => new ParameterList(
+                    [
+                        'remote_media' => Parameter::fromArray(
+                            [
+                                'name' => 'remote_media',
+                                'value' => 'image|folder|subfolder|image_name.jpg',
+                                'isEmpty' => false,
+                            ],
+                        ),
+                        'variation' => Parameter::fromArray(
+                            [
+                                'name' => 'variation',
+                                'value' => null,
+                                'isEmpty' => true,
+                            ],
+                        ),
+                        'title' => Parameter::fromArray(
+                            [
+                                'name' => 'title',
+                                'value' => 'Test title',
+                                'isEmpty' => false,
+                            ],
+                        ),
+                    ],
+                ),
             ],
-        ]);
+        );
 
         $value = new RemoteResource(
             remoteId: 'folder/subfolder/image_name.jpg',
@@ -141,25 +152,35 @@ final class RemoteMediaHandlerTest extends TestCase
     public function testGetDynamicSettingsEmpty(): void
     {
         $params = new DynamicParameters();
-        $block = Block::fromArray([
-            'parameters' => [
-                'remote_media' => Parameter::fromArray([
-                    'name' => 'remote_media',
-                    'value' => null,
-                    'isEmpty' => true,
-                ]),
-                'variation' => Parameter::fromArray([
-                    'name' => 'variation',
-                    'value' => null,
-                    'isEmpty' => true,
-                ]),
-                'title' => Parameter::fromArray([
-                    'name' => 'title',
-                    'value' => 'Test title',
-                    'isEmpty' => false,
-                ]),
+        $block = Block::fromArray(
+            [
+                'parameters' => new ParameterList(
+                    [
+                        'remote_media' => Parameter::fromArray(
+                            [
+                                'name' => 'remote_media',
+                                'value' => null,
+                                'isEmpty' => true,
+                            ],
+                        ),
+                        'variation' => Parameter::fromArray(
+                            [
+                                'name' => 'variation',
+                                'value' => null,
+                                'isEmpty' => true,
+                            ],
+                        ),
+                        'title' => Parameter::fromArray(
+                            [
+                                'name' => 'title',
+                                'value' => 'Test title',
+                                'isEmpty' => false,
+                            ],
+                        ),
+                    ],
+                ),
             ],
-        ]);
+        );
 
         $this->valueLoaderMock
             ->expects(self::never())

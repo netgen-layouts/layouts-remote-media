@@ -19,7 +19,7 @@ final class RemoteMediaMapper extends Mapper
     {
         return [
             'item_type' => 'remote_media',
-            'required' => $parameterDefinition->isRequired(),
+            'required' => $parameterDefinition->isRequired,
             'custom_params' => [
                 'allowed_types' => $parameterDefinition->hasOption('allowed_types')
                     ? $parameterDefinition->getOption('allowed_types')
