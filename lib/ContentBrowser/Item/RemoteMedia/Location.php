@@ -87,7 +87,7 @@ final class Location implements LocationInterface
     }
 
     private function __construct(
-        private(set) string $locationId,
+        public private(set) string $locationId,
         private ?string $entryName = null,
     ) {
         $this->validateId($this->locationId);

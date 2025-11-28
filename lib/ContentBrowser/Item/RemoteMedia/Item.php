@@ -32,6 +32,6 @@ final class Item implements ItemInterface
     }
 
     public function __construct(
-        private(set) RemoteResourceLocation $remoteResourceLocation,
+        public private(set) RemoteResourceLocation $remoteResourceLocation,
     ) {}
 }
