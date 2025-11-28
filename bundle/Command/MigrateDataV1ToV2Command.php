@@ -21,6 +21,7 @@ use function mb_strlen;
 use function mb_substr;
 use function sprintf;
 
+use const JSON_THROW_ON_ERROR;
 use const PHP_EOL;
 
 final class MigrateDataV1ToV2Command extends Command
@@ -186,13 +187,13 @@ final class MigrateDataV1ToV2Command extends Command
      */
     private function processBlockTranslation(array $blockTranslation): void
     {
-        $blockParameters = json_decode($blockTranslation['parameters'], true);
+        $blockParameters = json_decode($blockTranslation['parameters'], true, 512, JSON_THROW_ON_ERROR);
 
         $blockParameters[self::REMOTE_MEDIA_BLOCK_VALUE_PARAMETER_NAME] = $this->convertValue(
             $blockParameters[self::REMOTE_MEDIA_BLOCK_VALUE_PARAMETER_NAME],
         );
 
-        $blockTranslation['parameters'] = json_encode($blockParameters);
+        $blockTranslation['parameters'] = json_encode($blockParameters, JSON_THROW_ON_ERROR);
 
         $this->updateBlockTranslation($blockTranslation);
     }
@@ -212,13 +213,13 @@ final class MigrateDataV1ToV2Command extends Command
      */
     private function processLink(array $blockTranslationWithLink): void
     {
-        $blockParameters = json_decode($blockTranslationWithLink['parameters'], true);
+        $blockParameters = json_decode($blockTranslationWithLink['parameters'], true, 512, JSON_THROW_ON_ERROR);
         $value = $blockParameters['link']['link'];
         $linkValuePrefix = sprintf('%s://', self::REMOTE_MEDIA_LINK_PREFIX);
         $remoteMediaValue = mb_substr($value, mb_strlen($linkValuePrefix));
 
         $blockParameters['link']['link'] = sprintf('%s%s', $linkValuePrefix, $this->convertValue($remoteMediaValue));
-        $blockTranslationWithLink['parameters'] = json_encode($blockParameters);
+        $blockTranslationWithLink['parameters'] = json_encode($blockParameters, JSON_THROW_ON_ERROR);
 
         $this->updateBlockTranslation($blockTranslationWithLink);
     }
