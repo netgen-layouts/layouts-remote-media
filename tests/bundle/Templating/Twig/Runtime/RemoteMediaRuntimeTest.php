@@ -148,7 +148,7 @@ final class RemoteMediaRuntimeTest extends TestCase
         );
 
         $location = new RemoteResourceLocation($resource);
-        $tagString = '<img src="https://cloudinary.com/upload/some_variation_config/example">';
+        $tagString = '<img src="https://cloudinary.com/upload/some_variation_config/example" alt="Example">';
 
         $this->providerMock
             ->expects($this->once())
@@ -174,7 +174,7 @@ final class RemoteMediaRuntimeTest extends TestCase
         );
 
         $location = new RemoteResourceLocation($resource);
-        $tagString = '<img src="https://cloudinary.com/upload/some_variation_config/example">';
+        $tagString = '<img src="https://cloudinary.com/upload/some_variation_config/example" alt="Example">';
 
         $this->providerMock
             ->expects($this->once())
