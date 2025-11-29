@@ -32,7 +32,7 @@ final class RemoteMediaValueLoader implements ValueLoaderInterface
     {
         $query = ResourceQuery::createFromValue((string) $id);
 
-        $remoteMediaItem = $this->remoteMediaItemRepository->findOneBy(['value' => $query->getValue()]);
+        $remoteMediaItem = $this->remoteMediaItemRepository->findOneBy(['value' => $query->value]);
 
         if (!$remoteMediaItem instanceof RemoteMediaItem) {
             try {
@@ -45,7 +45,7 @@ final class RemoteMediaValueLoader implements ValueLoaderInterface
                 return null;
             }
 
-            $remoteMediaItem = new RemoteMediaItem($query->getValue(), $remoteResourceLocation);
+            $remoteMediaItem = new RemoteMediaItem($query->value, $remoteResourceLocation);
 
             $this->entityManager->persist($remoteMediaItem);
             $this->entityManager->flush();
@@ -62,9 +62,9 @@ final class RemoteMediaValueLoader implements ValueLoaderInterface
     private function resolveRemoteResource(ResourceQuery $query): RemoteResource
     {
         try {
-            return $this->provider->loadByRemoteId($query->getRemoteId());
+            return $this->provider->loadByRemoteId($query->remoteId);
         } catch (RemoteResourceNotFoundException) {
-            return $this->provider->loadFromRemote($query->getRemoteId());
+            return $this->provider->loadFromRemote($query->remoteId);
         }
     }
 }

@@ -11,8 +11,19 @@ use function str_replace;
 
 final class ResourceQuery
 {
+    public string $remoteId {
+        get {
+            $parts = array_map(
+                static fn ($part) => str_replace('|', '/', $part),
+                explode('||', $this->value),
+            );
+
+            return implode('|', $parts);
+        }
+    }
+
     private function __construct(
-        private string $value,
+        public private(set) string $value,
     ) {}
 
     public static function createFromValue(string $value): self
@@ -25,20 +36,5 @@ final class ResourceQuery
         $value = str_replace(['|', '/'], ['||', '|'], $remoteId);
 
         return new self($value);
-    }
-
-    public function getRemoteId(): string
-    {
-        $parts = array_map(
-            static fn ($part) => str_replace('|', '/', $part),
-            explode('||', $this->value),
-        );
-
-        return implode('|', $parts);
-    }
-
-    public function getValue(): string
-    {
-        return $this->value;
     }
 }

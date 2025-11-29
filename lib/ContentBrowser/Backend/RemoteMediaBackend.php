@@ -55,7 +55,7 @@ final class RemoteMediaBackend implements BackendInterface
         $query = ResourceQuery::createFromValue((string) $value);
 
         try {
-            $resource = $this->provider->loadFromRemote($query->getRemoteId());
+            $resource = $this->provider->loadFromRemote($query->remoteId);
         } catch (RemoteResourceNotFoundException) {
             throw new NotFoundException(
                 sprintf(

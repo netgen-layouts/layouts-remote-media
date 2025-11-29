@@ -37,11 +37,11 @@ final class RemoteMediaValidator extends ConstraintValidator
         $query = ResourceQuery::createFromValue($value);
 
         try {
-            $this->provider->loadFromRemote($query->getRemoteId());
+            $this->provider->loadFromRemote($query->remoteId);
         } catch (RemoteResourceNotFoundException) {
             $this->context
                 ->buildViolation($constraint->message)
-                ->setParameter('%remoteId%', $query->getRemoteId())
+                ->setParameter('%remoteId%', $query->remoteId)
                 ->addViolation();
         }
     }

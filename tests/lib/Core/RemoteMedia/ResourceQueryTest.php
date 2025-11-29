@@ -15,15 +15,15 @@ final class ResourceQueryTest extends TestCase
     {
         $resourceQuery = ResourceQuery::createFromValue('upload||image||folder|subfolder|resource.jpg');
 
-        self::assertSame('upload||image||folder|subfolder|resource.jpg', $resourceQuery->getValue());
-        self::assertSame('upload|image|folder/subfolder/resource.jpg', $resourceQuery->getRemoteId());
+        self::assertSame('upload||image||folder|subfolder|resource.jpg', $resourceQuery->value);
+        self::assertSame('upload|image|folder/subfolder/resource.jpg', $resourceQuery->remoteId);
     }
 
     public function testFromRemoteId(): void
     {
         $resourceQuery = ResourceQuery::createFromRemoteId('upload|image|folder/subfolder/resource.jpg');
 
-        self::assertSame('upload||image||folder|subfolder|resource.jpg', $resourceQuery->getValue());
-        self::assertSame('upload|image|folder/subfolder/resource.jpg', $resourceQuery->getRemoteId());
+        self::assertSame('upload||image||folder|subfolder|resource.jpg', $resourceQuery->value);
+        self::assertSame('upload|image|folder/subfolder/resource.jpg', $resourceQuery->remoteId);
     }
 }
