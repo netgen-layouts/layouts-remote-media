@@ -38,7 +38,7 @@ final class RemoteMediaValidatorTest extends ValidatorTestCase
     public function testValidateValid(): void
     {
         $this->provider
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('loadFromRemote')
             ->with(self::identicalTo('upload|image|folder/test_resource'))
             ->willReturn(new RemoteResource(
@@ -54,7 +54,7 @@ final class RemoteMediaValidatorTest extends ValidatorTestCase
     public function testValidateNull(): void
     {
         $this->provider
-            ->expects(self::never())
+            ->expects($this->never())
             ->method('loadFromRemote');
 
         $this->assertValid(true, null);
@@ -63,7 +63,7 @@ final class RemoteMediaValidatorTest extends ValidatorTestCase
     public function testValidateNonExisting(): void
     {
         $this->provider
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('loadFromRemote')
             ->with(self::identicalTo('upload|image|folder/test_resource2'))
             ->willThrowException(new RemoteResourceNotFoundException('upload|image|folder/test_resource2'));

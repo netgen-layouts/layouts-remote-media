@@ -103,7 +103,7 @@ final class RemoteMediaTypeTest extends TestCase
     public function testValidationValid(): void
     {
         $this->providerMock
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('loadFromRemote')
             ->with(self::identicalTo('upload|image|folder/test_resource'))
             ->willReturn(new RemoteResource(
@@ -129,7 +129,7 @@ final class RemoteMediaTypeTest extends TestCase
     public function testValidationValidWithNonRequiredValue(): void
     {
         $this->providerMock
-            ->expects(self::never())
+            ->expects($this->never())
             ->method('loadFromRemote');
 
         $parameter = $this->getParameterDefinition();
@@ -144,7 +144,7 @@ final class RemoteMediaTypeTest extends TestCase
     public function testValidationInvalid(): void
     {
         $this->providerMock
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('loadFromRemote')
             ->with(self::identicalTo('upload|image|folder/test_resource'))
             ->willThrowException(new RemoteResourceNotFoundException('upload|image|folder/test_resource'));

@@ -45,7 +45,7 @@ final class RemoteMediaRuntimeTest extends TestCase
         $location = new RemoteResourceLocation($resource);
 
         $this->providerMock
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('buildVariation')
             ->with($location, 'netgen_layouts_block', 'test_variation')
             ->willReturn($variation);
@@ -73,7 +73,7 @@ final class RemoteMediaRuntimeTest extends TestCase
         $location = new RemoteResourceLocation($resource);
 
         $this->providerMock
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('buildVariation')
             ->with($location, 'netgen_layouts_item', 'test_variation')
             ->willReturn($variation);
@@ -99,7 +99,7 @@ final class RemoteMediaRuntimeTest extends TestCase
         $tagString = '<video src="https://cloudinary.com/upload/test_resource">';
 
         $this->providerMock
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('generateHtmlTag')
             ->with($resource, [], true, false)
             ->willReturn($tagString);
@@ -125,7 +125,7 @@ final class RemoteMediaRuntimeTest extends TestCase
         $tagString = '<video src="https://cloudinary.com/upload/some_variation_config/test_resource">';
 
         $this->providerMock
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('generateVariationHtmlTag')
             ->with($location, 'netgen_layouts_block', 'test_variation', [], true, false)
             ->willReturn($tagString);
@@ -151,7 +151,7 @@ final class RemoteMediaRuntimeTest extends TestCase
         $tagString = '<img src="https://cloudinary.com/upload/some_variation_config/example">';
 
         $this->providerMock
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('generateHtmlTag')
             ->with($resource, [], true, true)
             ->willReturn($tagString);
@@ -177,7 +177,7 @@ final class RemoteMediaRuntimeTest extends TestCase
         $tagString = '<img src="https://cloudinary.com/upload/some_variation_config/example">';
 
         $this->providerMock
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('generateVariationHtmlTag')
             ->with($location, 'netgen_layouts_item', 'test_variation', [], true, true)
             ->willReturn($tagString);
