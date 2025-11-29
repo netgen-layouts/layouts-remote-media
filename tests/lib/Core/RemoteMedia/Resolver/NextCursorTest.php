@@ -41,18 +41,18 @@ final class NextCursorTest extends TestCase
         $cacheItemMock = $this->createMock(CacheItemInterface::class);
 
         $this->cache
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getItem')
             ->with(self::TEST_CACHE_KEY)
             ->willReturn($cacheItemMock);
 
         $cacheItemMock
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('isHit')
             ->willReturn(true);
 
         $cacheItemMock
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('get')
             ->willReturn(self::TEST_CURSOR);
 
@@ -64,13 +64,13 @@ final class NextCursorTest extends TestCase
         $cacheItemMock = $this->createMock(CacheItemInterface::class);
 
         $this->cache
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getItem')
             ->with(self::TEST_CACHE_KEY)
             ->willReturn($cacheItemMock);
 
         $cacheItemMock
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('isHit')
             ->willReturn(false);
 
@@ -85,18 +85,18 @@ final class NextCursorTest extends TestCase
         $cacheItemMock = $this->createMock(CacheItemInterface::class);
 
         $this->cache
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getItem')
             ->with(self::TEST_CACHE_KEY)
             ->willReturn($cacheItemMock);
 
         $cacheItemMock
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('set')
             ->with(self::TEST_CURSOR);
 
         $cacheItemMock
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('expiresAfter')
             ->with(self::CACHE_TTL);
 

@@ -38,7 +38,7 @@ final class RemoteMediaValueLoaderTest extends TestCase
         $this->remoteMediaItemRepositoryMock = $this->createMock(EntityRepository::class);
 
         $this->entityManagerMock
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getRepository')
             ->with(RemoteMediaItem::class)
             ->willReturn($this->remoteMediaItemRepositoryMock);
@@ -62,7 +62,7 @@ final class RemoteMediaValueLoaderTest extends TestCase
         $remoteMediaItem = new RemoteMediaItem('upload||video||folder|test_resource', $location);
 
         $this->remoteMediaItemRepositoryMock
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('findOneBy')
             ->with(['value' => 'upload||video||folder|test_resource'])
             ->willReturn($remoteMediaItem);
@@ -84,25 +84,25 @@ final class RemoteMediaValueLoaderTest extends TestCase
         $location = new RemoteResourceLocation($resource, 'netgen_layouts_value');
 
         $this->remoteMediaItemRepositoryMock
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('findOneBy')
             ->with(['value' => 'upload||video||folder|test_resource'])
             ->willReturn(null);
 
         $this->providerMock
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('loadByRemoteId')
             ->with('upload|video|folder/test_resource')
             ->willReturn($resource);
 
         $this->providerMock
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('store')
             ->with($resource)
             ->willReturn($resource);
 
         $this->providerMock
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('storeLocation')
             ->with($location)
             ->willReturn($location);
@@ -110,7 +110,7 @@ final class RemoteMediaValueLoaderTest extends TestCase
         $remoteMediaItem = new RemoteMediaItem('upload||video||folder|test_resource', $location);
 
         $this->entityManagerMock
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('persist')
             ->with($remoteMediaItem);
 
@@ -131,31 +131,31 @@ final class RemoteMediaValueLoaderTest extends TestCase
         $location = new RemoteResourceLocation($resource, 'netgen_layouts_value');
 
         $this->remoteMediaItemRepositoryMock
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('findOneBy')
             ->with(['value' => 'upload||video||folder|test_resource'])
             ->willReturn(null);
 
         $this->providerMock
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('loadByRemoteId')
             ->with('upload|video|folder/test_resource')
             ->willThrowException(new RemoteResourceNotFoundException('upload|video|folder/test_resource'));
 
         $this->providerMock
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('loadFromRemote')
             ->with('upload|video|folder/test_resource')
             ->willReturn($resource);
 
         $this->providerMock
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('store')
             ->with($resource)
             ->willReturn($resource);
 
         $this->providerMock
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('storeLocation')
             ->with($location)
             ->willReturn($location);
@@ -163,7 +163,7 @@ final class RemoteMediaValueLoaderTest extends TestCase
         $remoteMediaItem = new RemoteMediaItem('upload||video||folder|test_resource', $location);
 
         $this->entityManagerMock
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('persist')
             ->with($remoteMediaItem);
 
@@ -173,19 +173,19 @@ final class RemoteMediaValueLoaderTest extends TestCase
     public function testLoadNotFound(): void
     {
         $this->remoteMediaItemRepositoryMock
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('findOneBy')
             ->with(['value' => 'upload||video||folder|test_resource'])
             ->willReturn(null);
 
         $this->providerMock
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('loadByRemoteId')
             ->with('upload|video|folder/test_resource')
             ->willThrowException(new RemoteResourceNotFoundException('upload|video|folder/test_resource'));
 
         $this->providerMock
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('loadFromRemote')
             ->with('upload|video|folder/test_resource')
             ->willThrowException(new RemoteResourceNotFoundException('upload|video|folder/test_resource'));
@@ -209,7 +209,7 @@ final class RemoteMediaValueLoaderTest extends TestCase
         $remoteMediaItem = new RemoteMediaItem('upload||video||folder|test_resource', $location);
 
         $this->remoteMediaItemRepositoryMock
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('findOneBy')
             ->with(['value' => 'upload||video||folder|test_resource'])
             ->willReturn($remoteMediaItem);

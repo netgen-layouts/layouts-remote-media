@@ -82,7 +82,7 @@ final class RemoteMediaHandlerTest extends TestCase
         ];
 
         $builderMock
-            ->expects(self::exactly(3))
+            ->expects($this->exactly(3))
             ->method('add')
             ->willReturnMap(
                 [
@@ -137,7 +137,7 @@ final class RemoteMediaHandlerTest extends TestCase
         );
 
         $this->valueLoaderMock
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('load')
             ->with('image|folder|subfolder|image_name.jpg')
             ->willReturn($value);
@@ -183,7 +183,7 @@ final class RemoteMediaHandlerTest extends TestCase
         );
 
         $this->valueLoaderMock
-            ->expects(self::never())
+            ->expects($this->never())
             ->method('load');
 
         $this->handler->getDynamicParameters($params, $block);
