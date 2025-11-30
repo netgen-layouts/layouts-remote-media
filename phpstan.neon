@@ -10,7 +10,3 @@ parameters:
         # Doctrine DBAL
         - '#expects string\|null, Doctrine\\DBAL\\Query\\Expression\\CompositeExpression given#'
         - '#Property Netgen\\Layouts\\RemoteMedia\\API\\Values\\RemoteMediaItem::\$id \(int\|null\) is never assigned int so it can be removed from the property type.#'
-
-        #PHPStan
-
-        - '#Call to method arrayNode\(\) on an unknown class Symfony\\Component\\Config\\Definition\\Builder\\NodeBuilder<Symfony\\Component\\Config\\Definition\\Builder\\ArrayNodeDefinition>#'
