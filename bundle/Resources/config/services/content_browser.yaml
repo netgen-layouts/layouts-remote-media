@@ -10,7 +10,7 @@ services:
     netgen_layouts.remote_media.browser.backend.remote_media:
         class: Netgen\Layouts\RemoteMedia\ContentBrowser\Backend\RemoteMediaBackend
         arguments:
-            - "@netgen_remote_media.provider.cloudinary"
+            - "@netgen_remote_media.provider"
             - "@netgen_layouts.remote_media.next_cursor_resolver"
             - "@translator"
             - "@netgen_content_browser.config.remote_media"
