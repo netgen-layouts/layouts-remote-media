@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Netgen\Layouts\RemoteMedia\ContentBrowser\Backend;
+namespace Netgen\Layouts\RemoteMedia\Browser\Backend;
 
 use Netgen\ContentBrowser\Backend\BackendInterface;
 use Netgen\ContentBrowser\Backend\SearchQuery;
@@ -12,8 +12,8 @@ use Netgen\ContentBrowser\Config\Configuration;
 use Netgen\ContentBrowser\Exceptions\NotFoundException;
 use Netgen\ContentBrowser\Item\ItemInterface;
 use Netgen\ContentBrowser\Item\LocationInterface;
-use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Item;
-use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Location;
+use Netgen\Layouts\RemoteMedia\Browser\Item\RemoteMedia\Item;
+use Netgen\Layouts\RemoteMedia\Browser\Item\RemoteMedia\Location;
 use Netgen\Layouts\RemoteMedia\Core\RemoteMedia\NextCursorResolverInterface;
 use Netgen\Layouts\RemoteMedia\Core\RemoteMedia\ResourceQuery;
 use Netgen\RemoteMedia\API\ProviderInterface;
@@ -220,7 +220,7 @@ final class RemoteMediaBackend implements BackendInterface
     }
 
     /**
-     * @return \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Location[]
+     * @return \Netgen\Layouts\RemoteMedia\Browser\Item\RemoteMedia\Location[]
      */
     private function buildSections(): array
     {

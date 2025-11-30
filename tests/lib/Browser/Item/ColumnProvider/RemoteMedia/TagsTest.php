@@ -5,21 +5,21 @@ declare(strict_types=1);
 namespace Netgen\Layouts\RemoteMedia\Tests\ContentBrowser\Item\ColumnProvider\RemoteMedia;
 
 use Netgen\ContentBrowser\Tests\Stubs\Item;
-use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\ColumnProvider\RemoteMedia\Type;
-use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Item as RemoteMediaItem;
+use Netgen\Layouts\RemoteMedia\Browser\Item\ColumnProvider\RemoteMedia\Tags;
+use Netgen\Layouts\RemoteMedia\Browser\Item\RemoteMedia\Item as RemoteMediaItem;
 use Netgen\RemoteMedia\API\Values\RemoteResource;
 use Netgen\RemoteMedia\API\Values\RemoteResourceLocation;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(Type::class)]
-final class TypeTest extends TestCase
+#[CoversClass(Tags::class)]
+final class TagsTest extends TestCase
 {
-    private Type $typeColumn;
+    private Tags $tagsColumn;
 
     protected function setUp(): void
     {
-        $this->typeColumn = new Type();
+        $this->tagsColumn = new Tags();
     }
 
     public function testGetValue(): void
@@ -28,31 +28,31 @@ final class TypeTest extends TestCase
             remoteId: 'folder/test_resource',
             type: RemoteResource::TYPE_IMAGE,
             url: 'https://cloudinary.com/test/upload/image/folder/test_resource',
-            md5: 'fd03486b8f6fcdf3d60fd124465ec8d8',
+            md5: '3c15a1d4bbcda8d067478a6316518acc',
+            tags: ['tag1', 'tag2', 'tag3'],
         );
 
         $item = new RemoteMediaItem(new RemoteResourceLocation($resource));
 
-        self::assertSame('image', $this->typeColumn->getValue($item));
+        self::assertSame('tag1, tag2, tag3', $this->tagsColumn->getValue($item));
     }
 
-    public function testGetValueWithFormat(): void
+    public function testGetValueWithNoTags(): void
     {
         $resource = new RemoteResource(
             remoteId: 'folder/test_resource',
-            type: RemoteResource::TYPE_VIDEO,
+            type: RemoteResource::TYPE_IMAGE,
             url: 'https://cloudinary.com/test/upload/image/folder/test_resource',
-            md5: 'ddd1248ff21c4f16c5839fffe3f6a51d',
-            metadata: ['format' => 'mp4'],
+            md5: 'dc2474ad19a69be40dff3254af497d73',
         );
 
         $item = new RemoteMediaItem(new RemoteResourceLocation($resource));
 
-        self::assertSame('video / mp4', $this->typeColumn->getValue($item));
+        self::assertSame('', $this->tagsColumn->getValue($item));
     }
 
     public function testGetValueWithWrongItem(): void
     {
-        self::assertNull($this->typeColumn->getValue(new Item(42)));
+        self::assertNull($this->tagsColumn->getValue(new Item(42)));
     }
 }

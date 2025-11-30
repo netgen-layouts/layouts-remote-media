@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Netgen\Layouts\RemoteMedia\Tests\ContentBrowser\Item\ColumnProvider\RemoteMedia;
 
 use Netgen\ContentBrowser\Tests\Stubs\Item;
-use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\ColumnProvider\RemoteMedia\Size;
-use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Item as RemoteMediaItem;
+use Netgen\Layouts\RemoteMedia\Browser\Item\ColumnProvider\RemoteMedia\Size;
+use Netgen\Layouts\RemoteMedia\Browser\Item\RemoteMedia\Item as RemoteMediaItem;
 use Netgen\RemoteMedia\API\Values\RemoteResource;
 use Netgen\RemoteMedia\API\Values\RemoteResourceLocation;
 use PHPUnit\Framework\Attributes\CoversClass;

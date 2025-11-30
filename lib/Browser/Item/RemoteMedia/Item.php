@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia;
+namespace Netgen\Layouts\RemoteMedia\Browser\Item\RemoteMedia;
 
 use Netgen\ContentBrowser\Item\ItemInterface;
 use Netgen\RemoteMedia\API\Values\RemoteResourceLocation;

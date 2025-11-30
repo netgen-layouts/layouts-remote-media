@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Netgen\Layouts\RemoteMedia\ContentBrowser\Item\ColumnProvider\RemoteMedia;
+namespace Netgen\Layouts\RemoteMedia\Browser\Item\ColumnProvider\RemoteMedia;
 
 use Netgen\ContentBrowser\Item\ColumnProvider\ColumnValueProviderInterface;
 use Netgen\ContentBrowser\Item\ItemInterface;
-use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Item;
+use Netgen\Layouts\RemoteMedia\Browser\Item\RemoteMedia\Item;
 
 final class Resolution implements ColumnValueProviderInterface
 {

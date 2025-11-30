@@ -55,20 +55,21 @@ final class NetgenLayoutsRemoteMediaExtension extends Extension implements Prepe
 
         $loader->load('default_parameters.yaml');
         $loader->load('services/**/*.yaml', 'glob');
+        $loader->load('browser/services.yaml');
     }
 
     public function prepend(ContainerBuilder $container): void
     {
         $prependConfigs = [
             'default_settings.yaml' => 'netgen_layouts_remote_media',
-            'item_types.yaml' => 'netgen_content_browser',
             'block_definitions.yaml' => 'netgen_layouts',
             'value_types.yaml' => 'netgen_layouts',
             'netgen_layouts.yaml' => 'netgen_layouts',
-            'view/block_view.yaml' => 'netgen_layouts',
-            'view/item_view.yaml' => 'netgen_layouts',
             'image.yaml' => 'netgen_remote_media',
             'doctrine.yaml' => 'doctrine',
+            'browser/item_types.yaml' => 'netgen_content_browser',
+            'view/block_view.yaml' => 'netgen_layouts',
+            'view/item_view.yaml' => 'netgen_layouts',
         ];
 
         foreach ($prependConfigs as $configFile => $prependConfig) {
