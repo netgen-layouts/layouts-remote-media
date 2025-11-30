@@ -123,7 +123,7 @@ final class MigrateDataV1ToV2Command extends Command
                 'b',
                 'nglayouts_block_translation',
                 'bt',
-                $query->expr()->and(
+                (string) $query->expr()->and(
                     $query->expr()->eq('bt.block_id', 'b.id'),
                     $query->expr()->eq('bt.status', 'b.status'),
                 ),
