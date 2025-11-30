@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Netgen\Layouts\RemoteMedia\Tests\ContentBrowser\Item\RemoteMedia;
 
-use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Item;
+use Netgen\Layouts\RemoteMedia\Browser\Item\RemoteMedia\Item;
 use Netgen\Layouts\Tests\Core\Service\TransactionRollback\TestCase;
 use Netgen\RemoteMedia\API\Values\Folder;
 use Netgen\RemoteMedia\API\Values\RemoteResource;

@@ -1,6 +1,6 @@
 services:
     netgen_layouts.remote_media.override.content_browser.item_serializer:
-        class: Netgen\Layouts\RemoteMedia\ContentBrowser\Item\Serializer\ItemSerializer
+        class: Netgen\Layouts\RemoteMedia\Browser\Item\Serializer\ItemSerializer
         decorates: netgen_content_browser.item_serializer
         arguments:
             - "@netgen_layouts.remote_media.override.content_browser.item_serializer.inner"
@@ -8,7 +8,7 @@ services:
             - "@netgen_content_browser.column_provider"
 
     netgen_layouts.remote_media.browser.backend.remote_media:
-        class: Netgen\Layouts\RemoteMedia\ContentBrowser\Backend\RemoteMediaBackend
+        class: Netgen\Layouts\RemoteMedia\Browser\Backend\RemoteMediaBackend
         arguments:
             - "@netgen_remote_media.provider"
             - "@netgen_layouts.remote_media.next_cursor_resolver"
@@ -19,21 +19,21 @@ services:
             - { name: netgen_content_browser.backend, item_type: remote_media }
 
     netgen_layouts.remote_media.browser.column_value_provider.remote_media.tags:
-        class: Netgen\Layouts\RemoteMedia\ContentBrowser\Item\ColumnProvider\RemoteMedia\Tags
+        class: Netgen\Layouts\RemoteMedia\Browser\Item\ColumnProvider\RemoteMedia\Tags
         tags:
             - { name: netgen_content_browser.column_value_provider, identifier: remote_media\tags }
 
     netgen_layouts.remote_media.browser.column_value_provider.remote_media.resolution:
-        class: Netgen\Layouts\RemoteMedia\ContentBrowser\Item\ColumnProvider\RemoteMedia\Resolution
+        class: Netgen\Layouts\RemoteMedia\Browser\Item\ColumnProvider\RemoteMedia\Resolution
         tags:
             - { name: netgen_content_browser.column_value_provider, identifier: remote_media\resolution }
 
     netgen_layouts.remote_media.browser.column_value_provider.remote_media.type:
-        class: Netgen\Layouts\RemoteMedia\ContentBrowser\Item\ColumnProvider\RemoteMedia\Type
+        class: Netgen\Layouts\RemoteMedia\Browser\Item\ColumnProvider\RemoteMedia\Type
         tags:
             - { name: netgen_content_browser.column_value_provider, identifier: remote_media\type }
 
     netgen_layouts.remote_media.browser.column_value_provider.remote_media.size:
-        class: Netgen\Layouts\RemoteMedia\ContentBrowser\Item\ColumnProvider\RemoteMedia\Size
+        class: Netgen\Layouts\RemoteMedia\Browser\Item\ColumnProvider\RemoteMedia\Size
         tags:
             - { name: netgen_content_browser.column_value_provider, identifier: remote_media\size }

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Netgen\Layouts\RemoteMedia\Tests\ContentBrowser\Item\RemoteMedia;
 
 use InvalidArgumentException;
-use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Location;
+use Netgen\Layouts\RemoteMedia\Browser\Item\RemoteMedia\Location;
 use Netgen\RemoteMedia\API\Values\Folder;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;

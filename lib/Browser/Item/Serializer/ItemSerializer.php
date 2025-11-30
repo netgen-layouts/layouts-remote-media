@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Netgen\Layouts\RemoteMedia\ContentBrowser\Item\Serializer;
+namespace Netgen\Layouts\RemoteMedia\Browser\Item\Serializer;
 
 use Netgen\ContentBrowser\Backend\BackendInterface;
 use Netgen\ContentBrowser\Item\ColumnProvider\ColumnProviderInterface;
 use Netgen\ContentBrowser\Item\ItemInterface;
 use Netgen\ContentBrowser\Item\LocationInterface;
 use Netgen\ContentBrowser\Item\Serializer\ItemSerializerInterface;
-use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Item;
-use Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Location;
+use Netgen\Layouts\RemoteMedia\Browser\Item\RemoteMedia\Item;
+use Netgen\Layouts\RemoteMedia\Browser\Item\RemoteMedia\Location;
 
 final class ItemSerializer implements ItemSerializerInterface
 {
