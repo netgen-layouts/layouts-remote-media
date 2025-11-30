@@ -7,7 +7,7 @@ services:
     netgen_layouts.remote_media.item.value_loader.remote_media:
         class: Netgen\Layouts\RemoteMedia\Item\ValueLoader\RemoteMediaValueLoader
         arguments:
-            - "@netgen_remote_media.provider.cloudinary"
+            - "@netgen_remote_media.provider"
             - "@doctrine.orm.entity_manager"
         tags:
             - { name: netgen_layouts.cms_value_loader, value_type: remote_media }
