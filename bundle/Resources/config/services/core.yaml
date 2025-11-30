@@ -1,4 +1,7 @@
 services:
+    netgen_layouts.remote_media.cache.pool:
+        synthetic: true
+
     netgen_layouts.remote_media.next_cursor_resolver:
         class: Netgen\Layouts\RemoteMedia\Core\RemoteMedia\Resolver\NextCursor
         arguments:
