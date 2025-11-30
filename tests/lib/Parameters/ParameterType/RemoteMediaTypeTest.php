@@ -29,7 +29,7 @@ final class RemoteMediaTypeTest extends TestCase
     {
         $this->providerMock = $this->createMock(ProviderInterface::class);
 
-        $this->type = new RemoteMediaType();
+        $this->type = new RemoteMediaType($this->providerMock);
     }
 
     public function testGetIdentifier(): void
@@ -185,5 +185,40 @@ final class RemoteMediaTypeTest extends TestCase
                 false,
             ],
         ];
+    }
+
+    public function testGetValueObject(): void
+    {
+        $remoteResource = new RemoteResource(
+            remoteId: 'upload|image|folder/test_resource',
+            type: RemoteResource::TYPE_IMAGE,
+            url: 'https://cloudinary.com/test/upload/folder/test_resource',
+            md5: '5d7a812a020b40e23411edbc83cb809f',
+        );
+
+        $this->providerMock
+            ->expects($this->once())
+            ->method('loadFromRemote')
+            ->with(self::identicalTo('upload|image|folder/test_resource'))
+            ->willReturn($remoteResource);
+
+        /** @var \Netgen\Layouts\RemoteMedia\Parameters\ParameterType\RemoteMediaType $type */
+        $type = $this->type;
+
+        self::assertSame($remoteResource, $type->getValueObject('upload||image||folder|test_resource'));
+    }
+
+    public function testGetValueObjectWithNoPage(): void
+    {
+        $this->providerMock
+            ->expects($this->once())
+            ->method('loadFromRemote')
+            ->with(self::identicalTo('upload|image|folder/test_resource'))
+            ->willThrowException(new RemoteResourceNotFoundException('upload|image|folder/test_resource'));
+
+        /** @var \Netgen\Layouts\RemoteMedia\Parameters\ParameterType\RemoteMediaType $type */
+        $type = $this->type;
+
+        self::assertNull($type->getValueObject('upload||image||folder|test_resource'));
     }
 }
