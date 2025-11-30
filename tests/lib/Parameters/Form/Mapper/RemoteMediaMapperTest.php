@@ -8,6 +8,7 @@ use Netgen\ContentBrowser\Form\Type\ContentBrowserType;
 use Netgen\Layouts\Parameters\ParameterDefinition;
 use Netgen\Layouts\RemoteMedia\Parameters\Form\Mapper\RemoteMediaMapper;
 use Netgen\Layouts\RemoteMedia\Parameters\ParameterType\RemoteMediaType as ParameterType;
+use Netgen\RemoteMedia\API\ProviderInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
@@ -38,7 +39,7 @@ final class RemoteMediaMapperTest extends TestCase
             ],
             $this->mapper->mapOptions(ParameterDefinition::fromArray(
                 [
-                    'type' => new ParameterType(),
+                    'type' => new ParameterType($this->createMock(ProviderInterface::class)),
                     'isRequired' => false,
                 ],
             )),
@@ -57,7 +58,7 @@ final class RemoteMediaMapperTest extends TestCase
             ],
             $this->mapper->mapOptions(ParameterDefinition::fromArray(
                 [
-                    'type' => new ParameterType(),
+                    'type' => new ParameterType($this->createMock(ProviderInterface::class)),
                     'isRequired' => false,
                     'options' => [
                         'allowed_types' => ['image', 'video'],
