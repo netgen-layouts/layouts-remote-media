@@ -13,6 +13,6 @@ Running tests requires that you have complete vendors installed, so run
 
 You can run unit tests by calling `composer test` from the repo root:
 
-```
+```bash
 $ composer test
 ```
