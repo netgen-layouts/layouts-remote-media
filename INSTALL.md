@@ -1,6 +1,6 @@
 # Netgen Layouts & Remote Media integration installation instructions
 
-## Use Composer to install the integration
+## Use Composer
 
 Run the following command to install Netgen Layouts & Remote Media integration:
 
