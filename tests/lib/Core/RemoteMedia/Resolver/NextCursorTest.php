@@ -25,22 +25,22 @@ final class NextCursorTest extends TestCase
 
     private const string TEST_CURSOR = 'k84jh71osdf355asder';
 
-    private MockObject&CacheItemPoolInterface $cache;
+    private MockObject&CacheItemPoolInterface $cacheMock;
 
     private NextCursor $resolver;
 
     protected function setUp(): void
     {
-        $this->cache = $this->createMock(CacheItemPoolInterface::class);
+        $this->cacheMock = $this->createMock(CacheItemPoolInterface::class);
 
-        $this->resolver = new NextCursor($this->cache, self::CACHE_TTL);
+        $this->resolver = new NextCursor($this->cacheMock, self::CACHE_TTL);
     }
 
     public function testResolve(): void
     {
         $cacheItemMock = $this->createMock(CacheItemInterface::class);
 
-        $this->cache
+        $this->cacheMock
             ->expects($this->once())
             ->method('getItem')
             ->with(self::TEST_CACHE_KEY)
@@ -63,7 +63,7 @@ final class NextCursorTest extends TestCase
     {
         $cacheItemMock = $this->createMock(CacheItemInterface::class);
 
-        $this->cache
+        $this->cacheMock
             ->expects($this->once())
             ->method('getItem')
             ->with(self::TEST_CACHE_KEY)
@@ -84,7 +84,7 @@ final class NextCursorTest extends TestCase
     {
         $cacheItemMock = $this->createMock(CacheItemInterface::class);
 
-        $this->cache
+        $this->cacheMock
             ->expects($this->once())
             ->method('getItem')
             ->with(self::TEST_CACHE_KEY)

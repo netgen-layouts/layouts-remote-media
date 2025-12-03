@@ -230,8 +230,7 @@ final class MigrateDataV1ToV2Command extends Command
     private function updateBlockTranslation(array $blockTranslation): void
     {
         $query = $this->connection->createQueryBuilder();
-        $query
-            ->update('nglayouts_block_translation')
+        $query->update('nglayouts_block_translation')
             ->set('parameters', ':parameters')
             ->where(
                 $query->expr()->eq('block_id', ':block_id'),
@@ -252,8 +251,7 @@ final class MigrateDataV1ToV2Command extends Command
     private function updateItem(array $item): void
     {
         $query = $this->connection->createQueryBuilder();
-        $query
-            ->update('nglayouts_collection_item')
+        $query->update('nglayouts_collection_item')
             ->set('value', ':value')
             ->where(
                 $query->expr()->eq('id', ':id'),

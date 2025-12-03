@@ -8,12 +8,8 @@ use Netgen\Layouts\API\Values\Block\Block;
 use Netgen\Layouts\Block\DynamicParameters;
 use Netgen\Layouts\Item\ValueLoaderInterface;
 use Netgen\Layouts\Parameters\Parameter;
-use Netgen\Layouts\Parameters\ParameterBuilderInterface;
 use Netgen\Layouts\Parameters\ParameterList;
-use Netgen\Layouts\Parameters\ParameterType\ChoiceType;
-use Netgen\Layouts\Parameters\ParameterType\TextLineType;
 use Netgen\Layouts\RemoteMedia\Block\BlockDefinition\Handler\RemoteMediaHandler;
-use Netgen\Layouts\RemoteMedia\Parameters\ParameterType\RemoteMediaType;
 use Netgen\RemoteMedia\API\Values\RemoteResource;
 use Netgen\RemoteMedia\Core\Resolver\Variation as VariationResolver;
 use Netgen\RemoteMedia\Core\Transformation\Registry;
@@ -26,11 +22,6 @@ use Psr\Log\NullLogger;
 final class RemoteMediaHandlerTest extends TestCase
 {
     private MockObject&ValueLoaderInterface $valueLoaderMock;
-
-    /**
-     * @var string[]
-     */
-    private array $allowedResourceTypes;
 
     private RemoteMediaHandler $handler;
 
@@ -57,42 +48,16 @@ final class RemoteMediaHandlerTest extends TestCase
             ],
         );
 
-        $this->allowedResourceTypes = ['image', 'video'];
-
         $this->handler = new RemoteMediaHandler(
             $this->valueLoaderMock,
             $variationResolver,
-            $this->allowedResourceTypes,
+            ['image', 'video'],
         );
     }
 
     public function testIsContextual(): void
     {
         self::assertFalse($this->handler->isContextual(new Block()));
-    }
-
-    public function testBuildParameters(): void
-    {
-        $builderMock = $this->createMock(ParameterBuilderInterface::class);
-
-        $variationOptions = [
-            '(no variation)' => null,
-            'Small' => 'Small',
-            'Big' => 'Big',
-        ];
-
-        $builderMock
-            ->expects($this->exactly(3))
-            ->method('add')
-            ->willReturnMap(
-                [
-                    ['remote_media', RemoteMediaType::class, ['required' => false, 'allowed_types' => $this->allowedResourceTypes], $builderMock],
-                    ['variation', ChoiceType::class, ['required' => false, 'options' => $variationOptions], $builderMock],
-                    ['title', TextLineType::class, [], $builderMock],
-                ],
-            );
-
-        $this->handler->buildParameters($builderMock);
     }
 
     public function testGetDynamicSettings(): void
