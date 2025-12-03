@@ -19,7 +19,7 @@ use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 #[CoversClass(RemoteMediaValidator::class)]
 final class RemoteMediaValidatorTest extends ValidatorTestCase
 {
-    private MockObject&ProviderInterface $provider;
+    private MockObject&ProviderInterface $providerMock;
 
     protected function setUp(): void
     {
@@ -30,14 +30,14 @@ final class RemoteMediaValidatorTest extends ValidatorTestCase
 
     public function getValidator(): ConstraintValidatorInterface
     {
-        $this->provider = $this->createMock(ProviderInterface::class);
+        $this->providerMock = $this->createMock(ProviderInterface::class);
 
-        return new RemoteMediaValidator($this->provider);
+        return new RemoteMediaValidator($this->providerMock);
     }
 
     public function testValidateValid(): void
     {
-        $this->provider
+        $this->providerMock
             ->expects($this->once())
             ->method('loadFromRemote')
             ->with(self::identicalTo('upload|image|folder/test_resource'))
@@ -53,7 +53,7 @@ final class RemoteMediaValidatorTest extends ValidatorTestCase
 
     public function testValidateNull(): void
     {
-        $this->provider
+        $this->providerMock
             ->expects($this->never())
             ->method('loadFromRemote');
 
@@ -62,7 +62,7 @@ final class RemoteMediaValidatorTest extends ValidatorTestCase
 
     public function testValidateNonExisting(): void
     {
-        $this->provider
+        $this->providerMock
             ->expects($this->once())
             ->method('loadFromRemote')
             ->with(self::identicalTo('upload|image|folder/test_resource2'))
