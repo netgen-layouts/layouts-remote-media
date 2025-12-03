@@ -21,17 +21,17 @@ class RemoteMediaItem
         private RemoteResourceLocation $remoteResourceLocation,
     ) {}
 
-    public function getId(): ?int
+    final public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getValue(): string
+    final public function getValue(): string
     {
         return $this->value;
     }
 
-    public function getRemoteResourceLocation(): RemoteResourceLocation
+    final public function getRemoteResourceLocation(): RemoteResourceLocation
     {
         return $this->remoteResourceLocation;
     }
