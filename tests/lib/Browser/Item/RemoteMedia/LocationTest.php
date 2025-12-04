@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Netgen\Layouts\RemoteMedia\Tests\ContentBrowser\Item\RemoteMedia;
+namespace Netgen\Layouts\RemoteMedia\Tests\Browser\Item\RemoteMedia;
 
 use InvalidArgumentException;
 use Netgen\Layouts\RemoteMedia\Browser\Item\RemoteMedia\Location;

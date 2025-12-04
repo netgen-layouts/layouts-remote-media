@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Netgen\Layouts\RemoteMedia\Tests\ContentBrowser\Item\RemoteMedia;
+namespace Netgen\Layouts\RemoteMedia\Tests\Browser\Item\RemoteMedia;
 
 use Netgen\Layouts\RemoteMedia\Browser\Item\RemoteMedia\Item;
-use Netgen\Layouts\Tests\Core\Service\TransactionRollback\TestCase;
 use Netgen\RemoteMedia\API\Values\Folder;
 use Netgen\RemoteMedia\API\Values\RemoteResource;
 use Netgen\RemoteMedia\API\Values\RemoteResourceLocation;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 
 #[CoversClass(Item::class)]
 final class ItemTest extends TestCase

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Netgen\Layouts\RemoteMedia\Tests\ContentBrowser\Item\ColumnProvider\RemoteMedia;
+namespace Netgen\Layouts\RemoteMedia\Tests\Browser\Item\ColumnProvider\RemoteMedia;
 
 use Netgen\ContentBrowser\Tests\Stubs\Item;
 use Netgen\Layouts\RemoteMedia\Browser\Item\ColumnProvider\RemoteMedia\Tags;

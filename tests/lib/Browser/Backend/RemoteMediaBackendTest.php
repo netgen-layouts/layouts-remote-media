@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Netgen\Layouts\RemoteMedia\Tests\ContentBrowser\Backend;
+namespace Netgen\Layouts\RemoteMedia\Tests\Browser\Backend;
 
 use Netgen\ContentBrowser\Backend\SearchQuery;
 use Netgen\ContentBrowser\Config\Configuration;
