@@ -14,20 +14,20 @@ use Netgen\RemoteMedia\API\Values\RemoteResource;
 use Netgen\RemoteMedia\Core\Resolver\Variation as VariationResolver;
 use Netgen\RemoteMedia\Core\Transformation\Registry;
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 
 #[CoversClass(RemoteMediaHandler::class)]
 final class RemoteMediaHandlerTest extends TestCase
 {
-    private MockObject&ValueLoaderInterface $valueLoaderMock;
+    private Stub&ValueLoaderInterface $valueLoaderStub;
 
     private RemoteMediaHandler $handler;
 
     protected function setUp(): void
     {
-        $this->valueLoaderMock = $this->createMock(ValueLoaderInterface::class);
+        $this->valueLoaderStub = self::createStub(ValueLoaderInterface::class);
 
         $variationResolver = new VariationResolver(
             new Registry(),
@@ -49,7 +49,7 @@ final class RemoteMediaHandlerTest extends TestCase
         );
 
         $this->handler = new RemoteMediaHandler(
-            $this->valueLoaderMock,
+            $this->valueLoaderStub,
             $variationResolver,
             ['image', 'video'],
         );
@@ -101,8 +101,7 @@ final class RemoteMediaHandlerTest extends TestCase
             md5: '185901e0a6f0c338cc4115a8b1923f44',
         );
 
-        $this->valueLoaderMock
-            ->expects($this->once())
+        $this->valueLoaderStub
             ->method('load')
             ->with('image|folder|subfolder|image_name.jpg')
             ->willReturn($value);
@@ -146,10 +145,6 @@ final class RemoteMediaHandlerTest extends TestCase
                 ),
             ],
         );
-
-        $this->valueLoaderMock
-            ->expects($this->never())
-            ->method('load');
 
         $this->handler->getDynamicParameters($params, $block);
 

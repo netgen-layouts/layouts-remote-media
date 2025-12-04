@@ -39,7 +39,7 @@ final class RemoteMediaMapperTest extends TestCase
             ],
             $this->mapper->mapOptions(ParameterDefinition::fromArray(
                 [
-                    'type' => new ParameterType($this->createMock(ProviderInterface::class)),
+                    'type' => new ParameterType(self::createStub(ProviderInterface::class)),
                     'isRequired' => false,
                 ],
             )),
@@ -58,7 +58,7 @@ final class RemoteMediaMapperTest extends TestCase
             ],
             $this->mapper->mapOptions(ParameterDefinition::fromArray(
                 [
-                    'type' => new ParameterType($this->createMock(ProviderInterface::class)),
+                    'type' => new ParameterType(self::createStub(ProviderInterface::class)),
                     'isRequired' => false,
                     'options' => [
                         'allowed_types' => ['image', 'video'],

@@ -11,21 +11,21 @@ use Netgen\RemoteMedia\API\Values\RemoteResource;
 use Netgen\RemoteMedia\API\Values\RemoteResourceLocation;
 use Netgen\RemoteMedia\API\Values\RemoteResourceVariation;
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(RemoteMediaRuntime::class)]
 final class RemoteMediaRuntimeTest extends TestCase
 {
-    private MockObject&ProviderInterface $providerMock;
+    private Stub&ProviderInterface $providerStub;
 
     private RemoteMediaRuntime $runtime;
 
     protected function setUp(): void
     {
-        $this->providerMock = $this->createMock(ProviderInterface::class);
+        $this->providerStub = self::createStub(ProviderInterface::class);
 
-        $this->runtime = new RemoteMediaRuntime($this->providerMock);
+        $this->runtime = new RemoteMediaRuntime($this->providerStub);
     }
 
     public function testGetBlockVariation(): void
@@ -44,8 +44,7 @@ final class RemoteMediaRuntimeTest extends TestCase
 
         $location = new RemoteResourceLocation($resource);
 
-        $this->providerMock
-            ->expects($this->once())
+        $this->providerStub
             ->method('buildVariation')
             ->with($location, 'netgen_layouts_block', 'test_variation')
             ->willReturn($variation);
@@ -72,8 +71,7 @@ final class RemoteMediaRuntimeTest extends TestCase
 
         $location = new RemoteResourceLocation($resource);
 
-        $this->providerMock
-            ->expects($this->once())
+        $this->providerStub
             ->method('buildVariation')
             ->with($location, 'netgen_layouts_item', 'test_variation')
             ->willReturn($variation);
@@ -98,8 +96,7 @@ final class RemoteMediaRuntimeTest extends TestCase
         $location = new RemoteResourceLocation($resource);
         $tagString = '<video src="https://cloudinary.com/upload/test_resource">';
 
-        $this->providerMock
-            ->expects($this->once())
+        $this->providerStub
             ->method('generateHtmlTag')
             ->with($resource, [], true, false)
             ->willReturn($tagString);
@@ -124,8 +121,7 @@ final class RemoteMediaRuntimeTest extends TestCase
         $location = new RemoteResourceLocation($resource);
         $tagString = '<video src="https://cloudinary.com/upload/some_variation_config/test_resource">';
 
-        $this->providerMock
-            ->expects($this->once())
+        $this->providerStub
             ->method('generateVariationHtmlTag')
             ->with($location, 'netgen_layouts_block', 'test_variation', [], true, false)
             ->willReturn($tagString);
@@ -150,8 +146,7 @@ final class RemoteMediaRuntimeTest extends TestCase
         $location = new RemoteResourceLocation($resource);
         $tagString = '<img src="https://cloudinary.com/upload/some_variation_config/example" alt="Example">';
 
-        $this->providerMock
-            ->expects($this->once())
+        $this->providerStub
             ->method('generateHtmlTag')
             ->with($resource, [], true, true)
             ->willReturn($tagString);
@@ -176,8 +171,7 @@ final class RemoteMediaRuntimeTest extends TestCase
         $location = new RemoteResourceLocation($resource);
         $tagString = '<img src="https://cloudinary.com/upload/some_variation_config/example" alt="Example">';
 
-        $this->providerMock
-            ->expects($this->once())
+        $this->providerStub
             ->method('generateVariationHtmlTag')
             ->with($location, 'netgen_layouts_item', 'test_variation', [], true, true)
             ->willReturn($tagString);

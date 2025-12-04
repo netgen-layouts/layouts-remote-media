@@ -19,18 +19,18 @@ use Netgen\RemoteMedia\API\Values\Folder;
 use Netgen\RemoteMedia\API\Values\RemoteResource;
 use Netgen\RemoteMedia\Exception\RemoteResourceNotFoundException;
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[CoversClass(RemoteMediaBackend::class)]
 final class RemoteMediaBackendTest extends TestCase
 {
-    private MockObject&ProviderInterface $providerMock;
+    private Stub&ProviderInterface $providerStub;
 
-    private MockObject&NextCursorResolverInterface $nextCursorResolverMock;
+    private Stub&NextCursorResolverInterface $nextCursorResolverStub;
 
-    private MockObject&TranslatorInterface $translatorMock;
+    private Stub&TranslatorInterface $translatorStub;
 
     private Configuration $config;
 
@@ -38,23 +38,22 @@ final class RemoteMediaBackendTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->providerMock = $this->createMock(ProviderInterface::class);
-        $this->nextCursorResolverMock = $this->createMock(NextCursorResolverInterface::class);
-        $this->translatorMock = $this->createMock(TranslatorInterface::class);
+        $this->providerStub = self::createStub(ProviderInterface::class);
+        $this->nextCursorResolverStub = self::createStub(NextCursorResolverInterface::class);
+        $this->translatorStub = self::createStub(TranslatorInterface::class);
         $this->config = new Configuration('remote_media', 'Remote media', []);
 
         $this->backend = new RemoteMediaBackend(
-            $this->providerMock,
-            $this->nextCursorResolverMock,
-            $this->translatorMock,
+            $this->providerStub,
+            $this->nextCursorResolverStub,
+            $this->translatorStub,
             $this->config,
         );
     }
 
     public function testGetSections(): void
     {
-        $this->translatorMock
-            ->expects($this->exactly(6))
+        $this->translatorStub
             ->method('trans')
             ->willReturnMap(
                 [
@@ -77,8 +76,7 @@ final class RemoteMediaBackendTest extends TestCase
     {
         $this->config->setParameter('allowed_types', 'image,video');
 
-        $this->translatorMock
-            ->expects($this->exactly(3))
+        $this->translatorStub
             ->method('trans')
             ->willReturnMap(
                 [
@@ -98,8 +96,7 @@ final class RemoteMediaBackendTest extends TestCase
     {
         $this->config->setParameter('allowed_types', '');
 
-        $this->translatorMock
-            ->expects($this->exactly(6))
+        $this->translatorStub
             ->method('trans')
 
             ->willReturnMap(
@@ -186,8 +183,7 @@ final class RemoteMediaBackendTest extends TestCase
             folder: Folder::fromPath('media/videos'),
         );
 
-        $this->providerMock
-            ->expects($this->once())
+        $this->providerStub
             ->method('loadFromRemote')
             ->with('upload|video|media/videos/my_video.mp4')
             ->willReturn($resource);
@@ -203,8 +199,7 @@ final class RemoteMediaBackendTest extends TestCase
     {
         $value = 'upload||video||media|videos|my_video.mp4';
 
-        $this->providerMock
-            ->expects($this->once())
+        $this->providerStub
             ->method('loadFromRemote')
             ->with('upload|video|media/videos/my_video.mp4')
             ->willThrowException(
@@ -227,8 +222,7 @@ final class RemoteMediaBackendTest extends TestCase
             Folder::fromPath('documents'),
         ];
 
-        $this->providerMock
-            ->expects($this->once())
+        $this->providerStub
             ->method('listFolders')
             ->willReturn($folders);
 
@@ -248,8 +242,7 @@ final class RemoteMediaBackendTest extends TestCase
             Folder::fromPath('documents'),
         ];
 
-        $this->providerMock
-            ->expects($this->once())
+        $this->providerStub
             ->method('listFolders')
             ->with(Folder::fromPath('test_folder/test_subfolder'))
             ->willReturn($folders);
@@ -275,8 +268,7 @@ final class RemoteMediaBackendTest extends TestCase
             Folder::fromPath('documents'),
         ];
 
-        $this->providerMock
-            ->expects($this->once())
+        $this->providerStub
             ->method('listFolders')
             ->willReturn($folders);
 
@@ -293,8 +285,7 @@ final class RemoteMediaBackendTest extends TestCase
             Folder::fromPath('documents'),
         ];
 
-        $this->providerMock
-            ->expects($this->once())
+        $this->providerStub
             ->method('listFolders')
             ->with(Folder::fromPath('test_folder/test_subfolder'))
             ->willReturn($folders);
@@ -311,10 +302,6 @@ final class RemoteMediaBackendTest extends TestCase
     {
         $location = Location::createAsSection('image', 'Image');
 
-        $this->nextCursorResolverMock
-            ->expects($this->never())
-            ->method('resolve');
-
         $query = new Query(
             types: ['image'],
             limit: 25,
@@ -322,14 +309,12 @@ final class RemoteMediaBackendTest extends TestCase
 
         $searchResult = $this->getSearchResult();
 
-        $this->providerMock
-            ->expects($this->once())
+        $this->providerStub
             ->method('search')
             ->with($query)
             ->willReturn($searchResult);
 
-        $this->nextCursorResolverMock
-            ->expects($this->once())
+        $this->nextCursorResolverStub
             ->method('save')
             ->with($query, 25, 'test-cursor-123');
 
@@ -350,8 +335,7 @@ final class RemoteMediaBackendTest extends TestCase
             limit: 5,
         );
 
-        $this->nextCursorResolverMock
-            ->expects($this->once())
+        $this->nextCursorResolverStub
             ->method('resolve')
             ->with($query, 5)
             ->willReturn($nextCursor);
@@ -365,14 +349,12 @@ final class RemoteMediaBackendTest extends TestCase
 
         $searchResult = $this->getSearchResult();
 
-        $this->providerMock
-            ->expects($this->once())
+        $this->providerStub
             ->method('search')
             ->with($query)
             ->willReturn($searchResult);
 
-        $this->nextCursorResolverMock
-            ->expects($this->once())
+        $this->nextCursorResolverStub
             ->method('save')
             ->with($query, 10, 'test-cursor-123');
 
@@ -394,20 +376,14 @@ final class RemoteMediaBackendTest extends TestCase
             limit: 5,
         );
 
-        $this->nextCursorResolverMock
-            ->expects($this->never())
-            ->method('resolve');
-
         $searchResult = $this->getSearchResult();
 
-        $this->providerMock
-            ->expects($this->once())
+        $this->providerStub
             ->method('search')
             ->with($query)
             ->willReturn($searchResult);
 
-        $this->nextCursorResolverMock
-            ->expects($this->once())
+        $this->nextCursorResolverStub
             ->method('save')
             ->with($query, 5, 'test-cursor-123');
 
@@ -421,10 +397,6 @@ final class RemoteMediaBackendTest extends TestCase
     {
         $location = Location::createAsSection('video', 'Video');
 
-        $this->nextCursorResolverMock
-            ->expects($this->never())
-            ->method('resolve');
-
         $query = new Query(
             types: ['video'],
             limit: 25,
@@ -432,15 +404,10 @@ final class RemoteMediaBackendTest extends TestCase
 
         $searchResult = $this->getEmptySearchResult();
 
-        $this->providerMock
-            ->expects($this->once())
+        $this->providerStub
             ->method('search')
             ->with($query)
             ->willReturn($searchResult);
-
-        $this->nextCursorResolverMock
-            ->expects($this->never())
-            ->method('save');
 
         self::assertSame([], $this->backend->getSubItems($location));
     }
@@ -459,8 +426,7 @@ final class RemoteMediaBackendTest extends TestCase
             limit: 0,
         );
 
-        $this->providerMock
-            ->expects($this->once())
+        $this->providerStub
             ->method('searchCount')
             ->with($query)
             ->willReturn(150);
@@ -477,8 +443,7 @@ final class RemoteMediaBackendTest extends TestCase
             limit: 0,
         );
 
-        $this->providerMock
-            ->expects($this->once())
+        $this->providerStub
             ->method('searchCount')
             ->with($query)
             ->willReturn(1000);
@@ -498,8 +463,7 @@ final class RemoteMediaBackendTest extends TestCase
             limit: 0,
         );
 
-        $this->providerMock
-            ->expects($this->once())
+        $this->providerStub
             ->method('searchCount')
             ->with($query)
             ->willReturn(6000);
@@ -518,8 +482,7 @@ final class RemoteMediaBackendTest extends TestCase
             limit: 0,
         );
 
-        $this->providerMock
-            ->expects($this->once())
+        $this->providerStub
             ->method('searchCount')
             ->with($query)
             ->willReturn(1000);
@@ -538,10 +501,6 @@ final class RemoteMediaBackendTest extends TestCase
 
         $searchQuery = new SearchQuery('test', $location);
 
-        $this->nextCursorResolverMock
-            ->expects($this->never())
-            ->method('resolve');
-
         $query = new Query(
             query: 'test',
             types: ['image', 'audio', 'video', 'document', 'other'],
@@ -550,14 +509,12 @@ final class RemoteMediaBackendTest extends TestCase
 
         $searchResult = $this->getSearchResult();
 
-        $this->providerMock
-            ->expects($this->once())
+        $this->providerStub
             ->method('search')
             ->with($query)
             ->willReturn($searchResult);
 
-        $this->nextCursorResolverMock
-            ->expects($this->once())
+        $this->nextCursorResolverStub
             ->method('save')
             ->with($query, 25, 'test-cursor-123');
 
@@ -575,10 +532,6 @@ final class RemoteMediaBackendTest extends TestCase
 
         $this->config->setParameter('allowed_types', 'other');
 
-        $this->nextCursorResolverMock
-            ->expects($this->never())
-            ->method('resolve');
-
         $query = new Query(
             query: 'test',
             types: ['other'],
@@ -588,14 +541,12 @@ final class RemoteMediaBackendTest extends TestCase
 
         $searchResult = $this->getSearchResult();
 
-        $this->providerMock
-            ->expects($this->once())
+        $this->providerStub
             ->method('search')
             ->with($query)
             ->willReturn($searchResult);
 
-        $this->nextCursorResolverMock
-            ->expects($this->once())
+        $this->nextCursorResolverStub
             ->method('save')
             ->with($query, 25, 'test-cursor-123');
 
@@ -621,8 +572,7 @@ final class RemoteMediaBackendTest extends TestCase
             limit: 5,
         );
 
-        $this->nextCursorResolverMock
-            ->expects($this->once())
+        $this->nextCursorResolverStub
             ->method('resolve')
             ->with($query, 5)
             ->willReturn($nextCursor);
@@ -636,14 +586,12 @@ final class RemoteMediaBackendTest extends TestCase
 
         $searchResult = $this->getSearchResult();
 
-        $this->providerMock
-            ->expects($this->once())
+        $this->providerStub
             ->method('search')
             ->with($query)
             ->willReturn($searchResult);
 
-        $this->nextCursorResolverMock
-            ->expects($this->once())
+        $this->nextCursorResolverStub
             ->method('save')
             ->with($query, 10, 'test-cursor-123');
 
@@ -659,10 +607,6 @@ final class RemoteMediaBackendTest extends TestCase
 
         $searchQuery = new SearchQuery('non-existing text', $location);
 
-        $this->nextCursorResolverMock
-            ->expects($this->never())
-            ->method('resolve');
-
         $query = new Query(
             query: 'non-existing text',
             types: ['video'],
@@ -671,15 +615,10 @@ final class RemoteMediaBackendTest extends TestCase
 
         $searchResult = $this->getEmptySearchResult();
 
-        $this->providerMock
-            ->expects($this->once())
+        $this->providerStub
             ->method('search')
             ->with($query)
             ->willReturn($searchResult);
-
-        $this->nextCursorResolverMock
-            ->expects($this->never())
-            ->method('save');
 
         $searchResult = $this->backend->searchItems($searchQuery);
 
@@ -699,8 +638,7 @@ final class RemoteMediaBackendTest extends TestCase
             limit: 25,
         );
 
-        $this->providerMock
-            ->expects($this->once())
+        $this->providerStub
             ->method('searchCount')
             ->with($query)
             ->willReturn(12);
@@ -723,8 +661,7 @@ final class RemoteMediaBackendTest extends TestCase
             limit: 25,
         );
 
-        $this->providerMock
-            ->expects($this->once())
+        $this->providerStub
             ->method('searchCount')
             ->with($query)
             ->willReturn(12);
@@ -742,8 +679,7 @@ final class RemoteMediaBackendTest extends TestCase
             limit: 25,
         );
 
-        $this->providerMock
-            ->expects($this->once())
+        $this->providerStub
             ->method('searchCount')
             ->with($query)
             ->willReturn(12);
