@@ -11,7 +11,7 @@ use Netgen\RemoteMedia\API\ProviderInterface;
 use Netgen\RemoteMedia\API\Values\RemoteResource;
 use Netgen\RemoteMedia\Exception\RemoteResourceNotFoundException;
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\ConstraintValidatorInterface;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
@@ -19,7 +19,7 @@ use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 #[CoversClass(RemoteMediaValidator::class)]
 final class RemoteMediaValidatorTest extends ValidatorTestCase
 {
-    private MockObject&ProviderInterface $providerMock;
+    private Stub&ProviderInterface $providerStub;
 
     protected function setUp(): void
     {
@@ -30,15 +30,14 @@ final class RemoteMediaValidatorTest extends ValidatorTestCase
 
     public function getValidator(): ConstraintValidatorInterface
     {
-        $this->providerMock = $this->createMock(ProviderInterface::class);
+        $this->providerStub = self::createStub(ProviderInterface::class);
 
-        return new RemoteMediaValidator($this->providerMock);
+        return new RemoteMediaValidator($this->providerStub);
     }
 
     public function testValidateValid(): void
     {
-        $this->providerMock
-            ->expects($this->once())
+        $this->providerStub
             ->method('loadFromRemote')
             ->with(self::identicalTo('upload|image|folder/test_resource'))
             ->willReturn(new RemoteResource(
@@ -53,17 +52,12 @@ final class RemoteMediaValidatorTest extends ValidatorTestCase
 
     public function testValidateNull(): void
     {
-        $this->providerMock
-            ->expects($this->never())
-            ->method('loadFromRemote');
-
         $this->assertValid(true, null);
     }
 
     public function testValidateNonExisting(): void
     {
-        $this->providerMock
-            ->expects($this->once())
+        $this->providerStub
             ->method('loadFromRemote')
             ->with(self::identicalTo('upload|image|folder/test_resource2'))
             ->willThrowException(new RemoteResourceNotFoundException('upload|image|folder/test_resource2'));

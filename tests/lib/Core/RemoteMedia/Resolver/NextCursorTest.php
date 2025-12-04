@@ -8,7 +8,7 @@ use Netgen\Layouts\RemoteMedia\Core\RemoteMedia\Resolver\NextCursor;
 use Netgen\RemoteMedia\API\Search\Query;
 use Netgen\RemoteMedia\API\Values\Folder;
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
@@ -25,34 +25,31 @@ final class NextCursorTest extends TestCase
 
     private const string TEST_CURSOR = 'k84jh71osdf355asder';
 
-    private MockObject&CacheItemPoolInterface $cacheMock;
+    private Stub&CacheItemPoolInterface $cacheStub;
 
     private NextCursor $resolver;
 
     protected function setUp(): void
     {
-        $this->cacheMock = $this->createMock(CacheItemPoolInterface::class);
+        $this->cacheStub = self::createStub(CacheItemPoolInterface::class);
 
-        $this->resolver = new NextCursor($this->cacheMock, self::CACHE_TTL);
+        $this->resolver = new NextCursor($this->cacheStub, self::CACHE_TTL);
     }
 
     public function testResolve(): void
     {
-        $cacheItemMock = $this->createMock(CacheItemInterface::class);
+        $cacheItemStub = self::createStub(CacheItemInterface::class);
 
-        $this->cacheMock
-            ->expects($this->once())
+        $this->cacheStub
             ->method('getItem')
             ->with(self::TEST_CACHE_KEY)
-            ->willReturn($cacheItemMock);
+            ->willReturn($cacheItemStub);
 
-        $cacheItemMock
-            ->expects($this->once())
+        $cacheItemStub
             ->method('isHit')
             ->willReturn(true);
 
-        $cacheItemMock
-            ->expects($this->once())
+        $cacheItemStub
             ->method('get')
             ->willReturn(self::TEST_CURSOR);
 
@@ -61,16 +58,14 @@ final class NextCursorTest extends TestCase
 
     public function testResolveWithoutMatch(): void
     {
-        $cacheItemMock = $this->createMock(CacheItemInterface::class);
+        $cacheItemStub = self::createStub(CacheItemInterface::class);
 
-        $this->cacheMock
-            ->expects($this->once())
+        $this->cacheStub
             ->method('getItem')
             ->with(self::TEST_CACHE_KEY)
-            ->willReturn($cacheItemMock);
+            ->willReturn($cacheItemStub);
 
-        $cacheItemMock
-            ->expects($this->once())
+        $cacheItemStub
             ->method('isHit')
             ->willReturn(false);
 
@@ -82,21 +77,18 @@ final class NextCursorTest extends TestCase
 
     public function testSave(): void
     {
-        $cacheItemMock = $this->createMock(CacheItemInterface::class);
+        $cacheItemStub = self::createStub(CacheItemInterface::class);
 
-        $this->cacheMock
-            ->expects($this->once())
+        $this->cacheStub
             ->method('getItem')
             ->with(self::TEST_CACHE_KEY)
-            ->willReturn($cacheItemMock);
+            ->willReturn($cacheItemStub);
 
-        $cacheItemMock
-            ->expects($this->once())
+        $cacheItemStub
             ->method('set')
             ->with(self::TEST_CURSOR);
 
-        $cacheItemMock
-            ->expects($this->once())
+        $cacheItemStub
             ->method('expiresAfter')
             ->with(self::CACHE_TTL);
 

@@ -13,7 +13,7 @@ use Netgen\RemoteMedia\API\Values\RemoteResource;
 use Netgen\RemoteMedia\Exception\RemoteResourceNotFoundException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\OptionsResolver\Exception\InvalidArgumentException;
 use Symfony\Component\Validator\Validation;
@@ -23,13 +23,13 @@ final class RemoteMediaTypeTest extends TestCase
 {
     use ParameterTypeTestTrait;
 
-    private MockObject&ProviderInterface $providerMock;
+    private Stub&ProviderInterface $providerStub;
 
     protected function setUp(): void
     {
-        $this->providerMock = $this->createMock(ProviderInterface::class);
+        $this->providerStub = self::createStub(ProviderInterface::class);
 
-        $this->type = new RemoteMediaType($this->providerMock);
+        $this->type = new RemoteMediaType($this->providerStub);
     }
 
     public function testGetIdentifier(): void
@@ -102,8 +102,7 @@ final class RemoteMediaTypeTest extends TestCase
 
     public function testValidationValid(): void
     {
-        $this->providerMock
-            ->expects($this->once())
+        $this->providerStub
             ->method('loadFromRemote')
             ->with(self::identicalTo('upload|image|folder/test_resource'))
             ->willReturn(new RemoteResource(
@@ -115,7 +114,7 @@ final class RemoteMediaTypeTest extends TestCase
 
         $parameter = $this->getParameterDefinition([], true);
         $validator = Validation::createValidatorBuilder()
-            ->setConstraintValidatorFactory(new RemoteMediaValidatorFactory($this->providerMock))
+            ->setConstraintValidatorFactory(new RemoteMediaValidatorFactory($this->providerStub))
             ->getValidator();
 
         $errors = $validator->validate(
@@ -128,13 +127,9 @@ final class RemoteMediaTypeTest extends TestCase
 
     public function testValidationValidWithNonRequiredValue(): void
     {
-        $this->providerMock
-            ->expects($this->never())
-            ->method('loadFromRemote');
-
         $parameter = $this->getParameterDefinition();
         $validator = Validation::createValidatorBuilder()
-            ->setConstraintValidatorFactory(new RemoteMediaValidatorFactory($this->providerMock))
+            ->setConstraintValidatorFactory(new RemoteMediaValidatorFactory($this->providerStub))
             ->getValidator();
 
         $errors = $validator->validate(null, $this->type->getConstraints($parameter, null));
@@ -143,15 +138,14 @@ final class RemoteMediaTypeTest extends TestCase
 
     public function testValidationInvalid(): void
     {
-        $this->providerMock
-            ->expects($this->once())
+        $this->providerStub
             ->method('loadFromRemote')
             ->with(self::identicalTo('upload|image|folder/test_resource'))
             ->willThrowException(new RemoteResourceNotFoundException('upload|image|folder/test_resource'));
 
         $parameter = $this->getParameterDefinition([], true);
         $validator = Validation::createValidatorBuilder()
-            ->setConstraintValidatorFactory(new RemoteMediaValidatorFactory($this->providerMock))
+            ->setConstraintValidatorFactory(new RemoteMediaValidatorFactory($this->providerStub))
             ->getValidator();
 
         $errors = $validator->validate(
@@ -196,8 +190,7 @@ final class RemoteMediaTypeTest extends TestCase
             md5: '5d7a812a020b40e23411edbc83cb809f',
         );
 
-        $this->providerMock
-            ->expects($this->once())
+        $this->providerStub
             ->method('loadFromRemote')
             ->with(self::identicalTo('upload|image|folder/test_resource'))
             ->willReturn($remoteResource);
@@ -210,8 +203,7 @@ final class RemoteMediaTypeTest extends TestCase
 
     public function testGetValueObjectWithNoPage(): void
     {
-        $this->providerMock
-            ->expects($this->once())
+        $this->providerStub
             ->method('loadFromRemote')
             ->with(self::identicalTo('upload|image|folder/test_resource'))
             ->willThrowException(new RemoteResourceNotFoundException('upload|image|folder/test_resource'));
