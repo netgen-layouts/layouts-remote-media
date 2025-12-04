@@ -8,4 +8,5 @@ includes:
 parameters:
     ignoreErrors:
         # Doctrine DBAL
+
         - '#Property Netgen\\Layouts\\RemoteMedia\\API\\Values\\RemoteMediaItem::\$id \(int\|null\) is never assigned int so it can be removed from the property type.#'
