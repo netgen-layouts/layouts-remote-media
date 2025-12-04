@@ -60,9 +60,7 @@ final class RemoteMediaTypeTest extends TestCase
     }
 
     /**
-     * Provider for testing valid parameter attributes.
-     *
-     * @return mixed[]
+     * @return iterable<mixed>
      */
     public static function validOptionsDataProvider(): iterable
     {
@@ -85,9 +83,7 @@ final class RemoteMediaTypeTest extends TestCase
     }
 
     /**
-     * Provider for testing invalid parameter attributes.
-     *
-     * @return mixed[]
+     * @return iterable<mixed>
      */
     public static function invalidOptionsDataProvider(): iterable
     {
@@ -163,7 +159,7 @@ final class RemoteMediaTypeTest extends TestCase
     }
 
     /**
-     * @return mixed[]
+     * @return iterable<mixed>
      */
     public static function emptyDataProvider(): iterable
     {
