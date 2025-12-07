@@ -13,13 +13,11 @@ use Symfony\Component\Validator\ConstraintValidatorInterface;
 
 final class RemoteMediaValidatorFactory implements ConstraintValidatorFactoryInterface
 {
-    private ProviderInterface $provider;
-
     private ConstraintValidatorFactory $baseValidatorFactory;
 
-    public function __construct(ProviderInterface $provider)
-    {
-        $this->provider = $provider;
+    public function __construct(
+        private ProviderInterface $provider,
+    ) {
         $this->baseValidatorFactory = new ConstraintValidatorFactory();
     }
 

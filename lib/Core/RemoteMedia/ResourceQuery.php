@@ -14,7 +14,7 @@ final class ResourceQuery
     public string $remoteId {
         get {
             $parts = array_map(
-                static fn ($part) => str_replace('|', '/', $part),
+                static fn (string $part): string => str_replace('|', '/', $part),
                 explode('||', $this->value),
             );
 
