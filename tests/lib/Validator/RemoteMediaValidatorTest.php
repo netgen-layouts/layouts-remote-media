@@ -28,13 +28,6 @@ final class RemoteMediaValidatorTest extends ValidatorTestCase
         $this->constraint = new RemoteMedia();
     }
 
-    public function getValidator(): ConstraintValidatorInterface
-    {
-        $this->providerStub = self::createStub(ProviderInterface::class);
-
-        return new RemoteMediaValidator($this->providerStub);
-    }
-
     public function testValidateValid(): void
     {
         $this->providerStub
@@ -80,5 +73,12 @@ final class RemoteMediaValidatorTest extends ValidatorTestCase
         $this->expectExceptionMessage('Expected argument of type "string", "array" given');
 
         $this->assertValid(true, []);
+    }
+
+    protected function getValidator(): ConstraintValidatorInterface
+    {
+        $this->providerStub = self::createStub(ProviderInterface::class);
+
+        return new RemoteMediaValidator($this->providerStub);
     }
 }

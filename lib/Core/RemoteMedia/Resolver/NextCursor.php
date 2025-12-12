@@ -11,6 +11,7 @@ use RuntimeException;
 
 use function implode;
 use function mb_trim;
+use function sprintf;
 use function str_replace;
 
 final class NextCursor implements NextCursorResolverInterface
@@ -29,7 +30,7 @@ final class NextCursor implements NextCursorResolverInterface
             return $cacheItem->get();
         }
 
-        throw new RuntimeException("Can't get cursor key for query: " . $query . " with offset: {$offset}");
+        throw new RuntimeException(sprintf("Can't get cursor key for query: %s with offset: %s", $query, $offset));
     }
 
     public function save(Query $query, int $offset, string $cursor): void
