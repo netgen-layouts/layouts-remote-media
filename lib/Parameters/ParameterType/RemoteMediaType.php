@@ -40,7 +40,7 @@ final class RemoteMediaType extends ParameterType implements ValueObjectProvider
 
     public function getValueObject(mixed $value): ?RemoteResource
     {
-        $query = ResourceQuery::createFromValue($value);
+        $query = ResourceQuery::createFromValue((string) $value);
 
         try {
             return $this->provider->loadFromRemote($query->remoteId);
