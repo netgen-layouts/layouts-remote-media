@@ -6,7 +6,7 @@ namespace Netgen\Layouts\RemoteMedia\Tests\Parameters\ParameterType;
 
 use Netgen\Layouts\Parameters\ParameterDefinition;
 use Netgen\Layouts\RemoteMedia\Parameters\ParameterType\RemoteMediaType;
-use Netgen\Layouts\RemoteMedia\Tests\Validator\RemoteMediaValidatorFactory;
+use Netgen\Layouts\RemoteMedia\Tests\TestCase\ValidatorTestCaseTrait;
 use Netgen\Layouts\Tests\Parameters\ParameterType\ParameterTypeTestTrait;
 use Netgen\RemoteMedia\API\ProviderInterface;
 use Netgen\RemoteMedia\API\Values\RemoteResource;
@@ -16,12 +16,13 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\OptionsResolver\Exception\InvalidArgumentException;
-use Symfony\Component\Validator\Validation;
 
 #[CoversClass(RemoteMediaType::class)]
 final class RemoteMediaTypeTest extends TestCase
 {
     use ParameterTypeTestTrait;
+
+    use ValidatorTestCaseTrait;
 
     private Stub&ProviderInterface $providerStub;
 
@@ -108,14 +109,13 @@ final class RemoteMediaTypeTest extends TestCase
                 md5: '5d7a812a020b40e23411edbc83cb809f',
             ));
 
-        $parameter = $this->getParameterDefinition([], true);
-        $validator = Validation::createValidatorBuilder()
-            ->setConstraintValidatorFactory(new RemoteMediaValidatorFactory($this->providerStub))
-            ->getValidator();
+        $validator = $this->createValidator($this->providerStub);
+
+        $parameterDefinition = $this->getParameterDefinition([], true);
 
         $errors = $validator->validate(
             'upload||image||folder|test_resource',
-            $this->type->getConstraints($parameter, 'upload||image||folder|test_resource'),
+            $this->type->getConstraints($parameterDefinition, 'upload||image||folder|test_resource'),
         );
 
         self::assertCount(0, $errors);
@@ -123,12 +123,11 @@ final class RemoteMediaTypeTest extends TestCase
 
     public function testValidationValidWithNonRequiredValue(): void
     {
-        $parameter = $this->getParameterDefinition();
-        $validator = Validation::createValidatorBuilder()
-            ->setConstraintValidatorFactory(new RemoteMediaValidatorFactory($this->providerStub))
-            ->getValidator();
+        $validator = $this->createValidator($this->providerStub);
 
-        $errors = $validator->validate(null, $this->type->getConstraints($parameter, null));
+        $parameterDefinition = $this->getParameterDefinition();
+
+        $errors = $validator->validate(null, $this->type->getConstraints($parameterDefinition, null));
         self::assertCount(0, $errors);
     }
 
@@ -139,14 +138,13 @@ final class RemoteMediaTypeTest extends TestCase
             ->with(self::identicalTo('upload|image|folder/test_resource'))
             ->willThrowException(new RemoteResourceNotFoundException('upload|image|folder/test_resource'));
 
-        $parameter = $this->getParameterDefinition([], true);
-        $validator = Validation::createValidatorBuilder()
-            ->setConstraintValidatorFactory(new RemoteMediaValidatorFactory($this->providerStub))
-            ->getValidator();
+        $validator = $this->createValidator($this->providerStub);
+
+        $parameterDefinition = $this->getParameterDefinition([], true);
 
         $errors = $validator->validate(
             'upload||image||folder|test_resource',
-            $this->type->getConstraints($parameter, 'upload||image||folder|test_resource'),
+            $this->type->getConstraints($parameterDefinition, 'upload||image||folder|test_resource'),
         );
 
         self::assertNotCount(0, $errors);

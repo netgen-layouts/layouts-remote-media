@@ -75,7 +75,7 @@ final class RemoteMediaValidatorTest extends ValidatorTestCase
         $this->assertValid(true, []);
     }
 
-    protected function getValidator(): ConstraintValidatorInterface
+    protected function getConstraintValidator(): ConstraintValidatorInterface
     {
         $this->providerStub = self::createStub(ProviderInterface::class);
 
