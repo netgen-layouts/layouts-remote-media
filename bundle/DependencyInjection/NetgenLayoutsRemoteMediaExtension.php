@@ -41,7 +41,7 @@ final class NetgenLayoutsRemoteMediaExtension extends Extension implements Prepe
         $loader->load('default_settings.yaml');
         $loader->load('services/**/*.yaml', 'glob');
 
-        $container->setParameter('netgen_layouts_remote_media.root_folder', $config['root_folder']);
+        $container->setParameter('netgen_layouts.remote_media.root_folder', $config['root_folder']);
     }
 
     /**
