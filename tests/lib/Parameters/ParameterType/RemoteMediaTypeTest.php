@@ -44,6 +44,7 @@ final class RemoteMediaTypeTest extends TestCase
      * @param mixed[] $resolvedOptions
      *
      * @covers \Netgen\Layouts\RemoteMedia\Parameters\ParameterType\RemoteMediaType::configureOptions
+     *
      * @dataProvider validOptionsDataProvider
      */
     public function testValidOptions(array $options, array $resolvedOptions): void
@@ -56,6 +57,7 @@ final class RemoteMediaTypeTest extends TestCase
      * @param mixed[] $options
      *
      * @covers \Netgen\Layouts\RemoteMedia\Parameters\ParameterType\RemoteMediaType::configureOptions
+     *
      * @dataProvider invalidOptionsDataProvider
      */
     public function testInvalidOptions(array $options): void
@@ -70,7 +72,7 @@ final class RemoteMediaTypeTest extends TestCase
      *
      * @return mixed[]
      */
-    public function validOptionsDataProvider(): array
+    public static function validOptionsDataProvider(): iterable
     {
         return [
             [
@@ -95,7 +97,7 @@ final class RemoteMediaTypeTest extends TestCase
      *
      * @return mixed[]
      */
-    public function invalidOptionsDataProvider(): array
+    public static function invalidOptionsDataProvider(): iterable
     {
         return [
             [
@@ -168,6 +170,7 @@ final class RemoteMediaTypeTest extends TestCase
      * @param mixed $value
      *
      * @covers \Netgen\Layouts\RemoteMedia\Parameters\ParameterType\RemoteMediaType::isValueEmpty
+     *
      * @dataProvider emptyDataProvider
      */
     public function testIsValueEmpty($value, bool $isEmpty): void
@@ -178,7 +181,7 @@ final class RemoteMediaTypeTest extends TestCase
     /**
      * @return mixed[]
      */
-    public function emptyDataProvider(): array
+    public static function emptyDataProvider(): iterable
     {
         return [
             [null, true],
