@@ -24,6 +24,10 @@ final class NetgenLayoutsRemoteMediaExtension extends Extension implements Prepe
      */
     public function load(array $configs, ContainerBuilder $container): void
     {
+        // Process bundle configuration
+        $configuration = $this->getConfiguration($configs, $container);
+        $config = $this->processConfiguration($configuration, $configs);
+
         $locator = new FileLocator(__DIR__ . '/../Resources/config');
 
         $loader = new DelegatingLoader(
@@ -37,6 +41,13 @@ final class NetgenLayoutsRemoteMediaExtension extends Extension implements Prepe
 
         $loader->load('default_settings.yaml');
         $loader->load('services/**/*.yaml', 'glob');
+
+        $container->setParameter('netgen_layouts_remote_media.root_folder', $config['root_folder']);
+    }
+
+    public function getConfiguration(array $config, ContainerBuilder $container): Configuration
+    {
+        return new Configuration();
     }
 
     public function prepend(ContainerBuilder $container): void

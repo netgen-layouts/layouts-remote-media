@@ -14,6 +14,7 @@ use function count;
 use function explode;
 use function implode;
 use function in_array;
+use function str_replace;
 
 final class Location implements LocationInterface
 {
@@ -96,16 +97,17 @@ final class Location implements LocationInterface
         return new self($id, $name, $resourceType, $folder, $parentId);
     }
 
-    public static function createAsSection(string $resourceType, ?string $sectionName = null): self
+    public static function createAsSection(string $resourceType, ?string $sectionName = null, ?string $folder = null): self
     {
         if (!in_array($resourceType, self::SUPPORTED_TYPES, true)) {
             throw new InvalidArgumentException('Provided resource type ' . $resourceType . ' is invalid');
         }
 
         return new self(
-            $resourceType,
+            $folder !== null ? $resourceType . '|' . str_replace('/', '|', $folder) : $resourceType,
             $sectionName ?? $resourceType,
             $resourceType,
+            $folder,
         );
     }
 

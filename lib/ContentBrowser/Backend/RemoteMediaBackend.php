@@ -50,16 +50,23 @@ final class RemoteMediaBackend implements BackendInterface
      */
     private $config;
 
+    /**
+     * @var string|null
+     */
+    private $rootFolder;
+
     public function __construct(
         RemoteMediaProvider $provider,
         NextCursorResolver $nextCursorResolver,
         TranslatorInterface $translator,
-        Configuration $config
+        Configuration $config,
+        ?string $rootFolder = null
     ) {
         $this->provider = $provider;
         $this->nextCursorResolver = $nextCursorResolver;
         $this->translator = $translator;
         $this->config = $config;
+        $this->rootFolder = $rootFolder;
     }
 
     public function getSections(): iterable
@@ -279,6 +286,7 @@ final class RemoteMediaBackend implements BackendInterface
             Location::createAsSection(
                 Location::RESOURCE_TYPE_ALL,
                 $this->translator->trans('backend.remote_media.resource_type.' . Location::RESOURCE_TYPE_ALL, [], 'ngcb'),
+                $this->rootFolder,
             ),
         ];
 
@@ -286,6 +294,7 @@ final class RemoteMediaBackend implements BackendInterface
             $sections[] = Location::createAsSection(
                 $type,
                 $this->translator->trans('backend.remote_media.resource_type.' . $type, [], 'ngcb'),
+                $this->rootFolder,
             );
         }
 
