@@ -19,5 +19,11 @@
                 <referencedProperty name="Symfony\Component\Validator\ConstraintValidator::$context" />
             </errorLevel>
         </PropertyNotSetInConstructor>
+
+        <PossiblyUndefinedMethod>
+            <errorLevel type="suppress">
+                <referencedMethod name="Symfony\Component\Config\Definition\Builder\NodeDefinition::children" />
+            </errorLevel>
+        </PossiblyUndefinedMethod>
     </issueHandlers>
 </psalm>
