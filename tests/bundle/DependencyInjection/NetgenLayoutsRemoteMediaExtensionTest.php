@@ -18,6 +18,7 @@ final class NetgenLayoutsRemoteMediaExtensionTest extends AbstractExtensionTestC
 
         $this->assertContainerBuilderHasParameter('netgen_layouts.remote_media.cache.pool_name', 'cache.redis');
         $this->assertContainerBuilderHasParameter('netgen_layouts.remote_media.cache.ttl', 4800);
+        $this->assertContainerBuilderHasParameter('netgen_layouts.remote_media.root_folder', 'images/layouts');
     }
 
     protected function getContainerExtensions(): array
@@ -37,6 +38,7 @@ final class NetgenLayoutsRemoteMediaExtensionTest extends AbstractExtensionTestC
                 'pool' => 'cache.redis',
                 'ttl' => 4800,
             ],
+            'root_folder' => 'images/layouts',
         ];
     }
 }

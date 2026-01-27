@@ -24,6 +24,7 @@ final class ConfigurationTest extends TestCase
                         'pool' => 'cache.app',
                         'ttl' => 7200,
                     ],
+                    'root_folder' => 'images/layouts',
                 ],
             ],
         );
