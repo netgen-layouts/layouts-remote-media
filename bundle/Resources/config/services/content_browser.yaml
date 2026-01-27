@@ -14,6 +14,7 @@ services:
             - "@netgen_layouts.remote_media.next_cursor_resolver"
             - "@translator"
             - "@netgen_content_browser.config.remote_media"
+            - "%netgen_layouts.remote_media.root_folder%"
         tags:
             - { name: netgen_content_browser.backend, item_type: remote_media }
 

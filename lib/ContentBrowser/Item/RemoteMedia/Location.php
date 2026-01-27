@@ -15,6 +15,7 @@ use function count;
 use function explode;
 use function implode;
 use function in_array;
+use function sprintf;
 use function str_replace;
 
 final class Location implements LocationInterface
@@ -49,9 +50,14 @@ final class Location implements LocationInterface
         return new self($id, $folder->getName());
     }
 
-    public static function createAsSection(string $type, ?string $sectionName = null): self
+    public static function createAsSection(string $type, ?string $sectionName = null, ?string $folder = null): self
     {
-        return new self($type, $sectionName);
+        return new self(
+            id: $folder !== null
+                ? sprintf('%s||%s', $type, str_replace('/', '|', $folder))
+                : $type,
+            name: $sectionName ?? $type,
+        );
     }
 
     public function getLocationId(): string
