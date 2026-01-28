@@ -156,6 +156,7 @@ final class RemoteMediaBackendTest extends TestCase
                 ],
             );
 
+        /** @var \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Location[] $sections */
         $sections = $this->backend->getSections();
 
         self::assertCount(6, $sections);
