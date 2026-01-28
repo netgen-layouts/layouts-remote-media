@@ -53,10 +53,10 @@ final class Location implements LocationInterface
     public static function createAsSection(string $type, ?string $sectionName = null, ?string $folder = null): self
     {
         return new self(
-            id: $folder !== null
+            $folder !== null
                 ? sprintf('%s||%s', $type, str_replace('/', '|', $folder))
                 : $type,
-            name: $sectionName ?? $type,
+            $sectionName ?? $type,
         );
     }
 
