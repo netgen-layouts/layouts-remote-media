@@ -75,6 +75,17 @@ final class LocationTest extends TestCase
         self::assertSame('video', $this->location->getType());
     }
 
+    public function testCreateAsSectionWithFolder(): void
+    {
+        $location = Location::createAsSection('image', 'Images', 'images/layouts');
+
+        self::assertSame('image||images|layouts', $location->getLocationId());
+        self::assertSame('Images', $location->getName());
+        self::assertSame('image', $location->getType());
+        self::assertInstanceOf(Folder::class, $location->getFolder());
+        self::assertSame('images/layouts', $location->getFolder()->getPath());
+    }
+
     public function testFromIdWithInvalidResourceType(): void
     {
         $this->expectException(InvalidArgumentException::class);

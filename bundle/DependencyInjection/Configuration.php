@@ -17,6 +17,7 @@ final class Configuration implements ConfigurationInterface
         /** @var \Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition $rootNode */
         $rootNode = $treeBuilder->getRootNode();
         $this->addCacheConfiguration($rootNode);
+        $this->addRootFolderConfiguration($rootNode);
 
         return $treeBuilder;
     }
@@ -37,6 +38,17 @@ final class Configuration implements ConfigurationInterface
                             ->defaultValue(7200)
                         ->end()
                     ->end()
+                ->end()
+            ->end();
+    }
+
+    private function addRootFolderConfiguration(ArrayNodeDefinition $rootNode): void
+    {
+        $rootNode
+            ->children()
+                ->scalarNode('root_folder')
+                    ->info('Root folder in Cloudinary for content browser (see README)')
+                    ->defaultNull()
                 ->end()
             ->end();
     }

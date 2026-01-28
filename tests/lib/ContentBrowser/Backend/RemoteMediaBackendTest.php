@@ -132,6 +132,40 @@ final class RemoteMediaBackendTest extends TestCase
         self::assertContainsOnlyInstancesOf(Location::class, $sections);
     }
 
+    public function testGetSectionsWithRootFolder(): void
+    {
+        $this->backend = new RemoteMediaBackend(
+            $this->providerMock,
+            $this->nextCursorResolverMock,
+            $this->translatorMock,
+            $this->config,
+            'images/layouts',
+        );
+
+        $this->translatorMock
+            ->expects(self::exactly(6))
+            ->method('trans')
+            ->willReturnMap(
+                [
+                    ['backend.remote_media.resource_type.all', [], 'ngcb', null, 'All resources'],
+                    ['backend.remote_media.resource_type.image', [], 'ngcb', null, 'Image'],
+                    ['backend.remote_media.resource_type.audio', [], 'ngcb', null, 'Audio'],
+                    ['backend.remote_media.resource_type.video', [], 'ngcb', null, 'Video'],
+                    ['backend.remote_media.resource_type.document', [], 'ngcb', null, 'Document'],
+                    ['backend.remote_media.resource_type.other', [], 'ngcb', null, 'Other'],
+                ],
+            );
+
+        /** @var \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Location[] $sections */
+        $sections = $this->backend->getSections();
+
+        self::assertCount(6, $sections);
+        self::assertContainsOnlyInstancesOf(Location::class, $sections);
+
+        self::assertSame('all||images|layouts', $sections[0]->getLocationId());
+        self::assertSame('image||images|layouts', $sections[1]->getLocationId());
+    }
+
     public function testLoadLocation(): void
     {
         $location = $this->backend->loadLocation('video||media|videos');
