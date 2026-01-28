@@ -119,15 +119,14 @@ final class RemoteMediaBackendTest extends TestCase
     public function testGetSectionsWithRootFolder(): void
     {
         $this->backend = new RemoteMediaBackend(
-            $this->providerMock,
-            $this->nextCursorResolverMock,
-            $this->translatorMock,
+            $this->providerStub,
+            $this->nextCursorResolverStub,
+            $this->translatorStub,
             $this->config,
             'images/layouts',
         );
 
-        $this->translatorMock
-            ->expects(self::exactly(6))
+        $this->translatorStub
             ->method('trans')
             ->willReturnMap(
                 [
@@ -140,14 +139,13 @@ final class RemoteMediaBackendTest extends TestCase
                 ],
             );
 
-        /** @var \Netgen\Layouts\RemoteMedia\ContentBrowser\Item\RemoteMedia\Location[] $sections */
-        $sections = $this->backend->getSections();
+        $sections = [...$this->backend->getSections()];
 
         self::assertCount(6, $sections);
         self::assertContainsOnlyInstancesOf(Location::class, $sections);
 
-        self::assertSame('all||images|layouts', $sections[0]->getLocationId());
-        self::assertSame('image||images|layouts', $sections[1]->getLocationId());
+        self::assertSame('all||images|layouts', $sections[0]->locationId);
+        self::assertSame('image||images|layouts', $sections[1]->locationId);
     }
 
     public function testLoadLocation(): void

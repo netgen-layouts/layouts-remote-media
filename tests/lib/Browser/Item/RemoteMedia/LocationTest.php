@@ -79,11 +79,11 @@ final class LocationTest extends TestCase
     {
         $location = Location::createAsSection('image', 'Images', 'images/layouts');
 
-        self::assertSame('image||images|layouts', $location->getLocationId());
-        self::assertSame('Images', $location->getName());
-        self::assertSame('image', $location->getType());
-        self::assertInstanceOf(Folder::class, $location->getFolder());
-        self::assertSame('images/layouts', $location->getFolder()->getPath());
+        self::assertSame('image||images|layouts', $location->locationId);
+        self::assertSame('Images', $location->name);
+        self::assertSame('image', $location->type);
+        self::assertInstanceOf(Folder::class, $location->folder);
+        self::assertSame('images/layouts', $location->folder->getPath());
     }
 
     public function testFromIdWithInvalidResourceType(): void
