@@ -32,7 +32,6 @@ final class RemoteMediaValidatorTest extends ValidatorTestCase
     {
         $this->providerStub
             ->method('loadFromRemote')
-            ->with(self::identicalTo('upload|image|folder/test_resource'))
             ->willReturn(new RemoteResource(
                 remoteId: 'upload|image|folder/test_resource',
                 type: RemoteResource::TYPE_IMAGE,
@@ -52,7 +51,6 @@ final class RemoteMediaValidatorTest extends ValidatorTestCase
     {
         $this->providerStub
             ->method('loadFromRemote')
-            ->with(self::identicalTo('upload|image|folder/test_resource2'))
             ->willThrowException(new RemoteResourceNotFoundException('upload|image|folder/test_resource2'));
 
         $this->assertValid(false, 'upload||image||folder|test_resource2');

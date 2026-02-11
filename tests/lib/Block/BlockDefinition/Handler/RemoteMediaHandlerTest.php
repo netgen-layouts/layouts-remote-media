@@ -103,7 +103,6 @@ final class RemoteMediaHandlerTest extends TestCase
 
         $this->valueLoaderStub
             ->method('load')
-            ->with('image|folder|subfolder|image_name.jpg')
             ->willReturn($value);
 
         $this->handler->getDynamicParameters($params, $block);

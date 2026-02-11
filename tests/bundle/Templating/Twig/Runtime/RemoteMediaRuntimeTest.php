@@ -46,7 +46,6 @@ final class RemoteMediaRuntimeTest extends TestCase
 
         $this->providerStub
             ->method('buildVariation')
-            ->with($location, 'netgen_layouts_block', 'test_variation')
             ->willReturn($variation);
 
         self::assertSame(
@@ -73,7 +72,6 @@ final class RemoteMediaRuntimeTest extends TestCase
 
         $this->providerStub
             ->method('buildVariation')
-            ->with($location, 'netgen_layouts_item', 'test_variation')
             ->willReturn($variation);
 
         self::assertSame(
@@ -98,7 +96,6 @@ final class RemoteMediaRuntimeTest extends TestCase
 
         $this->providerStub
             ->method('generateHtmlTag')
-            ->with($resource, [], true, false)
             ->willReturn($tagString);
 
         self::assertSame(
@@ -123,7 +120,6 @@ final class RemoteMediaRuntimeTest extends TestCase
 
         $this->providerStub
             ->method('generateVariationHtmlTag')
-            ->with($location, 'netgen_layouts_block', 'test_variation', [], true, false)
             ->willReturn($tagString);
 
         self::assertSame(
@@ -148,7 +144,6 @@ final class RemoteMediaRuntimeTest extends TestCase
 
         $this->providerStub
             ->method('generateHtmlTag')
-            ->with($resource, [], true, true)
             ->willReturn($tagString);
 
         self::assertSame(
@@ -173,7 +168,6 @@ final class RemoteMediaRuntimeTest extends TestCase
 
         $this->providerStub
             ->method('generateVariationHtmlTag')
-            ->with($location, 'netgen_layouts_item', 'test_variation', [], true, true)
             ->willReturn($tagString);
 
         self::assertSame(

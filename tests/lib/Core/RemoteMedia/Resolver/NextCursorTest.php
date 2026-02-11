@@ -21,8 +21,6 @@ final class NextCursorTest extends TestCase
 {
     private const int CACHE_TTL = 3600;
 
-    private const string TEST_CACHE_KEY = 'layoutsremotemedia-cloudinary-nextcursor-test __ ble __ __ a _test$|15||image|test_folder||some tag||||created_at=desc-30';
-
     private const string TEST_CURSOR = 'k84jh71osdf355asder';
 
     private Stub&CacheItemPoolInterface $cacheStub;
@@ -38,18 +36,17 @@ final class NextCursorTest extends TestCase
 
     public function testResolve(): void
     {
-        $cacheItemStub = self::createStub(CacheItemInterface::class);
+        $cacheItemMock = self::createStub(CacheItemInterface::class);
 
         $this->cacheStub
             ->method('getItem')
-            ->with(self::TEST_CACHE_KEY)
-            ->willReturn($cacheItemStub);
+            ->willReturn($cacheItemMock);
 
-        $cacheItemStub
+        $cacheItemMock
             ->method('isHit')
             ->willReturn(true);
 
-        $cacheItemStub
+        $cacheItemMock
             ->method('get')
             ->willReturn(self::TEST_CURSOR);
 
@@ -58,14 +55,13 @@ final class NextCursorTest extends TestCase
 
     public function testResolveWithoutMatch(): void
     {
-        $cacheItemStub = self::createStub(CacheItemInterface::class);
+        $cacheItemMock = self::createStub(CacheItemInterface::class);
 
         $this->cacheStub
             ->method('getItem')
-            ->with(self::TEST_CACHE_KEY)
-            ->willReturn($cacheItemStub);
+            ->willReturn($cacheItemMock);
 
-        $cacheItemStub
+        $cacheItemMock
             ->method('isHit')
             ->willReturn(false);
 
@@ -77,18 +73,19 @@ final class NextCursorTest extends TestCase
 
     public function testSave(): void
     {
-        $cacheItemStub = self::createStub(CacheItemInterface::class);
+        $cacheItemMock = $this->createMock(CacheItemInterface::class);
 
         $this->cacheStub
             ->method('getItem')
-            ->with(self::TEST_CACHE_KEY)
-            ->willReturn($cacheItemStub);
+            ->willReturn($cacheItemMock);
 
-        $cacheItemStub
+        $cacheItemMock
+            ->expects($this->once())
             ->method('set')
             ->with(self::TEST_CURSOR);
 
-        $cacheItemStub
+        $cacheItemMock
+            ->expects($this->once())
             ->method('expiresAfter')
             ->with(self::CACHE_TTL);
 

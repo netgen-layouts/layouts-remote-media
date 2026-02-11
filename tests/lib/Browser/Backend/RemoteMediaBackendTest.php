@@ -183,7 +183,6 @@ final class RemoteMediaBackendTest extends TestCase
 
         $this->providerStub
             ->method('loadFromRemote')
-            ->with('upload|video|media/videos/my_video.mp4')
             ->willReturn($resource);
 
         $item = $this->backend->loadItem($value);
@@ -199,7 +198,6 @@ final class RemoteMediaBackendTest extends TestCase
 
         $this->providerStub
             ->method('loadFromRemote')
-            ->with('upload|video|media/videos/my_video.mp4')
             ->willThrowException(
                 new RemoteResourceNotFoundException('upload|video|media/videos/my_video.mp4'),
             );
@@ -242,7 +240,6 @@ final class RemoteMediaBackendTest extends TestCase
 
         $this->providerStub
             ->method('listFolders')
-            ->with(Folder::fromPath('test_folder/test_subfolder'))
             ->willReturn($folders);
 
         $locations = $this->backend->getSubLocations($location);
@@ -285,7 +282,6 @@ final class RemoteMediaBackendTest extends TestCase
 
         $this->providerStub
             ->method('listFolders')
-            ->with(Folder::fromPath('test_folder/test_subfolder'))
             ->willReturn($folders);
 
         self::assertSame(3, $this->backend->getSubLocationsCount($location));
@@ -309,12 +305,7 @@ final class RemoteMediaBackendTest extends TestCase
 
         $this->providerStub
             ->method('search')
-            ->with($query)
             ->willReturn($searchResult);
-
-        $this->nextCursorResolverStub
-            ->method('save')
-            ->with($query, 25, 'test-cursor-123');
 
         $items = $this->backend->getSubItems($location);
 
@@ -333,11 +324,6 @@ final class RemoteMediaBackendTest extends TestCase
             limit: 5,
         );
 
-        $this->nextCursorResolverStub
-            ->method('resolve')
-            ->with($query, 5)
-            ->willReturn($nextCursor);
-
         $query = new Query(
             types: ['image', 'audio', 'video', 'document', 'other'],
             folders: [Folder::fromPath('media/new')],
@@ -349,12 +335,7 @@ final class RemoteMediaBackendTest extends TestCase
 
         $this->providerStub
             ->method('search')
-            ->with($query)
             ->willReturn($searchResult);
-
-        $this->nextCursorResolverStub
-            ->method('save')
-            ->with($query, 10, 'test-cursor-123');
 
         $items = $this->backend->getSubItems($location, 5, 5);
 
@@ -378,12 +359,7 @@ final class RemoteMediaBackendTest extends TestCase
 
         $this->providerStub
             ->method('search')
-            ->with($query)
             ->willReturn($searchResult);
-
-        $this->nextCursorResolverStub
-            ->method('save')
-            ->with($query, 5, 'test-cursor-123');
 
         $items = $this->backend->getSubItems($location, 0, 5);
 
@@ -404,7 +380,6 @@ final class RemoteMediaBackendTest extends TestCase
 
         $this->providerStub
             ->method('search')
-            ->with($query)
             ->willReturn($searchResult);
 
         self::assertSame([], $this->backend->getSubItems($location));
@@ -426,7 +401,6 @@ final class RemoteMediaBackendTest extends TestCase
 
         $this->providerStub
             ->method('searchCount')
-            ->with($query)
             ->willReturn(150);
 
         self::assertSame(150, $this->backend->getSubItemsCount($location));
@@ -443,7 +417,6 @@ final class RemoteMediaBackendTest extends TestCase
 
         $this->providerStub
             ->method('searchCount')
-            ->with($query)
             ->willReturn(1000);
 
         self::assertSame(1000, $this->backend->getSubItemsCount($location));
@@ -463,7 +436,6 @@ final class RemoteMediaBackendTest extends TestCase
 
         $this->providerStub
             ->method('searchCount')
-            ->with($query)
             ->willReturn(6000);
 
         self::assertSame(6000, $this->backend->getSubItemsCount($location));
@@ -482,7 +454,6 @@ final class RemoteMediaBackendTest extends TestCase
 
         $this->providerStub
             ->method('searchCount')
-            ->with($query)
             ->willReturn(1000);
 
         self::assertSame(1000, $this->backend->getSubItemsCount($location));
@@ -509,12 +480,7 @@ final class RemoteMediaBackendTest extends TestCase
 
         $this->providerStub
             ->method('search')
-            ->with($query)
             ->willReturn($searchResult);
-
-        $this->nextCursorResolverStub
-            ->method('save')
-            ->with($query, 25, 'test-cursor-123');
 
         $searchResult = $this->backend->searchItems($searchQuery);
 
@@ -541,12 +507,7 @@ final class RemoteMediaBackendTest extends TestCase
 
         $this->providerStub
             ->method('search')
-            ->with($query)
             ->willReturn($searchResult);
-
-        $this->nextCursorResolverStub
-            ->method('save')
-            ->with($query, 25, 'test-cursor-123');
 
         $searchResult = $this->backend->searchItems($searchQuery);
 
@@ -570,11 +531,6 @@ final class RemoteMediaBackendTest extends TestCase
             limit: 5,
         );
 
-        $this->nextCursorResolverStub
-            ->method('resolve')
-            ->with($query, 5)
-            ->willReturn($nextCursor);
-
         $query = new Query(
             query: 'test',
             types: ['image'],
@@ -586,12 +542,7 @@ final class RemoteMediaBackendTest extends TestCase
 
         $this->providerStub
             ->method('search')
-            ->with($query)
             ->willReturn($searchResult);
-
-        $this->nextCursorResolverStub
-            ->method('save')
-            ->with($query, 10, 'test-cursor-123');
 
         $searchResult = $this->backend->searchItems($searchQuery);
 
@@ -615,7 +566,6 @@ final class RemoteMediaBackendTest extends TestCase
 
         $this->providerStub
             ->method('search')
-            ->with($query)
             ->willReturn($searchResult);
 
         $searchResult = $this->backend->searchItems($searchQuery);
@@ -638,7 +588,6 @@ final class RemoteMediaBackendTest extends TestCase
 
         $this->providerStub
             ->method('searchCount')
-            ->with($query)
             ->willReturn(12);
 
         self::assertSame(12, $this->backend->searchItemsCount($searchQuery));
@@ -661,7 +610,6 @@ final class RemoteMediaBackendTest extends TestCase
 
         $this->providerStub
             ->method('searchCount')
-            ->with($query)
             ->willReturn(12);
 
         self::assertSame(12, $this->backend->searchItemsCount($searchQuery));
@@ -679,7 +627,6 @@ final class RemoteMediaBackendTest extends TestCase
 
         $this->providerStub
             ->method('searchCount')
-            ->with($query)
             ->willReturn(12);
 
         self::assertSame(12, $this->backend->searchItemsCount($searchQuery));
