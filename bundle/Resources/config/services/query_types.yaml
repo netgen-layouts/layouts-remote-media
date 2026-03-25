@@ -1,0 +1,10 @@
+services:
+    netgen_layouts.remote_media.collection.query_type_handler.remote_media_folder:
+        class: Netgen\Layouts\RemoteMedia\Collection\QueryType\Handler\RemoteMediaFolderHandler
+        arguments:
+            - "@netgen_remote_media.provider.cloudinary"
+            - "@netgen_layouts.remote_media.cache.pool"
+            - "%netgen_layouts.remote_media.cache.ttl%"
+            - "@?logger"
+        tags:
+            - { name: netgen_layouts.query_type_handler, type: remote_media_folder }

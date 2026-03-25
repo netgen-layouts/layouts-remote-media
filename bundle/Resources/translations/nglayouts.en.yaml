@@ -1,3 +1,6 @@
 block.remote_media.remote_media: 'Remote media'
 block.remote_media.variation: 'Variation'
 block.remote_media.title: 'Title'
+
+query.remote_media_folder.folder_path: 'Remote media folder path'
+query.remote_media_folder.resource_type: 'Resource type'

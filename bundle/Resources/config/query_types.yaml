@@ -1,0 +1,3 @@
+query_types:
+    remote_media_folder:
+        name: 'Remote media folder'

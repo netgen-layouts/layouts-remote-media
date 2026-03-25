@@ -64,6 +64,7 @@ final class NetgenLayoutsRemoteMediaExtension extends Extension implements Prepe
             'item_types.yaml' => 'netgen_content_browser',
             'block_definitions.yaml' => 'netgen_layouts',
             'value_types.yaml' => 'netgen_layouts',
+            'query_types.yaml' => 'netgen_layouts',
             'netgen_layouts.yaml' => 'netgen_layouts',
             'view/block_view.yaml' => 'netgen_layouts',
             'view/item_view.yaml' => 'netgen_layouts',
