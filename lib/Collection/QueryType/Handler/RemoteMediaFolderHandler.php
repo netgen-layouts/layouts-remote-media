@@ -8,37 +8,26 @@ use Netgen\Layouts\API\Values\Collection\Query;
 use Netgen\Layouts\Collection\QueryType\QueryTypeHandlerInterface;
 use Netgen\Layouts\Parameters\ParameterBuilderInterface;
 use Netgen\Layouts\Parameters\ParameterType;
+use Netgen\Layouts\RemoteMedia\Core\RemoteMedia\NextCursorResolverInterface;
 use Netgen\RemoteMedia\API\ProviderInterface;
 use Netgen\RemoteMedia\API\Search\Query as SearchQuery;
 use Netgen\RemoteMedia\API\Values\Folder;
 use Netgen\RemoteMedia\API\Values\RemoteResource;
 use Netgen\RemoteMedia\API\Values\RemoteResourceLocation;
-use Psr\Cache\CacheItemPoolInterface;
-use Psr\Log\LoggerInterface;
-use Psr\Log\NullLogger;
+use RuntimeException;
 use Throwable;
 
 use function array_map;
-use function array_slice;
-use function count;
-use function implode;
-use function str_replace;
+use function is_string;
 
 final class RemoteMediaFolderHandler implements QueryTypeHandlerInterface
 {
     private const LOCATION_SOURCE = 'remote_media_folder_query';
-    private const CACHE_KEY_PREFIX = 'ngl_remote_media_folder';
-
-    private LoggerInterface $logger;
 
     public function __construct(
         private readonly ProviderInterface $provider,
-        private readonly ?CacheItemPoolInterface $cache = null,
-        private readonly int $cacheTtl = 1800,
-        ?LoggerInterface $logger = null,
-    ) {
-        $this->logger = $logger ?? new NullLogger();
-    }
+        private readonly NextCursorResolverInterface $nextCursorResolver,
+    ) {}
 
     public function buildParameters(ParameterBuilderInterface $builder): void
     {
@@ -69,47 +58,37 @@ final class RemoteMediaFolderHandler implements QueryTypeHandlerInterface
     {
         $folderPath = $query->getParameter('folder_path')->getValue();
 
-        $this->logger->debug('RemoteMediaFolderHandler::getValues', [
-            'folder_path' => $folderPath,
-            'offset' => $offset,
-            'limit' => $limit,
-        ]);
-
         if ($folderPath === null || $folderPath === '') {
             return [];
         }
 
-        $cacheKey = $this->buildCacheKey('values', $query, $offset, $limit);
-        $cached = $this->getCached($cacheKey);
-
-        if ($cached !== null) {
-            return $cached;
-        }
+        $limit ??= 25;
 
         try {
-            $searchQuery = $this->buildSearchQuery($query, $offset + ($limit ?? 25));
+            $searchQuery = $this->buildSearchQuery($query, $limit);
+
+            if ($offset > 0) {
+                try {
+                    $cursor = $this->nextCursorResolver->resolve($searchQuery, $offset);
+                    $searchQuery->setNextCursor($cursor);
+                } catch (RuntimeException) {
+                    throw new RuntimeException('Jumping to pages is not supported. Please, use only next/previous buttons.');
+                }
+            }
+
             $result = $this->provider->search($searchQuery);
-            $resources = array_slice($result->getResources(), $offset, $limit);
 
-            $this->logger->debug('RemoteMediaFolderHandler::getValues result', [
-                'total' => $result->getTotalCount(),
-                'returned' => count($resources),
-            ]);
+            if (is_string($result->getNextCursor())) {
+                $this->nextCursorResolver->save($searchQuery, $offset + $limit, $result->getNextCursor());
+            }
 
-            $locations = array_map(
+            return array_map(
                 static fn (RemoteResource $resource) => new RemoteResourceLocation($resource, self::LOCATION_SOURCE),
-                $resources,
+                $result->getResources(),
             );
-
-            $this->saveToCache($cacheKey, $locations);
-
-            return $locations;
+        } catch (RuntimeException $e) {
+            throw $e;
         } catch (Throwable $t) {
-            $this->logger->error('RemoteMediaFolderHandler::getValues error', [
-                'error' => $t->getMessage(),
-                'trace' => $t->getTraceAsString(),
-            ]);
-
             return [];
         }
     }
@@ -118,33 +97,15 @@ final class RemoteMediaFolderHandler implements QueryTypeHandlerInterface
     {
         $folderPath = $query->getParameter('folder_path')->getValue();
 
-        $this->logger->debug('RemoteMediaFolderHandler::getCount', [
-            'folder_path' => $folderPath,
-        ]);
-
         if ($folderPath === null || $folderPath === '') {
             return 0;
         }
 
-        $cacheKey = $this->buildCacheKey('count', $query);
-        $cached = $this->getCached($cacheKey);
-
-        if ($cached !== null) {
-            return $cached;
-        }
-
         try {
             $searchQuery = $this->buildSearchQuery($query, 0);
-            $count = $this->provider->searchCount($searchQuery);
 
-            $this->saveToCache($cacheKey, $count);
-
-            return $count;
-        } catch (Throwable $t) {
-            $this->logger->error('RemoteMediaFolderHandler::getCount error', [
-                'error' => $t->getMessage(),
-            ]);
-
+            return $this->provider->searchCount($searchQuery);
+        } catch (Throwable) {
             return 0;
         }
     }
@@ -152,61 +113,6 @@ final class RemoteMediaFolderHandler implements QueryTypeHandlerInterface
     public function isContextual(Query $query): bool
     {
         return false;
-    }
-
-    private function getCached(string $cacheKey): mixed
-    {
-        if ($this->cache === null) {
-            return null;
-        }
-
-        $cacheItem = $this->cache->getItem($cacheKey);
-
-        if ($cacheItem->isHit()) {
-            $this->logger->debug('RemoteMediaFolderHandler: cache hit', ['key' => $cacheKey]);
-
-            return $cacheItem->get();
-        }
-
-        return null;
-    }
-
-    private function saveToCache(string $cacheKey, mixed $value): void
-    {
-        if ($this->cache === null) {
-            return;
-        }
-
-        $cacheItem = $this->cache->getItem($cacheKey);
-        $cacheItem->set($value);
-        $cacheItem->expiresAfter($this->cacheTtl);
-        $this->cache->save($cacheItem);
-    }
-
-    private function buildCacheKey(string $type, Query $query, int $offset = 0, ?int $limit = null): string
-    {
-        $folderPath = $query->getParameter('folder_path')->getValue() ?? '';
-        $resourceType = $query->getParameter('resource_type')->getValue() ?? '';
-
-        $parts = [
-            self::CACHE_KEY_PREFIX,
-            $type,
-            $folderPath,
-            $resourceType,
-        ];
-
-        if ($type === 'values') {
-            $parts[] = (string) $offset;
-            $parts[] = (string) ($limit ?? 0);
-        }
-
-        $key = implode('-', $parts);
-
-        return str_replace(
-            ['{', '}', '(', ')', '/', '\\', '@', ' '],
-            '_',
-            $key,
-        );
     }
 
     private function buildSearchQuery(Query $query, int $limit): SearchQuery
