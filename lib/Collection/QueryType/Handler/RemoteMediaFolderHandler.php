@@ -7,6 +7,7 @@ namespace Netgen\Layouts\RemoteMedia\Collection\QueryType\Handler;
 use Netgen\Layouts\API\Values\Collection\Query;
 use Netgen\Layouts\Collection\QueryType\QueryTypeHandlerInterface;
 use Netgen\Layouts\Parameters\ParameterBuilderInterface;
+use Netgen\Layouts\Error\ErrorHandlerInterface;
 use Netgen\Layouts\Parameters\ParameterType;
 use Netgen\Layouts\RemoteMedia\Core\RemoteMedia\NextCursorResolverInterface;
 use Netgen\RemoteMedia\API\ProviderInterface;
@@ -14,7 +15,6 @@ use Netgen\RemoteMedia\API\Search\Query as SearchQuery;
 use Netgen\RemoteMedia\API\Values\Folder;
 use Netgen\RemoteMedia\API\Values\RemoteResource;
 use Netgen\RemoteMedia\API\Values\RemoteResourceLocation;
-use RuntimeException;
 use Throwable;
 
 use function array_map;
@@ -23,10 +23,12 @@ use function is_string;
 final class RemoteMediaFolderHandler implements QueryTypeHandlerInterface
 {
     private const LOCATION_SOURCE = 'remote_media_folder_query';
+    private const DEFAULT_LIMIT = 25;
 
     public function __construct(
-        private readonly ProviderInterface $provider,
-        private readonly NextCursorResolverInterface $nextCursorResolver,
+        private ProviderInterface $provider,
+        private NextCursorResolverInterface $nextCursorResolver,
+        private ErrorHandlerInterface $errorHandler,
     ) {}
 
     public function buildParameters(ParameterBuilderInterface $builder): void
@@ -44,8 +46,8 @@ final class RemoteMediaFolderHandler implements QueryTypeHandlerInterface
             ParameterType\ChoiceType::class,
             [
                 'required' => true,
+                'multiple' => true,
                 'options' => [
-                    'All' => '',
                     'Image' => 'image',
                     'Video' => 'video',
                     'Document' => 'document',
@@ -54,7 +56,7 @@ final class RemoteMediaFolderHandler implements QueryTypeHandlerInterface
         );
     }
 
-    public function getValues(Query $query, int $offset = 0, ?int $limit = null): iterable
+    public function getValues(Query $query, int $offset = 0, ?int $limit = self::DEFAULT_LIMIT): iterable
     {
         $folderPath = $query->getParameter('folder_path')->getValue();
 
@@ -62,18 +64,12 @@ final class RemoteMediaFolderHandler implements QueryTypeHandlerInterface
             return [];
         }
 
-        $limit ??= 25;
-
         try {
             $searchQuery = $this->buildSearchQuery($query, $limit);
 
             if ($offset > 0) {
-                try {
-                    $cursor = $this->nextCursorResolver->resolve($searchQuery, $offset);
-                    $searchQuery->setNextCursor($cursor);
-                } catch (RuntimeException) {
-                    throw new RuntimeException('Jumping to pages is not supported. Please, use only next/previous buttons.');
-                }
+                $cursor = $this->nextCursorResolver->resolve($searchQuery, $offset);
+                $searchQuery->setNextCursor($cursor);
             }
 
             $result = $this->provider->search($searchQuery);
@@ -83,12 +79,12 @@ final class RemoteMediaFolderHandler implements QueryTypeHandlerInterface
             }
 
             return array_map(
-                static fn (RemoteResource $resource) => new RemoteResourceLocation($resource, self::LOCATION_SOURCE),
+                static fn (RemoteResource $resource): RemoteResourceLocation => new RemoteResourceLocation($resource, self::LOCATION_SOURCE),
                 $result->getResources(),
             );
-        } catch (RuntimeException $e) {
-            throw $e;
         } catch (Throwable $t) {
+            $this->errorHandler->handleError($t, 'Error fetching remote media folder resources', ['query' => $query]);
+
             return [];
         }
     }
@@ -105,7 +101,9 @@ final class RemoteMediaFolderHandler implements QueryTypeHandlerInterface
             $searchQuery = $this->buildSearchQuery($query, 0);
 
             return $this->provider->searchCount($searchQuery);
-        } catch (Throwable) {
+        } catch (Throwable $t) {
+            $this->errorHandler->handleError($t, 'Error counting remote media folder resources', ['query' => $query]);
+
             return 0;
         }
     }
@@ -118,10 +116,9 @@ final class RemoteMediaFolderHandler implements QueryTypeHandlerInterface
     private function buildSearchQuery(Query $query, int $limit): SearchQuery
     {
         $folderPath = $query->getParameter('folder_path')->getValue();
-        $resourceType = $query->getParameter('resource_type')->getValue();
+        $types = $query->getParameter('resource_type')->getValue() ?? [];
 
         $folder = Folder::fromPath($folderPath);
-        $types = $resourceType !== '' && $resourceType !== null ? [$resourceType] : [];
 
         return new SearchQuery(
             folders: [$folder],

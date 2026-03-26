@@ -11,7 +11,7 @@ use RuntimeException;
 
 use function implode;
 use function str_replace;
-use function mb_trim;
+use function trim;
 
 final class NextCursor implements NextCursorResolverInterface
 {
@@ -56,7 +56,7 @@ final class NextCursor implements NextCursorResolverInterface
     {
         $forbiddenCharacters = ['{', '}', '(', ')', '/', '\\', '@'];
         foreach ($forbiddenCharacters as $char) {
-            $key = str_replace($char, '_', mb_trim($key, $char));
+            $key = str_replace($char, '_', trim($key, $char));
         }
 
         return $key;
