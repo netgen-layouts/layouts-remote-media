@@ -56,13 +56,15 @@ final class RemoteMediaFolderHandler implements QueryTypeHandlerInterface
         );
     }
 
-    public function getValues(Query $query, int $offset = 0, ?int $limit = self::DEFAULT_LIMIT): iterable
+    public function getValues(Query $query, int $offset = 0, ?int $limit = null): iterable
     {
         $folderPath = $query->getParameter('folder_path')->getValue();
 
         if ($folderPath === null || $folderPath === '') {
             return [];
         }
+
+        $limit ??= self::DEFAULT_LIMIT;
 
         try {
             $searchQuery = $this->buildSearchQuery($query, $limit);
