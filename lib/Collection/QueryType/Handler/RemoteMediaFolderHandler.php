@@ -22,8 +22,8 @@ use function is_string;
 
 final class RemoteMediaFolderHandler implements QueryTypeHandlerInterface
 {
-    private const LOCATION_SOURCE = 'remote_media_folder_query';
-    private const DEFAULT_LIMIT = 25;
+    private const string LOCATION_SOURCE = 'remote_media_folder_query';
+    private const int DEFAULT_LIMIT = 25;
 
     public function __construct(
         private ProviderInterface $provider,
@@ -58,7 +58,7 @@ final class RemoteMediaFolderHandler implements QueryTypeHandlerInterface
 
     public function getValues(Query $query, int $offset = 0, ?int $limit = null): iterable
     {
-        $folderPath = $query->getParameter('folder_path')->getValue();
+        $folderPath = $query->getParameter('folder_path')->value;
 
         if ($folderPath === null || $folderPath === '') {
             return [];
@@ -93,7 +93,7 @@ final class RemoteMediaFolderHandler implements QueryTypeHandlerInterface
 
     public function getCount(Query $query): int
     {
-        $folderPath = $query->getParameter('folder_path')->getValue();
+        $folderPath = $query->getParameter('folder_path')->value;
 
         if ($folderPath === null || $folderPath === '') {
             return 0;
@@ -117,8 +117,8 @@ final class RemoteMediaFolderHandler implements QueryTypeHandlerInterface
 
     private function buildSearchQuery(Query $query, int $limit): SearchQuery
     {
-        $folderPath = $query->getParameter('folder_path')->getValue();
-        $types = $query->getParameter('resource_type')->getValue() ?? [];
+        $folderPath = $query->getParameter('folder_path')->value;
+        $types = $query->getParameter('resource_type')->value ?? [];
 
         $folder = Folder::fromPath($folderPath);
 
