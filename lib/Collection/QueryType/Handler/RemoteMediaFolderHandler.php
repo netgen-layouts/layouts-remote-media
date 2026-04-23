@@ -6,8 +6,8 @@ namespace Netgen\Layouts\RemoteMedia\Collection\QueryType\Handler;
 
 use Netgen\Layouts\API\Values\Collection\Query;
 use Netgen\Layouts\Collection\QueryType\QueryTypeHandlerInterface;
-use Netgen\Layouts\Parameters\ParameterBuilderInterface;
 use Netgen\Layouts\Error\ErrorHandlerInterface;
+use Netgen\Layouts\Parameters\ParameterBuilderInterface;
 use Netgen\Layouts\Parameters\ParameterType;
 use Netgen\Layouts\RemoteMedia\Core\RemoteMedia\NextCursorResolverInterface;
 use Netgen\RemoteMedia\API\ProviderInterface;
@@ -123,8 +123,8 @@ final class RemoteMediaFolderHandler implements QueryTypeHandlerInterface
         $folder = Folder::fromPath($folderPath);
 
         return new SearchQuery(
-            folders: [$folder],
             types: $types,
+            folders: [$folder],
             limit: $limit,
         );
     }
