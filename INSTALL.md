@@ -64,10 +64,9 @@ mandatory, to prevent timeouts or breaking API limits.
 
 ## Database
 
-The bundle ships a Doctrine migration which creates its database tables. It requires MySQL or MariaDB and `doctrine/doctrine-migrations-bundle`:
+The bundle ships a Doctrine migration which creates its database tables. It requires MySQL or MariaDB:
 
 ```
-composer require doctrine/doctrine-migrations-bundle
 php bin/console doctrine:migrations:migrate --configuration=vendor/netgen/layouts-remote-media/migrations/doctrine.yaml
 ```
 

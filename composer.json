@@ -11,6 +11,7 @@
     ],
     "require": {
         "php": "^8.1",
+        "doctrine/doctrine-migrations-bundle": "^3.2",
         "netgen/layouts-core": "^1.4",
         "netgen/remote-media-bundle": "^3.0"
     },
@@ -35,9 +36,6 @@
         "coverage": "@php -dzend_extension=xdebug.so -dxdebug.mode=coverage vendor/bin/phpunit --coverage-html=coverage --colors=always",
         "phpstan": "@php vendor/bin/phpstan analyse -c phpstan.neon --level=8 --ansi lib bundle",
         "phpstan-tests": "@php vendor/bin/phpstan analyse -c phpstan.tests.neon --level=8 --ansi tests"
-    },
-    "suggest": {
-        "doctrine/doctrine-migrations-bundle": "To create the database tables with the shipped migrations"
     },
     "autoload": {
         "psr-4": {
