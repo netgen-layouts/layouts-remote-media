@@ -6,13 +6,18 @@ Upgrade to 2.2
 
 ### Database migrations
 
-The database tables are now created by a Doctrine migration shipped with the bundle. Run the migrations of `netgen/remote-media-bundle` first. If you already have the tables (created with `doctrine:schema:update`), mark the migration as executed instead of running it:
+The bundle now ships Doctrine migrations for its database tables. Run the migrations of `netgen/remote-media-bundle` first, then the migrations of this bundle:
+
+```
+php bin/console doctrine:migrations:migrate --configuration=vendor/netgen/layouts-remote-media/migrations/doctrine.yaml
+```
+
+If the tables already exist (for example, created with `doctrine:schema:update`), the initial migration fails. Mark it as executed and run the migrations again to execute the remaining ones:
 
 ```
 php bin/console doctrine:migrations:version 'Netgen\Layouts\RemoteMedia\Migrations\Doctrine\Version020200' --add --configuration=vendor/netgen/layouts-remote-media/migrations/doctrine.yaml
+php bin/console doctrine:migrations:migrate --configuration=vendor/netgen/layouts-remote-media/migrations/doctrine.yaml
 ```
-
-New installs only need to run `doctrine:migrations:migrate` as described in the installation instructions.
 
 Upgrade from 1.0 to 2.0
 -----------------------
