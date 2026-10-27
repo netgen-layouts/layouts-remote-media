@@ -17,7 +17,7 @@ other Netgen Layouts and Content Browser bundles:
 ...
 ...
 
-$bundles[] = new Netgen\Bundle\LayoutsRemoteMediaBundle\LayoutsRemoteMediaBundle();
+$bundles[] = new Netgen\Bundle\LayoutsRemoteMediaBundle\NetgenLayoutsRemoteMediaBundle();
 
 return $bundles;
 ```
