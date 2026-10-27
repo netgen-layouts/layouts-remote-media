@@ -13,8 +13,6 @@ final class Version020200 extends AbstractMigration
     {
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on MySQL.');
 
-        // nglayouts_remote_media_item table
-
         $this->addSql(
             <<<'EOT'
             CREATE TABLE nglayouts_remote_media_item (
