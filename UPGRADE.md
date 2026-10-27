@@ -1,6 +1,19 @@
 Netgen Layouts Remote Media upgrade instructions
 ================================================
 
+Upgrade to 2.2
+--------------
+
+### Database migrations
+
+The database tables are now created by a Doctrine migration shipped with the bundle. Run the migrations of `netgen/remote-media-bundle` first. If you already have the tables (created with `doctrine:schema:update`), mark the migration as executed instead of running it:
+
+```
+php bin/console doctrine:migrations:version 'Netgen\Layouts\RemoteMedia\Migrations\Doctrine\Version020200' --add --configuration=vendor/netgen/layouts-remote-media/migrations/doctrine.yaml
+```
+
+New installs only need to run `doctrine:migrations:migrate` as described in the installation instructions.
+
 Upgrade from 1.0 to 2.0
 -----------------------
 
