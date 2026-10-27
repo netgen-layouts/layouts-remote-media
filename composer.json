@@ -36,10 +36,14 @@
         "phpstan": "@php vendor/bin/phpstan analyse -c phpstan.neon --level=8 --ansi lib bundle",
         "phpstan-tests": "@php vendor/bin/phpstan analyse -c phpstan.tests.neon --level=8 --ansi tests"
     },
+    "suggest": {
+        "doctrine/doctrine-migrations-bundle": "To create the database tables with the shipped migrations"
+    },
     "autoload": {
         "psr-4": {
             "Netgen\\Layouts\\RemoteMedia\\": "lib/",
-            "Netgen\\Bundle\\LayoutsRemoteMediaBundle\\": "bundle/"
+            "Netgen\\Bundle\\LayoutsRemoteMediaBundle\\": "bundle/",
+            "Netgen\\Layouts\\RemoteMedia\\Migrations\\": "migrations/"
         }
     },
     "autoload-dev": {
