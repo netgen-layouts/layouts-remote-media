@@ -30,4 +30,11 @@ final class Version020200 extends AbstractMigration
             EOT
         );
     }
+
+    public function down(Schema $schema): void
+    {
+        $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on MySQL.');
+
+        $this->addSql('DROP TABLE nglayouts_remote_media_item');
+    }
 }
