@@ -64,13 +64,16 @@ mandatory, to prevent timeouts or breaking API limits.
 
 ## Database
 
-The bundle ships a Doctrine migration which creates its database tables. It requires MySQL or MariaDB:
+The bundle ships a Doctrine migration which creates its database tables. It requires MySQL or MariaDB.
+
+Run the migrations of `netgen/remote-media-bundle` first, since the table of this bundle references `ngrm_remote_resource_location`, then the migrations of this bundle:
 
 ```
+php bin/console doctrine:migrations:migrate --configuration=vendor/netgen/remote-media-bundle/migrations/doctrine.yaml
 php bin/console doctrine:migrations:migrate --configuration=vendor/netgen/layouts-remote-media/migrations/doctrine.yaml
 ```
 
-Run this command after every update of the bundle, for example as part of your deployment, so new migrations are applied. You can also run it automatically by adding it to the Composer `post-update-cmd` (and/or `post-install-cmd`) scripts in your `composer.json`, after the command for `netgen/remote-media-bundle`:
+Run these commands after every update of the bundles, for example as part of your deployment, so new migrations are applied. You can also run them automatically by adding them to the Composer `post-update-cmd` (and/or `post-install-cmd`) scripts in your `composer.json`, with the command for `netgen/remote-media-bundle` first:
 
 ```json
 {
@@ -82,5 +85,3 @@ Run this command after every update of the bundle, for example as part of your d
     }
 }
 ```
-
-Run the migrations of `netgen/remote-media-bundle` first: the table of this bundle references `ngrm_remote_resource_location`.

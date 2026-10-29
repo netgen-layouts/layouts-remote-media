@@ -1,14 +1,15 @@
 Netgen Layouts Remote Media upgrade instructions
 ================================================
 
-Upgrade to 2.2
---------------
+Upgrade from 2.1 to 2.2
+-----------------------
 
 ### Database migrations
 
-The bundle now ships Doctrine migrations for its database tables. Run the migrations of `netgen/remote-media-bundle` first, then the migrations of this bundle:
+The bundle now ships Doctrine migrations for its database tables, with its own configuration `migrations/doctrine.yaml` and version table `ngrm_layouts_migration_versions`. Require `netgen/remote-media-bundle` `^3.0`, run its migrations first, then the migrations of this bundle:
 
 ```
+php bin/console doctrine:migrations:migrate --configuration=vendor/netgen/remote-media-bundle/migrations/doctrine.yaml
 php bin/console doctrine:migrations:migrate --configuration=vendor/netgen/layouts-remote-media/migrations/doctrine.yaml
 ```
 
@@ -19,6 +20,8 @@ php bin/console doctrine:migrations:sync-metadata-storage --configuration=vendor
 php bin/console doctrine:migrations:version 'Netgen\Layouts\RemoteMedia\Migrations\Doctrine\Version020200' --add --configuration=vendor/netgen/layouts-remote-media/migrations/doctrine.yaml
 php bin/console doctrine:migrations:migrate --configuration=vendor/netgen/layouts-remote-media/migrations/doctrine.yaml
 ```
+
+The unsupported `on-update` option was removed from the mapping of the `updated_at` column. It was never applied to the schema, so there is nothing to do for existing installs.
 
 Upgrade from 1.0 to 2.0
 -----------------------
