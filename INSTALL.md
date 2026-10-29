@@ -17,7 +17,7 @@ other Netgen Layouts and Content Browser bundles:
 ...
 ...
 
-$bundles[] = new Netgen\Bundle\LayoutsRemoteMediaBundle\LayoutsRemoteMediaBundle();
+$bundles[] = new Netgen\Bundle\LayoutsRemoteMediaBundle\NetgenLayoutsRemoteMediaBundle();
 
 return $bundles;
 ```
@@ -62,12 +62,26 @@ By default, this parameter is empty (null) so it will fetch all folders.
 the API in the background. If you have lots of folders in the root, using this parameter might be
 mandatory, to prevent timeouts or breaking API limits.
 
-## Import database tables
+## Database
 
-This bundle stores used resources in a separate table in the database. Use the following command to update your database:
+The bundle ships a Doctrine migration which creates its database tables. It requires MySQL or MariaDB.
+
+Run the migrations of `netgen/remote-media-bundle` first, since the table of this bundle references `ngrm_remote_resource_location`, then the migrations of this bundle:
 
 ```
-php bin/console doctrine:schema:update
+php bin/console doctrine:migrations:migrate --configuration=vendor/netgen/remote-media-bundle/migrations/doctrine.yaml
+php bin/console doctrine:migrations:migrate --configuration=vendor/netgen/layouts-remote-media/migrations/doctrine.yaml
 ```
 
-**Note:** Use the command with `--dump-sql` first to check that it will do only modifications related to this bundle, and then use it with parameter `--force` to do the actual changes.
+Run these commands after every update of the bundles, for example as part of your deployment, so new migrations are applied. You can also run them automatically by adding them to the Composer `post-update-cmd` (and/or `post-install-cmd`) scripts in your `composer.json`, with the command for `netgen/remote-media-bundle` first:
+
+```json
+{
+    "scripts": {
+        "post-update-cmd": [
+            "@php bin/console doctrine:migrations:migrate --no-interaction --configuration=vendor/netgen/remote-media-bundle/migrations/doctrine.yaml",
+            "@php bin/console doctrine:migrations:migrate --no-interaction --configuration=vendor/netgen/layouts-remote-media/migrations/doctrine.yaml"
+        ]
+    }
+}
+```
