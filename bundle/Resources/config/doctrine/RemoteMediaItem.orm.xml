@@ -9,7 +9,11 @@
             <generator strategy="AUTO"/>
         </id>
 
-        <field name="value" column="value" type="string" length="255" nullable="false" unique="true" />
+        <field name="value" column="value" type="string" length="768" nullable="false" unique="true">
+            <options>
+                <option name="collation">utf8mb4_bin</option>
+            </options>
+        </field>
         <field name="createdAt" column="created_at" type="datetime_immutable" />
         <field name="updatedAt" column="updated_at" type="datetime_immutable" />
 
