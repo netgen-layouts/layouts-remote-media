@@ -62,12 +62,14 @@ By default, this parameter is empty (null) so it will fetch all folders.
 the API in the background. If you have lots of folders in the root, using this parameter might be
 mandatory, to prevent timeouts or breaking API limits.
 
-## Import database tables
+## Database
 
-This bundle stores used resources in a separate table in the database. Use the following command to update your database:
+This bundle ships no migrations. Its table `nglayouts_remote_media_item` is created by the Doctrine migrations of `netgen/remote-media-bundle` (3.1 or newer), which also create the tables of Netgen Remote Media itself. It requires MySQL or MariaDB.
+
+Run the migrations of `netgen/remote-media-bundle`:
 
 ```
-php bin/console doctrine:schema:update
+php bin/console doctrine:migrations:migrate --configuration=vendor/netgen/remote-media-bundle/migrations/doctrine.yaml
 ```
 
-**Note:** Use the command with `--dump-sql` first to check that it will do only modifications related to this bundle, and then use it with parameter `--force` to do the actual changes.
+Run this command after every update of the bundles, for example as part of your deployment, so new migrations are applied. See the [Netgen Remote Media install instructions](https://github.com/netgen/NetgenRemoteMediaBundle/blob/3.0/docs/INSTALL.md#database) for running it automatically from the Composer scripts.
