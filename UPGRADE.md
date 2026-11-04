@@ -1,6 +1,22 @@
 Netgen Layouts Remote Media upgrade instructions
 ================================================
 
+Upgrade from 2.1 to 2.2
+-----------------------
+
+### Database
+
+* This bundle ships no migrations. The `nglayouts_remote_media_item` table is created by the Doctrine migration `Version030002` of `netgen/remote-media-bundle`, a dependency of this bundle.
+* All Netgen Remote Media packages share the migrations of `netgen/remote-media-bundle` and the version table `ngrm_migration_versions`. One command then updates the database of every installed package, and the table is always created after `ngrm_remote_resource_location`, which it references.
+* Run the migrations of `netgen/remote-media-bundle`:
+
+    ```
+    php bin/console doctrine:migrations:migrate --configuration=vendor/netgen/remote-media-bundle/migrations/doctrine.yaml
+    ```
+
+* If the table already exists (created from `schema.sql` or with `doctrine:schema:update`), it is kept with its data and the `value` column is widened to `varchar(768)` with the case-sensitive `utf8mb4_bin` collation.
+* The unsupported `on-update` option was removed from the mapping of the `remote_resource_location_id` column. It was never applied to the schema, so there is nothing to do for existing installs.
+
 Upgrade from 1.0 to 2.0
 -----------------------
 
