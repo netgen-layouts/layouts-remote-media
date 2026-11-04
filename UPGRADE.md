@@ -6,7 +6,9 @@ Upgrade from 2.1 to 2.2
 
 ### Database
 
-* Require `netgen/remote-media-bundle` `^3.0.2`. This bundle ships no migrations, the `nglayouts_remote_media_item` table is created by the Doctrine migration `Version030002` of `netgen/remote-media-bundle`. Run its migrations with:
+* This bundle ships no migrations. The `nglayouts_remote_media_item` table is created by the Doctrine migration `Version030002` of `netgen/remote-media-bundle`, a dependency of this bundle.
+* All Netgen Remote Media packages share the migrations of `netgen/remote-media-bundle` and the version table `ngrm_migration_versions`. One command then updates the database of every installed package, and the table is always created after `ngrm_remote_resource_location`, which it references.
+* Run the migrations of `netgen/remote-media-bundle`:
 
     ```
     php bin/console doctrine:migrations:migrate --configuration=vendor/netgen/remote-media-bundle/migrations/doctrine.yaml

@@ -64,7 +64,12 @@ mandatory, to prevent timeouts or breaking API limits.
 
 ## Database
 
-This bundle ships no migrations. Its table `nglayouts_remote_media_item` is created by the Doctrine migrations of `netgen/remote-media-bundle` (3.0.2 or newer), which also create the tables of Netgen Remote Media itself. It requires MySQL or MariaDB.
+This bundle ships no migrations. Its table `nglayouts_remote_media_item` is created by the Doctrine migrations of `netgen/remote-media-bundle`, which also create the tables of Netgen Remote Media itself. They require MySQL or MariaDB.
+
+All Netgen Remote Media packages share the migrations of `netgen/remote-media-bundle` and one version table, `ngrm_migration_versions`, because:
+
+* one command updates the database of every installed package, instead of a separate command and version table for each package
+* the table is always created after `ngrm_remote_resource_location` of Netgen Remote Media, which it references
 
 Run the migrations of `netgen/remote-media-bundle`:
 
